@@ -16,37 +16,40 @@ knitr::opts_chunk$set(
 
 [![Travis-CI Build Status](https://travis-ci.org/benmarwick/timetest.svg?branch=master)](https://travis-ci.org/benmarwick/timetest)  [![Circle CI](https://circleci.com/gh/benmarwick/timetest.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/benmarwick/timetest)
 
-The goal of timetest is to see how long it takes to set up a basic researh compendium. We did the following steps:
+The goal of timetest is to see how long it takes to set up a basic research compendium, with continous integration, and ready to write a journal article, report or thesis. 
 
-1. devtools::create("pkgname")    
+This was a project developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July). Thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help!
 
+We did the following steps:
+
+#### 1. devtools::create("pkgname")    
 
 - edit the DESCRIPTION
 - continuinously update Imports: with pkgs used in Rmd
 
-2. devtools::use_mit_license()
+#### 2. devtools::use_mit_license()
 
-- gives MIT licence, edit LICENSE fiel to add name
+- gives MIT licence in DESCRIPTION, edit LICENSE file to add name
 
-3. devtools::use_github(".", auth_token = "xxxx")         
+#### 3. devtools::use_github(".", auth_token = "xxxx")         
 
 - connect to github.com, get token from https://github.com/settings/tokens
 - commit, push... maybe not, this is a bit flaky...
 
-4. devtools::use_readme_rmd()     
+#### 4. devtools::use_readme_rmd()     
 
 - ready for to add markdon code to show travis and circle badges
 
-5. devtools::use_travis()         
+#### 5. devtools::use_travis()         
 
 - go to the https://travis-ci.org/ to connect, 
 - change: MRAN    
--- linux dependencies    
+-- linux dependencies, see previous .travis.yml    
 -- devtools::install() to install custom fns     
--- render Rmd    
+-- render Rmd command   
 -- warnings_are_error: false    
 
-6. create analysis dir, and paper.Rmd and data/ dir
+#### 6. create analysis dir, and paper.Rmd and data/ dir
 
 - in metadata yml block    
 -- output: bookdown::word_document2    
@@ -54,20 +57,23 @@ The goal of timetest is to see how long it takes to set up a basic researh compe
 -- csl:      
 - update travis.yml with path/name of Rmd    
 
-7. paste in circle.yml           
+#### 7. paste in circle.yml           
 
+- get circle.yml from most recent project 
 - change pkg name in 3 places   
 - go to https://circleci.com & add env vars
 - add badge to readme.Rmd, knit to md   
 
-8. paste in Dockerfile           
+#### 8. paste in Dockerfile           
 
-- edit dockerfile:     
+- get dockerfile from most recent project   
+- edit dockerfile:   
 -- set rocker/verse R version    
 -- add linux dependencies    
 -- update repo/pkg name   
 -- update Rmd path/name    
 
+First timed attempt from nothing to green badges took **1 hour**, including builds with tidyverse. 
 
 ## Installation
 

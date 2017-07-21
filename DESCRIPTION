@@ -7,7 +7,7 @@ Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
-Imports: tidyverse
+Imports: rmarkdown, bookdown, knitr, tidyverse
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/benmarwick/timetest
