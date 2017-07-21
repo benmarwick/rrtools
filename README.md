@@ -11,43 +11,44 @@ This was a project developed during the 2017 [ISAA Kiel](https://isaakiel.github
 
 We did the following steps (in RStudio, but that's not important):
 
-#### 1. devtools::create("pkgname")
+#### 1. `devtools::create("pkgname")`
 
 -   this creates a basic R package with the name pkgname
 -   we must edit the DESCRIPTION to give correct metadata
 -   then we continuinously update Imports: with pkgs used in Rmd, as we write the Rmd
 
-#### 2. devtools::use\_mit\_license(copyright\_holder = "My Name")
+#### 2. `devtools::use_mit_license(copyright_holder = "My Name")`
 
 -   this gives MIT licence in DESCRIPTION, adds LICENSE file with our name in it
 
-#### 3. devtools::use\_github(".", auth\_token = "xxxx")
+#### 3. `devtools::use_github(".", auth_token = "xxxx")`
 
 -   connect to github.com, get token from <https://github.com/settings/tokens>
 -   commit, push... maybe not, this is a bit flaky...
 
-#### 4. devtools::use\_readme\_rmd(); evtools::use\_code\_of\_conduct()
+#### 4. `devtools::use_readme_rmd(); evtools::use_code_of_conduct()`
 
 -   ready for to add markdon code to show travis and circle badges
 -   paste in test from CoC from fn, ready for public contributions
 
-#### 5. devtools::use\_travis()
+#### 5. `devtools::use_travis()`
 
 -   this creates a minimal .travis.yml for us
 -   we need to go to the <https://travis-ci.org/> to connect,
 -   in .travis.yml we need to change: -- MRAN
     -- linux dependencies, see previous .travis.yml
-    -- devtools::install() to install custom fns
-    -- render Rmd command, path and Rmd filename -- warnings\_are\_error: false
+    -- `devtools::install()` to install custom fns
+    -- `rmarkdown::render(...)` Rmd command, path and Rmd filename -- warnings\_are\_error: false
 -   wee need edit DESCRIPTION add to Imports: rmarkdown, knitr, bookdown so Travis has these available to knit the Rmd (Docker doesn't need them because they're in the rocker/verse base iamge)
 
-#### 6. create analysis dir, and paper.Rmd and data/ dir
+#### 6. create analysis/ dir, and paper.Rmd and data/ dir
 
 -   in metadata yml block
     -- output: bookdown::word\_document2 or html\_ or pdf\_
     -- bibliography: \[file name of bib file\] use the citr Addin and Zotero for high efficiency
     -- csl: \[file name of csl, downloaded from <https://github.com/citation-style-language>\]
 -   we need to update travis.yml with exact path/name of Rmd
+-   while working in the Rmd writing code, update DESCTIPTION Imports: with pkg names
 
 #### 7. paste in Dockerfile
 
@@ -65,22 +66,22 @@ We did the following steps (in RStudio, but that's not important):
 -   we need to go to <https://circleci.com> & add env vars
 -   we must add badge to readme.Rmd, then knit to md for display on GitHub
 
-#### 9. devtools::use\_testthat()
+#### 9. `devtools::use_testthat()`
 
 -   in case we have functions in R/, we need to have some tests to ensure they do what we want
 -   Create tests.R in tests/testhat/ and check <http://r-pkgs.had.co.nz/tests.html> for template
 
-First timed attempt of this workflow, from nothing to green badges, took **1 hour**, including builds with tidyverse.
+First timed attempt of this workflow, from nothing to green badges, took **1 hour**, including builds with tidyverse and a little bit of code in the Rmd.
 
 Future directions
 -----------------
 
 We see scope for automation in these area:
 
--   updating Imports: with library(), require and :: calls in the Rmd
+-   updating Imports: with `library()`, `require()` and :: calls in the Rmd
 -   write Dockerfile (containerit did not work for us)
 -   write circle.yml
--   write custom lines to .travis.yml
+-   write custom lines to .travis.yml for install and render
 
 Installation
 ------------
