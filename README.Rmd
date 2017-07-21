@@ -47,7 +47,7 @@ We did the following steps (in RStudio, but that's not important):
 - this creates a minimal .travis.yml for us
 - we need to go to the https://travis-ci.org/ to connect, 
 - in .travis.yml we need to change: 
--- MRAN    
+    + MRAN repos URL and set the date
     + linux dependencies, see previous .travis.yml    
     + `devtools::install()` to install custom fns     
     + `rmarkdown::render(...)` to knit Rmd file to Word/HTML/PDF 
