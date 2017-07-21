@@ -1,6 +1,7 @@
 # get the base image, this one has R, RStudio and pandoc
 # also we get pkgs from MRAN, not CRAN
-FROM rocker/verse:3.3.2 # https://github.com/rocker-org/rocker-versioned
+# https://github.com/rocker-org/rocker-versioned
+FROM rocker/verse:3.4.0 
 
 # required
 MAINTAINER Ben Marwick <benmarwick@gmail.com>
