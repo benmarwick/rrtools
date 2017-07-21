@@ -5,64 +5,82 @@ timetest
 
 [![Travis-CI Build Status](https://travis-ci.org/benmarwick/timetest.svg?branch=master)](https://travis-ci.org/benmarwick/timetest) [![Circle CI](https://circleci.com/gh/benmarwick/timetest.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/benmarwick/timetest)
 
-The goal of timetest is to see how long it takes to set up a basic research compendium, with continous integration, and ready to write a journal article, report or thesis.
+The goal of timetest is to see how long it would take to set up a basic research compendium, with continous integration, and ready to write a journal article, report or thesis. The goal was also to document the key steps of creating a new research compendium in an efficient order suitable for reuse in new projects.
 
-This was a project developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July). Thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help!
+This was a project developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July). Thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help.
 
-We did the following steps:
+We did the following steps (in RStudio, but that's not important):
 
 #### 1. devtools::create("pkgname")
 
--   edit the DESCRIPTION
--   continuinously update Imports: with pkgs used in Rmd
+-   this creates a basic R package with the name pkgname
+-   we must edit the DESCRIPTION to give correct metadata
+-   then we continuinously update Imports: with pkgs used in Rmd, as we write the Rmd
 
-#### 2. devtools::use\_mit\_license()
+#### 2. devtools::use\_mit\_license(copyright\_holder = "My Name")
 
--   gives MIT licence in DESCRIPTION, edit LICENSE file to add name
+-   this gives MIT licence in DESCRIPTION, adds LICENSE file with our name in it
 
 #### 3. devtools::use\_github(".", auth\_token = "xxxx")
 
 -   connect to github.com, get token from <https://github.com/settings/tokens>
 -   commit, push... maybe not, this is a bit flaky...
 
-#### 4. devtools::use\_readme\_rmd()
+#### 4. devtools::use\_readme\_rmd(); evtools::use\_code\_of\_conduct()
 
 -   ready for to add markdon code to show travis and circle badges
+-   paste in test from CoC from fn, ready for public contributions
 
 #### 5. devtools::use\_travis()
 
--   go to the <https://travis-ci.org/> to connect,
--   change: MRAN
+-   this creates a minimal .travis.yml for us
+-   we need to go to the <https://travis-ci.org/> to connect,
+-   in .travis.yml we need to change: -- MRAN
     -- linux dependencies, see previous .travis.yml
     -- devtools::install() to install custom fns
-    -- render Rmd command
-    -- warnings\_are\_error: false
+    -- render Rmd command, path and Rmd filename -- warnings\_are\_error: false
+-   wee need edit DESCRIPTION add to Imports: rmarkdown, knitr, bookdown so Travis has these available to knit the Rmd (Docker doesn't need them because they're in the rocker/verse base iamge)
 
 #### 6. create analysis dir, and paper.Rmd and data/ dir
 
 -   in metadata yml block
-    -- output: bookdown::word\_document2
-    -- bibliography:
-    -- csl:
--   update travis.yml with path/name of Rmd
+    -- output: bookdown::word\_document2 or html\_ or pdf\_
+    -- bibliography: \[file name of bib file\] use the citr Addin and Zotero for high efficiency
+    -- csl: \[file name of csl, downloaded from <https://github.com/citation-style-language>\]
+-   we need to update travis.yml with exact path/name of Rmd
 
-#### 7. paste in circle.yml
+#### 7. paste in Dockerfile
 
--   get circle.yml from most recent project
--   change pkg name in 3 places
--   go to <https://circleci.com> & add env vars
--   add badge to readme.Rmd, knit to md
-
-#### 8. paste in Dockerfile
-
--   get dockerfile from most recent project
--   edit dockerfile:
+-   we need to get dockerfile from most recent good project
+-   then edit dockerfile:
     -- set rocker/verse R version
     -- add linux dependencies
     -- update repo/pkg name
     -- update Rmd path/name
 
-First timed attempt from nothing to green badges took **1 hour**, including builds with tidyverse.
+#### 8. paste in circle.yml
+
+-   need to get circle.yml from most recent project
+-   we must change pkg name in 3 places in the circle.yml file
+-   we need to go to <https://circleci.com> & add env vars
+-   we must add badge to readme.Rmd, then knit to md for display on GitHub
+
+#### 9. devtools::use\_testthat()
+
+-   in case we have functions in R/, we need to have some tests to ensure they do what we want
+-   Create tests.R in tests/testhat/ and check <http://r-pkgs.had.co.nz/tests.html> for template
+
+First timed attempt of this workflow, from nothing to green badges, took **1 hour**, including builds with tidyverse.
+
+Future directions
+-----------------
+
+We see scope for automation in these area:
+
+-   updating Imports: with library(), require and :: calls in the Rmd
+-   write Dockerfile (containerit did not work for us)
+-   write circle.yml
+-   write custom lines to .travis.yml
 
 Installation
 ------------
@@ -74,11 +92,4 @@ You can install timetest from github with:
 devtools::install_github("benmarwick/timetest")
 ```
 
-Example
--------
-
-This is a basic example which shows you how to solve a common problem:
-
-``` r
-## basic example code
-```
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.

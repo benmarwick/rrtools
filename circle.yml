@@ -6,10 +6,12 @@ dependencies:
   override:
     - docker info
     - docker build -t benmarwick/timetest  .
+    
 test:
   override:
     - docker run --name mytestpkg -d -p 8787:8787 benmarwick/timetest 
 
+# push our docker container to the docker hub
 deployment:
   hub:
     branch: master

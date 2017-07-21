@@ -18,5 +18,5 @@ RUN . /etc/environment \
 # set date here manually
   && R -e "devtools::install('/timetest', dep=TRUE)" \
 
- # render the manuscript into a docx
+# render the manuscript into a docx
   && R -e "rmarkdown::render('/timetest/analysis/paper.Rmd')"

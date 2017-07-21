@@ -3,15 +3,22 @@
 language: R
 sudo: false
 cache: packages
+
+# set package install repo to versioned CRAN, edit date as necessary
 repos:
   MRAN: "https://mran.microsoft.com/snapshot/2017-07-20"
+
+# install linux dependencies that R packages need
 addons:
   apt:
     packages:
       - libudunits2-dev
 
+# install our custom pkg to make functions available
 script:
   - Rscript -e "devtools::install()"
+  # render our Rmd to output document (Word/HTML/PDF)
   - Rscript -e "rmarkdown::render('analysis/paper.Rmd')"
 
+# make it more tolerant of our weaknesses :)
 warnings_are_errors: false

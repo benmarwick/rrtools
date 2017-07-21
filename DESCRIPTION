@@ -12,3 +12,4 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/benmarwick/timetest
 BugReports: https://github.com/benmarwick/timetest/issues
+Suggests: testthat
