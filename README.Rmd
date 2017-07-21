@@ -50,17 +50,17 @@ We did the following steps (in RStudio, but that's not important):
 -- MRAN    
 -- linux dependencies, see previous .travis.yml    
 -- `devtools::install()` to install custom fns     
--- `rmarkdown::render(...)` Rmd command, path and Rmd filename 
--- warnings_are_error: false   
+-- `rmarkdown::render(...)` to knit Rmd file to Word/HTML/PDF 
+-- `warnings_are_error: false`   
 - wee need edit DESCRIPTION add to Imports: rmarkdown, knitr, bookdown so Travis has these available to knit the Rmd (Docker doesn't need them because they're in the rocker/verse base iamge)
 
 #### 6. create analysis/ dir, and paper.Rmd and data/ dir
 
 - in metadata yml block    
--- output: bookdown::word_document2  or html_ or pdf_  
--- bibliography: [file name of bib file] use the citr Addin and Zotero for high efficiency   
+-- output: bookdown::word_document2  or html_ or pdf_     
+-- bibliography: [file name of bib file] use the citr Addin and Zotero for high efficiency    
 -- csl: [file name of csl, downloaded from https://github.com/citation-style-language]     
-- we need to update travis.yml with exact path/name of Rmd 
+- we need to update travis.yml with exact path/name of Rmd     
 - while working in the Rmd writing code, update DESCTIPTION Imports: with pkg names
 
 #### 7. paste in Dockerfile           

@@ -38,7 +38,7 @@ We did the following steps (in RStudio, but that's not important):
 -   in .travis.yml we need to change: -- MRAN
     -- linux dependencies, see previous .travis.yml
     -- `devtools::install()` to install custom fns
-    -- `rmarkdown::render(...)` Rmd command, path and Rmd filename -- warnings\_are\_error: false
+    -- `rmarkdown::render(...)` to knit Rmd file to Word/HTML/PDF -- `warnings_are_error: false`
 -   wee need edit DESCRIPTION add to Imports: rmarkdown, knitr, bookdown so Travis has these available to knit the Rmd (Docker doesn't need them because they're in the rocker/verse base iamge)
 
 #### 6. create analysis/ dir, and paper.Rmd and data/ dir
