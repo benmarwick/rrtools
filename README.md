@@ -14,6 +14,7 @@ We did the following steps (in RStudio, but that's not important):
 #### 1. `devtools::create("pkgname")`
 
 -   this creates a basic R package with the name pkgname
+-   we must find the new project folder, and open the new .Rproj file to go into the new project
 -   we must edit the DESCRIPTION to give correct metadata
 -   then we continuinously update Imports: with pkgs used in Rmd, as we write the Rmd
 
