@@ -1,6 +1,9 @@
 
 
 #' @name use_travis
+#' @title Add a travis config file
+#'
+#' This differs from devtools by directing travis to build the Docker container and push the successful result to Docker Hub.
 #' @param browse open a browser window to enable Travis builds for the package
 #' automatically.
 #' @import devtools
@@ -37,9 +40,10 @@ use_travis <- function(pkg = ".", browse = interactive()) {
 
 
 #' @name use_analysis
-#' This will create \file{analysis/paper.Rmd}, \file{{analysis/references.bib} and
-#' add \pkg{bookdown} to the imported packages.
-#' @rdname infrastructure
+#' @title Adds and analysis directory (and sub-directories), and an Rmd file ready to write
+#'
+#' This will create \file{analysis/paper.Rmd}, \file{analysis/references.bib}
+#' and several others, and add \pkg{bookdown} to the imported packages.
 #' @export
 use_analysis <- function(pkg = ".", template = 'paper.Rmd') {
   pkg <- devtools:::as.package(pkg)
@@ -105,8 +109,9 @@ invisible(TRUE)
 
 
 #' @name use_dockerfile
-#' This will create \file{analysis/paper.Rmd}, \file{{analysis/references.bib} and
-#' add \pkg{bookdown} to the imported packages.
+#' @title Add a Dockerfile
+#'
+#' This will create a basic \file{Dockerfile} based on rocker/verse
 #' @param rocker chr, the rocker image to base this container on
 #' @export
 use_dockerfile <- function(pkg = ".", rocker = "verse") {
