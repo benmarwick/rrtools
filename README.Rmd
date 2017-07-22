@@ -114,7 +114,7 @@ We see scope for automation in these area:
 
 ## References
 
-Kitzes, J., Turek, D., & Deniz, F. (Eds.). (2017). The Practice of Reproducible Research: Case Studies and Lessons from the Data-Intensive Sciences. Oakland, CA: University of California Press.
+Kitzes, J., Turek, D., & Deniz, F. (Eds.). (2017). The Practice of Reproducible Research: Case Studies and Lessons from the Data-Intensive Sciences. Oakland, CA: University of California Press. <https://www.practicereproducibleresearch.org>
 
 Marwick, B. (2017). Computational reproducibility in archaeological research: Basic principles and a case study of their implementation. _Journal of Archaeological Method and Theory_, 24(2), 424-450.
 

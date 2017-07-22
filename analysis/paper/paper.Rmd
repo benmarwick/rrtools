@@ -21,11 +21,11 @@ highlights: |
 
 <!-- This is the format for text comments that will be ignored during renderings. Do not put R code in these comments because it will not be ignored. -->
 
-```{r, setup echo = FALSE}
+```{r, setup, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
-  message = FALSE
+  message = FALSE,
   echo = FALSE,
   comment = "#>",
   fig.path = "figures"
