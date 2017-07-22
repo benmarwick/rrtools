@@ -1,24 +1,52 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
-sudo: false
-cache: packages
+# language: R
+# sudo: false
+# cache: packages
 
 # set package install repo to versioned CRAN, edit date as necessary
-repos:
-  MRAN: "https://mran.microsoft.com/snapshot/2017-07-20"
+#repos:
+#  MRAN: "https://mran.microsoft.com/snapshot/2017-07-20"
 
 # install linux dependencies that R packages need
-addons:
-  apt:
-    packages:
-      - libudunits2-dev
+#addons:
+#  apt:
+#    packages:
+#      - libudunits2-dev
 
 # install our custom pkg to make functions available
 script:
-  - Rscript -e "devtools::install()"
+#  - Rscript -e "devtools::install()"
   # render our Rmd to output document (Word/HTML/PDF)
-  - Rscript -e "rmarkdown::render('analysis/paper.Rmd')"
+#  - Rscript -e "rmarkdown::render('analysis/paper.Rmd')"
 
 # make it more tolerant of our weaknesses :)
+# warnings_are_errors: false
+
+#----------------------------------------------------------
+
+# Docker on travis
+
+sudo: required
+
 warnings_are_errors: false
+
+# don't need to install R
+language: generic
+
+services:
+  - docker
+
+before_install:
+    # create & run container, i.e. compile pkg and render Rmd to Word doc
+  - docker build -t benmarwick/timetest .
+
+# push our custom docker container to docker hub
+after_success:
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=sebestblog/travis-demo
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO
