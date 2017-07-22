@@ -1,5 +1,13 @@
 
-
+#' @name use_compendium
+#' @title Creates an R package suitable to use as a research compendium
+#'
+#' This is devtools::create() with an additional step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio
+#' @param browse open a browser window to enable Travis builds for the package
+#' automatically.
+#' @import devtools rstudioapi
+#' @export
+#' @aliases add_travis
 use_compendium <- function(path, description = getOption("devtools.desc"),
                            check = FALSE, rstudio = TRUE, quiet = FALSE){
 
