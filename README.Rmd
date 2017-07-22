@@ -61,6 +61,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 - this creates a minimal .travis.yml for us
 - we need to go to the https://travis-ci.org/ to connect to our repo 
 - we need to add environment variables to enable push of the Docker container to the Docker Hub
+- we need to make an account at <https://hub.docker.com/> to host our Docker container
 
 #### 6. `rrtools::use_analysis()` 
 
@@ -85,7 +86,6 @@ analysis/
     └── template.Rmd
 ```
 
-
 - The `paper.Rmd` in `aanlysis/paper/` is ready to render with bookdown   
 - The references.bib` file is empty, ready to insert reference details
 - You can replace the supplied `csl` file with one from <https://github.com/citation-style-language/>    
@@ -97,7 +97,8 @@ analysis/
 - this will create a basic Dockerfile using `rocker/verse` as the base image   
 - the version of R in your rocker container will match the version used when you run this function, for example `rocker/verse:3.4.0`  
 - `rocker/verse` includes R, the tidyverse, RStudio, pandoc and LaTeX, so build times are very fast
-- we need to edit dockerfile to add linux dependencies (if any) & modify which Rmd files are rendered when the container is made.     
+- we need to edit dockerfile to add linux dependencies (if any) & modify which Rmd files are rendered when the container is made.  
+- remember that we need to make an account at <https://hub.docker.com/> to host our Docker container
 
 #### 8. `devtools::use_testthat()`
 
@@ -108,13 +109,11 @@ You should be able to follow these steps get a new research compendium repositor
 
 ## Future directions
 
-We see scope for automation in these area:
-
-- updating Imports: with `library()`, `require()` and :: calls in the Rmd    
+- updating Imports: with `library()`, `require()` and :: calls in the Rmd when `render()`ing    
 
 ## References
 
-Kitzes, J., Turek, D., & Deniz, F. (Eds.). (2017). The Practice of Reproducible Research: Case Studies and Lessons from the Data-Intensive Sciences. Oakland, CA: University of California Press. <https://www.practicereproducibleresearch.org>
+Kitzes, J., Turek, D., & Deniz, F. (Eds.). (2017). _The Practice of Reproducible Research: Case Studies and Lessons from the Data-Intensive Sciences_. Oakland, CA: University of California Press. <https://www.practicereproducibleresearch.org>
 
 Marwick, B. (2017). Computational reproducibility in archaeological research: Basic principles and a case study of their implementation. _Journal of Archaeological Method and Theory_, 24(2), 424-450. <https:doi.org/10.1007/s10816-015-9272-9>
 
