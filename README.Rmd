@@ -20,15 +20,14 @@ The goal of rrtools is to provide instructions, templates and functions for maki
 
 rrtools gives you a template for doing scholarly writing in literate programming enviroment using R Markdown and bookdown. It also provides isolation of your computational enviroment using Docker, package versioning using MRAN, and continuous integration using Travis. It makes a convenient starting point for writing a journal article, report or thesis. 
 
-This project was developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July). Special thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help.
-
+This project was developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July). Special thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help. The convenience functions in this package are derived from similar functions in Hadley Wickham's `devtools` package. 
 ## Installation
 
 You can install rrtools from github with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("benmarwick/timetest")
+devtools::install_github("benmarwick/rrtools")
 ```
 
 ## How to use
