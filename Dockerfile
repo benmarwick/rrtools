@@ -15,7 +15,7 @@ RUN . /etc/environment \
   && sudo apt-get install libudunits2-dev -y \
 
   # build this compendium package
-  && R -e devtools::install('/rrtools', dep=TRUE)" \
+  && R -e "devtools::install('/rrtools', dep=TRUE)" \
 
  # render the manuscript into a docx
   && R -e "rmarkdown::render('/rrtools/analysis/paper/paper.Rmd')"
