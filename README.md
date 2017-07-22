@@ -24,7 +24,7 @@ devtools::install_github("benmarwick/rrtools")
 How to use
 ----------
 
-To create a reproducible research compendium using the rrtools approach, follow these steps (in [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), which we recommend):
+To create a reproducible research compendium using the rrtools approach, follow these steps (in [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), which we recommend, but is not required):
 
 #### 1. `rrtools::use_compendium("pkgname")`
 
@@ -36,11 +36,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 -   this gives MIT licence in DESCRIPTION, adds LICENSE file with our name in it
 
-<<<<<<< HEAD
 #### 3. `devtools::use_github(".", auth_token = "xxxx", protocol = "https", private = FALSE)`
-=======
-#### 3. `devtools::use_github(".", auth_token = "xxxx", private = FALSE)`
->>>>>>> 152d852efae88d657d407fb8b05e5735f2251973
 
 -   This will initialize a local git repository, and connect to github.com and create a remote repository there.
 -   we need to get a token from <https://github.com/settings/tokens>, and replace "xxxx" with your token
