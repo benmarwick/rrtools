@@ -5,7 +5,7 @@
 \alias{add_travis}
 \title{Creates an R package suitable to use as a research compendium
 
-This is devtools::create() with an addition step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio}
+This is devtools::create() with an additional step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio}
 \usage{
 use_compendium(path, description = getOption("devtools.desc"),
   check = FALSE, rstudio = TRUE, quiet = FALSE)

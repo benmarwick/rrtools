@@ -12,7 +12,7 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
                            check = FALSE, rstudio = TRUE, quiet = FALSE){
 
   devtools::create(path, description = getOption("devtools.desc"),
-                   check = FALSE, rstudio = TRUE, quiet = FALSE)
+                   check, rstudio, quiet)
 
   message("The package", path, " has been created \n",
           "Next: \n",
