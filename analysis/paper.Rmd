@@ -23,3 +23,10 @@ mtcars %>%
   geom_point()
 ```
 
+
+```{r}
+# break the Rmd
+rm(x)
+rnorm(x)
+```
+
