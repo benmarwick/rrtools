@@ -9,7 +9,7 @@ output:
     fig_caption: yes
     reference_docx: templates/template.docx
 bibliography: references.bib
-csl: templates/journal-of-archaeological-science.csl
+csl: journal-of-archaeological-science.csl
 abstract: |
   Text of abstract
 keywords: |

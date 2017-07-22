@@ -95,6 +95,8 @@ use_analysis <- function(pkg = ".", template = 'paper.Rmd') {
           " * For adding captions & cross-referenceing in an Rmd, see https://bookdown.org/yihui/bookdown/ ", "\n",
           " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ")
 
+  devtools:::open_in_rstudio("analysis/paper/paper.Rmd")
+
 
 invisible(TRUE)
 }
@@ -122,8 +124,8 @@ use_dockerfile <- function(pkg = ".", rocker = "verse") {
                          "Dockerfile",
                          ignore = TRUE,
                          pkg = pkg,
-                         data = gh)
-
+                         data = gh,
+                         open = TRUE)
 
   message("Next: \n",
           " * Edit the dockerfile with your name & email", "\n",
@@ -167,7 +169,7 @@ use_template <- function(template, save_as = template, data = list(),
 
   if (open) {
     message("* Modify `", save_as, "`.")
-    devtools::open_in_rstudio(path)
+    devtools:::open_in_rstudio(path)
   }
 
   invisible(TRUE)
