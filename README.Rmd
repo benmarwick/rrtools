@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# rrtools: Tools for Writing Reproducible Reseach in R
+# rrtools: Tools for Writing Reproducible Research in R
 
 [![Travis-CI Build Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://travis-ci.org/benmarwick/rrtools)  
 

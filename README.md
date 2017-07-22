@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-rrtools: Tools for Writing Reproducible Reseach in R
-====================================================
+rrtools: Tools for Writing Reproducible Research in R
+=====================================================
 
 [![Travis-CI Build Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://travis-ci.org/benmarwick/rrtools)
 
