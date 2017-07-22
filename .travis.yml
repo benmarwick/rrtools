@@ -16,7 +16,7 @@ services:
 
 before_install:
     # create & run container using our dockerfile, i.e. compile pkg and render Rmd to Word doc
-  - docker build -t benmarwick/rrtools .
+  - docker build -t $REPO .
 
 # push our custom docker container to docker hub, env vars stored on travis-ci.org
 after_success:
