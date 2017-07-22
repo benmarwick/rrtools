@@ -38,11 +38,10 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 -   this gives MIT licence in DESCRIPTION, adds LICENSE file with our name in it
 
-#### 3. `devtools::use_github(".", auth_token = "xxxx")`
+#### 3. `devtools::use_github(".", auth_token = "xxxx", private = FALSE)`
 
 -   This will initialize a local git repository, and connect to github.com and create a remote repository there.
 -   we need to get a token from <https://github.com/settings/tokens>, and replace "xxxx" with your token
--   we found that it makes our GitHub repo private by default, so we need to go to GitHub to make it public if we want to use Travis
 -   we found that it gives an error in RStudio and doesn't fully enable git in RStudio, so:
 -   in the shell, we need to `git remote set-url origin https://github.com/username/pkgname.git` (it does seem to work again in RStudio after completing one commit-push cycle from the shell and restarting RStudio)
 -   then we can commit, push, etc. as usual, from the shell or RStudio
