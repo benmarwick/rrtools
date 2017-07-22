@@ -1,0 +1,96 @@
+---
+title: "Workflow"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(bookdown)
+library(rmarkdown)
+```
+
+
+This is a workflow to create the "reproduceability" we learned in the Summer School "Reproducable Research in Landscape Archaeology" by Ben Marwick et al. 17th-21st July 2017.
+
+
+# Setup
+
+Start Rstudio and start by creating your package:
+
+```{r , eval=FALSE}
+devtools::create("packagename") 
+```
+This creates also the description, namespace and manuals-folder (man).
+Remember to edit the description. Especially the imports should be continously updated!
+
+Levae the other two alone...
+
+```{r, eval = FALSE}
+devtools::use_mit_license()
+```
+This puts the MIT licence in the DESCRIPTION and creates the license-document, which you need to edit to give your name. Think about your decision, do you want to use the MIT-license or another one?
+
+## Github
+
+```{r, eval=FALSE}
+devtools::use_github()
+```
+This creates your local github repository for the package. Go online to github.com/yourname to create your online repository with the same name. Commit and push your package.
+
+```{r, eval=FALSE}
+devtools::use_readme_rmd() 
+devtools::use_travis() 
+```
+With these you create the README.Rmd and the travis.yml. 
+
+The README.Rmd needs to be updated with your packagename in the "Travis-CI Build Status" (the url to your travis-website).
+
+The travis.yml needs following changes:   
+
+* repos: MRAN update date,     
+* linux package dependencies      
+* Rmd-name and path
+* add: warnings_are_errors: false    (if you want to)
+
+
+Remeber to locally build your package if you have created your own functions. 
+
+## Folder structure
+Create your analysis-folder (if you use it) and create there your Markdown.Rmd. Name it whatever you said in the travis.yml . 
+
+Create the data-folder and whichever else you need.
+
+
+## Circleci and Travis
+Copy and paste the circle.yml from a working package into your package folder and edit the variables in the circle yml, especially the packagename.
+
+Go to your websites on https://travis-ci.org/ and on https://circleci.com/ to create the connections to the github package. 
+
+Paste in Dockerfile from a working package and edit ist. Things that need to change:  
+
+* linux dependencies    
+* package name,    
+* markdown.Rmd-filename and path,    
+* R-version, Rocker.verse - version
+
+## Run the system
+Commit everything and push it to Github.
+
+Wait for the error message from Travis.
+
+***Don't panic!***
+
+Look at the error message and try to find out, what the problem was.
+Good luck and when you succeed, don't forget to stick a yellow sticker to your laptop!
+
+## Useful shell commands
+
+For checking, committing and pushing files via the shell, use:
+```{r, eval=FALSE}
+$ git add filename.ext
+$ git commit -m 'place comment here'
+$ git push origin master
+```
+
+
