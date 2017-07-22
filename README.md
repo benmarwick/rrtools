@@ -24,7 +24,7 @@ devtools::install_github("benmarwick/rrtools")
 How to use
 ----------
 
-To create a reproducible research compendium using the rrtools approach, follow these steps (in RStudio, which we recommend):
+To create a reproducible research compendium using the rrtools approach, follow these steps (in [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), which we recommend):
 
 #### 1. `devtools::create("pkgname")`
 
@@ -86,14 +86,14 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   The `paper.Rmd` in `analysis/paper/` is ready to render with bookdown
 -   The references.bib\` file is empty, ready to insert reference details
 -   You can replace the supplied `csl` file with one from <https://github.com/citation-style-language/>
--   we recommend using the citr Addin and Zotero for high efficiency
--   we need to remember that when working in the Rmd writing code, we much update DESCTIPTION Imports: with pkg names used in the Rmd
+-   we recommend using the [citr addin](https://github.com/crsh/citr) and [Zotero](https://www.zotero.org/) for high efficiency
+-   we need to remember that when working in the Rmd writing code, we much update DESCRIPTION Imports: with pkg names used in the Rmd
 
 #### 7. `rrtools::use_dockerfile()`
 
--   this will create a basic Dockerfile using `rocker/verse` as the base image
+-   this will create a basic Dockerfile using [`rocker/verse`](https://github.com/rocker-org/rocker) as the base image
 -   the version of R in your rocker container will match the version used when you run this function, for example `rocker/verse:3.4.0`
--   `rocker/verse` includes R, the tidyverse, RStudio, pandoc and LaTeX, so build times are very fast
+-   [`rocker/verse`](https://github.com/rocker-org/rocker) includes R, the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX, so build times are very fast
 -   we need to edit dockerfile to add linux dependencies (if any) & modify which Rmd files are rendered when the container is made.
 -   remember that we need to make an account at <https://hub.docker.com/> to host our Docker container
 
