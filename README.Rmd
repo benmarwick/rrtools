@@ -20,13 +20,14 @@ The goal of timetest is to see how long it would take to set up a basic research
 
 This was a project developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July). Thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help.
 
-We did the following steps (in RStudio, but that's not important):
+We did the following steps (in RStudio, which we recommend):
 
-#### 1. `devtools::create("pkgname")`    
+#### 1. `devtools::create("pkgname")  `  
 
 - this creates a basic R package with the name pkgname
-- we must edit the DESCRIPTION to give correct metadata
-- then we continuinously update Imports: with pkgs used in Rmd, as we write the Rmd
+- double-click the `pkgname.Rproj` just created to open the new package project
+-  edit the DESCRIPTION to give correct metadata
+- then we continuinously update `Imports:` with names of pkgs used in Rmd, as we write the Rmd, this can be done with `devtools::use_package("dplyr", "imports")`
 
 #### 2. `devtools::use_mit_license(copyright_holder = "My Name")`
 
@@ -37,10 +38,10 @@ We did the following steps (in RStudio, but that's not important):
 - connect to github.com, get token from https://github.com/settings/tokens
 - commit, push... maybe not, this is a bit flaky...
 
-#### 4. `devtools::use_readme_rmd(); evtools::use_code_of_conduct()`     
+#### 4. `devtools::use_readme_rmd(); devtools::use_code_of_conduct()`     
 
 - ready for to add markdon code to show travis and circle badges
-- paste in test from CoC from fn, ready for public contributions
+- paste in test from CoC from fn output in console, ready for public contributions
 
 #### 5. `devtools::use_travis()`         
 
