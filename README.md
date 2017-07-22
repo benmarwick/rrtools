@@ -87,7 +87,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   The references.bib\` file is empty, ready to insert reference details
 -   You can replace the supplied `csl` file with one from <https://github.com/citation-style-language/>
 -   we recommend using the [citr addin](https://github.com/crsh/citr) and [Zotero](https://www.zotero.org/) for high efficiency
--   we need to remember that when working in the Rmd writing code, we much update DESCRIPTION Imports: with pkg names used in the Rmd
+-   we need to remember that when working in the Rmd writing code, we must update DESCRIPTION Imports: with pkg names used in the Rmd
 
 #### 7. `rrtools::use_dockerfile()`
 
