@@ -36,11 +36,14 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 -   this gives MIT licence in DESCRIPTION, adds LICENSE file with our name in it
 
+<<<<<<< HEAD
 #### 3. `devtools::use_github(".", auth_token = "xxxx", protocol = "https", private = FALSE)`
+=======
+#### 3. `devtools::use_github(".", auth_token = "xxxx", private = FALSE)`
+>>>>>>> 152d852efae88d657d407fb8b05e5735f2251973
 
 -   This will initialize a local git repository, and connect to github.com and create a remote repository there.
 -   we need to get a token from <https://github.com/settings/tokens>, and replace "xxxx" with your token
--   we found that it makes our GitHub repo private by default, so we need to go to GitHub to make it public if we want to use Travis
 -   we found that it gives an error in RStudio and doesn't fully enable git in RStudio, so:
 -   in the shell, we need to `git remote set-url origin https://github.com/username/pkgname.git` (it does seem to work again in RStudio after completing one commit-push cycle from the shell and restarting RStudio)
 -   then we can commit, push, etc. as usual, from the shell or RStudio
@@ -85,7 +88,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   The references.bib\` file is empty, ready to insert reference details
 -   You can replace the supplied `csl` file with one from <https://github.com/citation-style-language/>
 -   we recommend using the [citr addin](https://github.com/crsh/citr) and [Zotero](https://www.zotero.org/) for high efficiency
--   we need to remember that when working in the Rmd writing code, we much update DESCRIPTION Imports: with pkg names used in the Rmd
+-   we need to remember that when working in the Rmd writing code, we must update DESCRIPTION Imports: with pkg names used in the Rmd
 
 #### 7. `rrtools::use_dockerfile()`
 
