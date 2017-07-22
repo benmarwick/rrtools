@@ -1,4 +1,4 @@
-Package: timetest
+Package: rrtools
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
@@ -10,6 +10,6 @@ License: MIT + file LICENSE
 Imports: rmarkdown, bookdown, knitr, tidyverse
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/benmarwick/timetest
-BugReports: https://github.com/benmarwick/timetest/issues
+URL: https://github.com/benmarwick/rrtools
+BugReports: https://github.com/benmarwick/rrtools/issues
 Suggests: testthat

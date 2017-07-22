@@ -55,7 +55,7 @@ We did the following steps (in RStudio, which we recommend):
     + `warnings_are_error: false`   
 - wee need edit DESCRIPTION add to Imports: rmarkdown, knitr, bookdown so Travis has these available to knit the Rmd (Docker doesn't need them because they're in the rocker/verse base iamge)
 
-#### 6. create analysis/ dir, and paper.Rmd and data/ dir
+#### 6. create `analysis/` directory, and `paper.Rmd` and `analysis/data/` directory
 
 - in metadata yml block    
     + output: bookdown::word_document2  or html_ or pdf_     
@@ -86,8 +86,8 @@ We see scope for automation in these area:
 
 - updating Imports: with `library()`, `require()` and :: calls in the Rmd    
 - write Dockerfile (containerit did not work for us)  
-- write circle.yml   
-- write custom lines to .travis.yml for install and render
+- write `analysis/` dir and `paper.Rmd`
+- write custom lines to `.travis.yml` for install and render
 
 ## Installation
 

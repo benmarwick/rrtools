@@ -1,12 +1,12 @@
 # get the base image, this one has R, RStudio and pandoc
 # also we get pkgs from MRAN, not CRAN
 # https://github.com/rocker-org/rocker-versioned
-FROM rocker/verse:3.4.0 
+FROM rocker/verse:3.4.0
 
 # required
 MAINTAINER Ben Marwick <benmarwick@gmail.com>
 
-COPY . /timetest
+COPY . /rrtools
  # go into the repo directory
 RUN . /etc/environment \
 
@@ -16,7 +16,7 @@ RUN . /etc/environment \
 
 # build this compendium package, get deps from MRAN
 # set date here manually
-  && R -e "devtools::install('/timetest', dep=TRUE)" \
+  && R -e "devtools::install('/rrtools', dep=TRUE)" \
 
 # render the manuscript into a docx
-  && R -e "rmarkdown::render('/timetest/analysis/paper.Rmd')"
+  && R -e "rmarkdown::render('/rrtools/analysis/paper.Rmd')"

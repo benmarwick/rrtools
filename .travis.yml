@@ -1,30 +1,3 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
-
-# language: R
-# sudo: false
-# cache: packages
-
-# set package install repo to versioned CRAN, edit date as necessary
-#repos:
-#  MRAN: "https://mran.microsoft.com/snapshot/2017-07-20"
-
-# install linux dependencies that R packages need
-#addons:
-#  apt:
-#    packages:
-#      - libudunits2-dev
-
-# install our custom pkg to make functions available
-script:
-#  - Rscript -e "devtools::install()"
-  # render our Rmd to output document (Word/HTML/PDF)
-#  - Rscript -e "rmarkdown::render('analysis/paper.Rmd')"
-
-# make it more tolerant of our weaknesses :)
-# warnings_are_errors: false
-
-#----------------------------------------------------------
-
 # Docker on travis
 
 sudo: required
@@ -39,12 +12,12 @@ services:
 
 before_install:
     # create & run container using our dockerfile, i.e. compile pkg and render Rmd to Word doc
-  - docker build -t benmarwick/timetest .
+  - docker build -t benmarwick/rrtools .
 
 # push our custom docker container to docker hub, env vars stored on travis-ci.org
 after_success:
   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-  - export REPO=benmarwick/timetest
+  - export REPO=benmarwick/rrtools
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
   - docker build -f Dockerfile -t $REPO:$COMMIT .
   - docker tag $REPO:$COMMIT $REPO:$TAG
