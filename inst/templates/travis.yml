@@ -2,7 +2,7 @@
 
 env:
   global:
-  - REPO=benmarwick/rrtools
+  - REPO={{{username}}}/{{{repo}}}
 
 sudo: required
 

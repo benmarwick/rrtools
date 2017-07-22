@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # rrtools: 
 
-[![Travis-CI Build Status](https://travis-ci.org/benmarwick/timetest.svg?branch=master)](https://travis-ci.org/benmarwick/timetest)  [![Circle CI](https://circleci.com/gh/benmarwick/timetest.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/benmarwick/timetest)
+[![Travis-CI Build Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://travis-ci.org/benmarwick/rrtools)  
 
 The goal of rrtools is to provide a basic compendium suitable for doing reproducible research with R. This package documents the key steps of creating a new research compendium in an efficient order suitable for reuse in new projects, as well as providing functions to quickly create a new compendia.  
 
