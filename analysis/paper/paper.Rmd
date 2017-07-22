@@ -1,0 +1,56 @@
+---
+title: "Untitled"
+author:
+  - author 1
+  - author 2
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+    bookdown::html_document2:
+    fig_caption: yes
+    reference_docx: templates/template.docx
+bibliography: references.bib
+csl: templates/journal-of-archaeological-science.csl
+abstract: |
+  Text of abstract
+keywords: |
+  keyword 1; keyword 2; keyword 3
+highlights: |
+  These are the highlights. 
+---
+
+
+<!-- This is the format for text comments that will be ignored during renderings. Do not put R code in these comments because it will not be ignored. -->
+
+```{r, setup echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE
+  echo = FALSE,
+  comment = "#>",
+  fig.path = "figures"
+)
+```
+
+# Introduction
+
+# Background
+
+```{r demo, eval = FALSE}
+1 + 1
+```
+
+# Methods
+
+# Results
+
+```{r get-data, eval = FALSE}
+my_data <- readr::read_csv("../data/raw_data/my_csv_file.csv")
+```
+
+
+# Discussion
+
+# Conclusion
+
+# References 

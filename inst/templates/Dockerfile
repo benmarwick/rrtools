@@ -1,10 +1,10 @@
 # get the base image, the rocker/verse has R, RStudio and pandoc
-FROM rocker/verse:3.4.0
+FROM rocker/{{{rocker}}}:{{{r_version}}}
 
 # required
 MAINTAINER Your Name <your_email@somewhere.com>
 
-COPY . /rrtools
+COPY . /{{{repo}}}
 
 # go into the repo directory
 RUN . /etc/environment \
@@ -15,7 +15,7 @@ RUN . /etc/environment \
   && sudo apt-get install libudunits2-dev -y \
 
   # build this compendium package
-  && R -e devtools::install('/rrtools', dep=TRUE)" \
+  && R -e devtools::install('/{{{repo}}}', dep=TRUE)" \
 
  # render the manuscript into a docx
-  && R -e "rmarkdown::render('/rrtools/analysis/paper/paper.Rmd')"
+  && R -e "rmarkdown::render('/{{{repo}}}/analysis/paper/paper.Rmd')"
