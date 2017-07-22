@@ -1,5 +1,29 @@
 
 
+use_compendium <- function(path, description = getOption("devtools.desc"),
+                           check = FALSE, rstudio = TRUE, quiet = FALSE){
+
+  devtools::create(path, description = getOption("devtools.desc"),
+                   check = FALSE, rstudio = TRUE, quiet = FALSE)
+
+  message("The package", path, " has been created \n",
+          "Next: \n",
+          " * Edit the DESCRIPTION file \n",
+          " * Use other rrtools functions to add components to the compendium \n \n",
+          "Now opening the new compendium...")
+
+  Sys.sleep(1) #
+
+  # if we're using RStudio, open the Rproj, otherwise setwd()
+  if(rstudioapi::isAvailable()) rstudioapi::callFun("openProject", paste0("./", path))
+  setwd(path)
+
+  message("Done. The working directory is currently ", getwd())
+
+}
+
+
+
 #' @name use_travis
 #' @title Add a travis config file
 #'
@@ -202,3 +226,7 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
 
   invisible(TRUE)
 }
+
+
+
+

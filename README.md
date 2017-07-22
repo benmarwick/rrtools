@@ -26,19 +26,17 @@ How to use
 
 To create a reproducible research compendium using the rrtools approach, follow these steps (in [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), which we recommend):
 
-#### 1. `devtools::create("pkgname")`
+#### 1. `rrtools::use_compendium("pkgname")`
 
--   this creates a basic R package with the name pkgname
--   we need to look into the new pkgname directory and then,
--   we need to double-click the `pkgname.Rproj` just created to open the new package project
--   edit the DESCRIPTION to give correct metadata
--   then we continuinously update `Imports:` with names of pkgs used in Rmd, as we write the Rmd, this can be done with, for example, `devtools::use_package("dplyr", "imports")`
+-   this uses `devtools::create()` to create a basic R package with the name pkgname, and then opens the project (if using RStudio, if not, it sets the working directory to the pkgname directory)
+-   we need to edit the DESCRIPTION to give correct metadata
+-   we need continuinously update `Imports:` with names of pkgs used in Rmd, as we write the Rmd, this can be done with, for example, `devtools::use_package("dplyr", "imports")`
 
 #### 2. `devtools::use_mit_license(copyright_holder = "My Name")`
 
 -   this gives MIT licence in DESCRIPTION, adds LICENSE file with our name in it
 
-#### 3. `devtools::use_github(".", auth_token = "xxxx")`
+#### 3. `devtools::use_github(".", auth_token = "xxxx", protocol = "https", private = FALSE)`
 
 -   This will initialize a local git repository, and connect to github.com and create a remote repository there.
 -   we need to get a token from <https://github.com/settings/tokens>, and replace "xxxx" with your token
