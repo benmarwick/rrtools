@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 [![Travis-CI Build Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://travis-ci.org/benmarwick/rrtools)  
 
-The goal of rrtools is to provide instructions, templates and functions for making a basic compendium suitable for doing reproducible research with R. This package documents the key steps and provides convenient functions for quickly creating a new research compendium. The approach is based on Marwick's (2016, 2017) work using the R package structure as the basis for a research compendium
+The goal of rrtools is to provide instructions, templates and functions for making a basic compendium suitable for doing reproducible research with R. This package documents the key steps and provides convenient functions for quickly creating a new research compendium. The approach is based generally on Kitzes et al. (2017), and more specifically on Marwick's (2017) work using the R package structure as the basis for a research compendium
 
 rrtools gives you a template for doing scholarly writing in literate programming enviroment using R Markdown and bookdown. It also provides isolation of your computational enviroment using Docker, package versioning using MRAN, and continuous integration using Travis. It makes a convenient starting point for writing a journal article, report or thesis. 
 
@@ -114,6 +114,8 @@ We see scope for automation in these area:
 
 ## References
 
+Kitzes, J., Turek, D., & Deniz, F. (Eds.). (2017). The Practice of Reproducible Research: Case Studies and Lessons from the Data-Intensive Sciences. Oakland, CA: University of California Press.
 
+Marwick, B. (2017). Computational reproducibility in archaeological research: Basic principles and a case study of their implementation. _Journal of Archaeological Method and Theory_, 24(2), 424-450.
 
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
