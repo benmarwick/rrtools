@@ -92,6 +92,8 @@ use_analysis <- function(pkg = ".", template = 'paper.Rmd') {
   writeLines("", file("analysis/paper/references.bib"))
   closeAllConnections()
 
+  devtools:::use_build_ignore("analysis", escape = FALSE, pkg = pkg)
+
   message("Next: \n",
           " * Write your article/paper/thesis in Rmd file(s) in analysis/paper/", "\n",
           " * Add the citation style libray file (csl) to replace the default in analysis/paper/", "\n",

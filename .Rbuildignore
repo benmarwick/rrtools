@@ -5,3 +5,4 @@
 ^\.travis\.yml$
 ^CONDUCT\.md$
 ^Dockerfile$
+analysis
