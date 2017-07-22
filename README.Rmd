@@ -12,15 +12,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-# timetest
+# rrtools: 
 
 [![Travis-CI Build Status](https://travis-ci.org/benmarwick/timetest.svg?branch=master)](https://travis-ci.org/benmarwick/timetest)  [![Circle CI](https://circleci.com/gh/benmarwick/timetest.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/benmarwick/timetest)
 
-The goal of timetest is to see how long it would take to set up a basic research compendium, with continous integration, and ready to write a journal article, report or thesis. The goal was also to document the key steps of creating a new research compendium in an efficient order suitable for reuse in new projects. 
+The goal of rrtools is to provide a basic compendium suitable for doing reproducible research with R. This package documents the key steps of creating a new research compendium in an efficient order suitable for reuse in new projects, as well as providing functions to quickly create a new compendia.  
+
+It provides a template for writing in literate programming enviroment using R Markdown and bookdown, isolation of the computational enviroment using Docker, and continous integration using Travis. It provides a convienent starting point for writing a journal article, report or thesis. 
 
 This was a project developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July). Thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help.
 
-We did the following steps (in RStudio, which we recommend):
+To create a reproducible research compendium using the rrtools approach, follow these steps (in RStudio, which we recommend):
 
 #### 1. `devtools::create("pkgname")  `  
 
