@@ -7,7 +7,7 @@ rrtools: Tools for Writing Reproducible Reseach in R
 
 The goal of rrtools is to provide instructions, templates and functions for making a basic compendium suitable for doing reproducible research with R. This package documents the key steps and provides convenient functions for quickly creating a new research compendium. The approach is based generally on Kitzes et al. (2017), and more specifically on Marwick's (2017) work using the R package structure as the basis for a research compendium
 
-rrtools gives you a template for doing scholarly writing in literate programming enviroment using R Markdown and bookdown. It also provides isolation of your computational enviroment using Docker, package versioning using MRAN, and continuous integration using Travis. It makes a convenient starting point for writing a journal article, report or thesis.
+rrtools gives you a template for doing scholarly writing in literate programming environment using R Markdown and bookdown. It also provides isolation of your computational environment using Docker, package versioning using MRAN, and continuous integration using Travis. It makes a convenient starting point for writing a journal article, report or thesis.
 
 This project was developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July). Special thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help. The convenience functions in this package are derived from similar functions in Hadley Wickham's `devtools` package.
 
@@ -29,6 +29,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 #### 1. `devtools::create("pkgname")`
 
 -   this creates a basic R package with the name pkgname
+-   we need to look into the new pkgname directory and then,
 -   we need to double-click the `pkgname.Rproj` just created to open the new package project
 -   edit the DESCRIPTION to give correct metadata
 -   then we continuinously update `Imports:` with names of pkgs used in Rmd, as we write the Rmd, this can be done with, for example, `devtools::use_package("dplyr", "imports")`
@@ -39,19 +40,25 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 #### 3. `devtools::use_github(".", auth_token = "xxxx")`
 
--   connect to github.com, get token from <https://github.com/settings/tokens>
--   commit, push... maybe not, this is a bit flaky...
+-   This will initialize a local git repository, and connect to github.com and create a remote repository there.
+-   we need to get a token from <https://github.com/settings/tokens>, and replace "xxxx" with your token
+-   we found that it makes our GitHub repo private by default, so we need to go to GitHub to make it public if we want to use Travis
+-   we found that it gives an error in RStudio and doesn't fully enable git in RStudio, so:
+-   in the shell, we need to `git remote set-url origin https://github.com/username/pkgname.git` (it does seem to work again in RStudio after completing one commit-push cycle from the shell and restarting RStudio)
+-   then we can commit, push, etc. as usual, from the shell or RStudio
 
 #### 4. `devtools::use_readme_rmd(); devtools::use_code_of_conduct()`
 
 -   this makes readme.Rmd, ready for to add markdown code to show travis badge
 -   we need to paste in test from CoC from fn output in console, ready for public contributions
+-   we need to render this after each change to refresh the readme.md, which is the doc that GitHub shows on the home page of our repository.
 
 #### 5. `rrtools::use_travis()`
 
 -   this creates a minimal .travis.yml for us
 -   we need to go to the <https://travis-ci.org/> to connect to our repo
 -   we need to add environment variables to enable push of the Docker container to the Docker Hub
+-   we need to make an account at <https://hub.docker.com/> to host our Docker container
 
 #### 6. `rrtools::use_analysis()`
 
@@ -76,7 +83,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
         ├── template.docx
         └── template.Rmd
 
--   The `paper.Rmd` in `aanlysis/paper/` is ready to render with bookdown
+-   The `paper.Rmd` in `analysis/paper/` is ready to render with bookdown
 -   The references.bib\` file is empty, ready to insert reference details
 -   You can replace the supplied `csl` file with one from <https://github.com/citation-style-language/>
 -   we recommend using the citr Addin and Zotero for high efficiency
@@ -88,6 +95,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   the version of R in your rocker container will match the version used when you run this function, for example `rocker/verse:3.4.0`
 -   `rocker/verse` includes R, the tidyverse, RStudio, pandoc and LaTeX, so build times are very fast
 -   we need to edit dockerfile to add linux dependencies (if any) & modify which Rmd files are rendered when the container is made.
+-   remember that we need to make an account at <https://hub.docker.com/> to host our Docker container
 
 #### 8. `devtools::use_testthat()`
 
@@ -99,14 +107,12 @@ You should be able to follow these steps get a new research compendium repositor
 Future directions
 -----------------
 
-We see scope for automation in these area:
-
--   updating Imports: with `library()`, `require()` and :: calls in the Rmd
+-   updating Imports: with `library()`, `require()` and :: calls in the Rmd when `render()`ing
 
 References
 ----------
 
-Kitzes, J., Turek, D., & Deniz, F. (Eds.). (2017). The Practice of Reproducible Research: Case Studies and Lessons from the Data-Intensive Sciences. Oakland, CA: University of California Press. <https://www.practicereproducibleresearch.org>
+Kitzes, J., Turek, D., & Deniz, F. (Eds.). (2017). *The Practice of Reproducible Research: Case Studies and Lessons from the Data-Intensive Sciences*. Oakland, CA: University of California Press. <https://www.practicereproducibleresearch.org>
 
 Marwick, B. (2017). Computational reproducibility in archaeological research: Basic principles and a case study of their implementation. *Journal of Archaeological Method and Theory*, 24(2), 424-450. <https:doi.org/10.1007/s10816-015-9272-9>
 
