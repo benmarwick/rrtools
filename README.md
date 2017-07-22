@@ -9,7 +9,7 @@ The goal of rrtools is to provide instructions, templates and functions for maki
 
 rrtools gives you a template for doing scholarly writing in literate programming environment using R Markdown and bookdown. It also provides isolation of your computational environment using Docker, package versioning using MRAN, and continuous integration using Travis. It makes a convenient starting point for writing a journal article, report or thesis.
 
-This project was developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universit盲t Berlin (17-21 July). Special thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help. The convenience functions in this package are derived from similar functions in Hadley Wickham's `devtools` package.
+This project was developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July). Special thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help. The convenience functions in this package are derived from similar functions in Hadley Wickham's `devtools` package.
 
 Installation
 ------------
@@ -65,20 +65,20 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
     analysis/
     |
-    鈹溾攢鈹€ paper/
-    NA
-    NA
-    NA
+    ├── paper/
+    │   ├── paper.Rmd         # this is the main document to edit, could be multiple
+    │   ├── references.bib    # this contains the reference list information
+    │   └── journal-of-archaeological-science.csl
     |                         # this sets the style of citations & reference list
-    鈹溾攢鈹€ figures/
+    ├── figures/
     |
-    鈹溾攢鈹€ data/
-    NA
-    NA
+    ├── data/
+    │   ├── raw_data/       # data obtained from elswhere
+    │   └── derived_data/   # data generated during the analysis
     |
-    鈹斺攢鈹€  templates
-        鈹溾攢鈹€ template.docx  # used to style the output of the paper.Rmd
-        鈹斺攢鈹€ template.Rmd
+    └──  templates
+        ├── template.docx  # used to style the output of the paper.Rmd
+        └── template.Rmd
 
 -   The `paper.Rmd` in `analysis/paper/` is ready to render with bookdown
 -   The references.bib\` file is empty, ready to insert reference details
