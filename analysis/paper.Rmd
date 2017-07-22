@@ -24,7 +24,7 @@ mtcars %>%
 ```
 
 
-```{r}
+```{r eval = FALSE}
 # break the Rmd
 rm(x)
 rnorm(x)

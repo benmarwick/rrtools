@@ -9,14 +9,14 @@ The goal of timetest is to see how long it would take to set up a basic research
 
 This was a project developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July). Thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help.
 
-We did the following steps (in RStudio, but that's not important):
+We did the following steps (in RStudio, which we recommend):
 
 #### 1. `devtools::create("pkgname")`
 
 -   this creates a basic R package with the name pkgname
--   we must find the new project folder, and open the new .Rproj file to go into the new project
--   we must edit the DESCRIPTION to give correct metadata
--   then we continuinously update Imports: with pkgs used in Rmd, as we write the Rmd
+-   double-click the `pkgname.Rproj` just created to open the new package project
+-   edit the DESCRIPTION to give correct metadata
+-   then we continuinously update `Imports:` with names of pkgs used in Rmd, as we write the Rmd, this can be done with, for example, `devtools::use_package("dplyr", "imports")`
 
 #### 2. `devtools::use_mit_license(copyright_holder = "My Name")`
 
@@ -27,16 +27,17 @@ We did the following steps (in RStudio, but that's not important):
 -   connect to github.com, get token from <https://github.com/settings/tokens>
 -   commit, push... maybe not, this is a bit flaky...
 
-#### 4. `devtools::use_readme_rmd(); evtools::use_code_of_conduct()`
+#### 4. `devtools::use_readme_rmd(); devtools::use_code_of_conduct()`
 
 -   ready for to add markdon code to show travis and circle badges
--   paste in test from CoC from fn, ready for public contributions
+-   paste in test from CoC from fn output in console, ready for public contributions
 
 #### 5. `devtools::use_travis()`
 
 -   this creates a minimal .travis.yml for us
 -   we need to go to the <https://travis-ci.org/> to connect,
--   in .travis.yml we need to change: -- MRAN
+-   in .travis.yml we need to change:
+    -   MRAN repos URL and set the date
     -   linux dependencies, see previous .travis.yml
     -   `devtools::install()` to install custom fns
     -   `rmarkdown::render(...)` to knit Rmd file to Word/HTML/PDF
@@ -56,19 +57,12 @@ We did the following steps (in RStudio, but that's not important):
 
 -   we need to get dockerfile from most recent good project
 -   then edit dockerfile:
-    -   set rocker/verse R version
+    -   set rocker/verse:X:X:X for R version and sets date for MRAN repo
     -   add linux dependencies
     -   update repo/pkg name
     -   update Rmd path/name
 
-#### 8. paste in circle.yml
-
--   need to get circle.yml from most recent project
--   we must change pkg name in 3 places in the circle.yml file
--   we need to go to <https://circleci.com> & add env vars
--   we must add badge to readme.Rmd, then knit to md for display on GitHub
-
-#### 9. `devtools::use_testthat()`
+#### 8. `devtools::use_testthat()`
 
 -   in case we have functions in R/, we need to have some tests to ensure they do what we want
 -   Create tests.R in tests/testhat/ and check <http://r-pkgs.had.co.nz/tests.html> for template

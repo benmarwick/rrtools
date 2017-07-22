@@ -27,7 +27,7 @@ We did the following steps (in RStudio, which we recommend):
 - this creates a basic R package with the name pkgname
 - double-click the `pkgname.Rproj` just created to open the new package project
 -  edit the DESCRIPTION to give correct metadata
-- then we continuinously update `Imports:` with names of pkgs used in Rmd, as we write the Rmd, this can be done with `devtools::use_package("dplyr", "imports")`
+- then we continuinously update `Imports:` with names of pkgs used in Rmd, as we write the Rmd, this can be done with, for example, `devtools::use_package("dplyr", "imports")`
 
 #### 2. `devtools::use_mit_license(copyright_holder = "My Name")`
 
@@ -68,19 +68,12 @@ We did the following steps (in RStudio, which we recommend):
 
 - we need to get dockerfile from most recent good project   
 - then edit dockerfile:   
-    + set rocker/verse R version    
+    + set rocker/verse:X:X:X for R version and sets date for MRAN repo   
     + add linux dependencies    
     + update repo/pkg name   
     + update Rmd path/name    
 
-#### 8. paste in circle.yml           
-
-- need to get circle.yml from most recent project    
-- we must change pkg name in 3 places in the circle.yml file    
-- we need to go to https://circleci.com & add env vars
-- we must add badge to readme.Rmd, then knit to md for display on GitHub  
-
-#### 9. `devtools::use_testthat()`
+#### 8. `devtools::use_testthat()`
 
 - in case we have functions in R/, we need to have some tests to ensure they do what we want
 - Create tests.R in tests/testhat/ and check http://r-pkgs.had.co.nz/tests.html for template
