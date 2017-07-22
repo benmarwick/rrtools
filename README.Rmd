@@ -53,7 +53,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 - in the shell, we need to `git remote set-url origin https://github.com/username/pkgname.git` (it does seem to work again in RStudio after completing one commit-push cycle from the shell and restarting RStudio)
 - then we can commit, push, etc. as usual, from the shell or RStudio
 
-#### 4. `devtools::use_readme_rmd(); devtools::use_code_of_conduct()`     
+#### 4. `rrtools::use_readme_rmd(); devtools::use_code_of_conduct()`     
 
 - this makes readme.Rmd, ready for to add markdown code to show travis badge
 - we need to paste in test from CoC from fn output in console, ready for public contributions

@@ -30,6 +30,9 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "figures"
 )
+
+library(rrtools)
+
 ```
 
 # Introduction

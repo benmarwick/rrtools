@@ -9,7 +9,7 @@ The goal of rrtools is to provide instructions, templates and functions for maki
 
 rrtools gives you a template for doing scholarly writing in literate programming environment using R Markdown and bookdown. It also provides isolation of your computational environment using Docker, package versioning using MRAN, and continuous integration using Travis. It makes a convenient starting point for writing a journal article, report or thesis.
 
-This project was developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July). Special thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help. The convenience functions in this package are derived from similar functions in Hadley Wickham's `devtools` package.
+This project was developed during the 2017 [ISAA Kiel](https://isaakiel.github.io/) Summer School on Reproducible Research in Landscape Archaeology at the Freie Universit盲t Berlin (17-21 July). Special thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help. The convenience functions in this package are derived from similar functions in Hadley Wickham's `devtools` package.
 
 Installation
 ------------
@@ -44,7 +44,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   in the shell, we need to `git remote set-url origin https://github.com/username/pkgname.git` (it does seem to work again in RStudio after completing one commit-push cycle from the shell and restarting RStudio)
 -   then we can commit, push, etc. as usual, from the shell or RStudio
 
-#### 4. `devtools::use_readme_rmd(); devtools::use_code_of_conduct()`
+#### 4. `rrtools::use_readme_rmd(); devtools::use_code_of_conduct()`
 
 -   this makes readme.Rmd, ready for to add markdown code to show travis badge
 -   we need to paste in test from CoC from fn output in console, ready for public contributions
@@ -65,20 +65,20 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
     analysis/
     |
-    ├── paper/
-    │   ├── paper.Rmd         # this is the main document to edit, could be multiple
-    │   ├── references.bib    # this contains the reference list information
-    │   └── journal-of-archaeological-science.csl
+    鈹溾攢鈹€ paper/
+    NA
+    NA
+    NA
     |                         # this sets the style of citations & reference list
-    ├── figures/
+    鈹溾攢鈹€ figures/
     |
-    ├── data/
-    │   ├── raw_data/       # data obtained from elswhere
-    │   └── derived_data/   # data generated during the analysis
+    鈹溾攢鈹€ data/
+    NA
+    NA
     |
-    └──  templates
-        ├── template.docx  # used to style the output of the paper.Rmd
-        └── template.Rmd
+    鈹斺攢鈹€  templates
+        鈹溾攢鈹€ template.docx  # used to style the output of the paper.Rmd
+        鈹斺攢鈹€ template.Rmd
 
 -   The `paper.Rmd` in `analysis/paper/` is ready to render with bookdown
 -   The references.bib\` file is empty, ready to insert reference details

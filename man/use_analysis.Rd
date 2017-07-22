@@ -7,5 +7,5 @@
 This will create \file{analysis/paper.Rmd}, \file{analysis/references.bib}
 and several others, and add \pkg{bookdown} to the imported packages.}
 \usage{
-use_analysis(pkg = ".", template = "paper.Rmd")
+use_analysis(pkg = ".", template = "paper.Rmd", data = list())
 }

@@ -77,13 +77,15 @@ use_travis <- function(pkg = ".", browse = interactive()) {
 #' This will create \file{analysis/paper.Rmd}, \file{analysis/references.bib}
 #' and several others, and add \pkg{bookdown} to the imported packages.
 #' @export
-use_analysis <- function(pkg = ".", template = 'paper.Rmd') {
+use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
   pkg <- devtools:::as.package(pkg)
   pkg$Rmd <- TRUE
+  gh <- devtools:::github_info(pkg$path)
 
   message("* Adding bookdown to Imports")
   devtools:::add_desc_package(pkg, "Imports", "bookdown")
 
+  message("* Creating analysis/ directory")
   devtools:::use_directory("analysis", pkg = pkg)
   devtools:::use_directory("analysis/paper", pkg = pkg)
   devtools:::use_directory("analysis/figures", pkg = pkg)
@@ -114,15 +116,20 @@ use_analysis <- function(pkg = ".", template = 'paper.Rmd') {
 
   template_out <- whisker::whisker.render(readLines(template_path), data)
 
-  # use_template doesn't seem to work for this...
+
   if(file.exists("analysis/paper/paper.Rmd")) stop("paper.Rmd exists already, quitting")
-  writeLines(template_out, file("analysis/paper/paper.Rmd"))
+  # inject the pkg name into the Rmd
+  rmd <- readLines(template_path)
+  rmd <- c(rmd[1:32], paste0("\nlibrary(", gh$repo, ")"), rmd[33:length(rmd)])
+  # use_template doesn't seem to work for this...
+  writeLines(rmd, file("analysis/paper/paper.Rmd"))
   closeAllConnections()
 
   # use_template doesn't seem to work for this...
   if(file.exists("analysis/paper/references.bib")) stop("references.bib exists already, quitting")
   writeLines("", file("analysis/paper/references.bib"))
   closeAllConnections()
+
 
   devtools:::use_build_ignore("analysis", escape = FALSE, pkg = pkg)
 
@@ -174,7 +181,50 @@ use_dockerfile <- function(pkg = ".", rocker = "verse") {
   invisible(TRUE)
 }
 
+#' Creates skeleton README files with sections for
+#' \itemize{
+#' \item a high-level description of the package and its goals
+#' \item R code to install from GitHub, if GitHub usage detected
+#' \item a basic example
+#' }
+#' Use \code{Rmd} if you want a rich intermingling of code and data. Use
+#' \code{md} for a basic README. \code{README.Rmd} will be automatically
+#' added to \code{.Rbuildignore}. The resulting README is populated with default
+#' YAML frontmatter and R fenced code blocks (\code{md}) or chunks (\code{Rmd}).
+#'
+#' @param pkg package description, can be path or package name.  See
+#'   \code{\link{as.package}} for more information
+#' @import devtools
+#' @export
+#' @examples
+#' \dontrun{
+#' use_readme_rmd()
+#' use_readme_md()
+#' }
+#' @family infrastructure
+use_readme_rmd <- function(pkg = ".") {
+  pkg <- devtools:::as.package(pkg)
 
+  if (devtools:::uses_github(pkg$path)) {
+    pkg$github <- devtools:::github_info(pkg$path)
+  }
+  pkg$Rmd <- TRUE
+
+  rrtools:::use_template("omni-README", save_as = "README.Rmd", data = pkg,
+               ignore = TRUE, open = TRUE, pkg = pkg)
+  devtools:::use_build_ignore("^README-.*\\.png$", escape = FALSE, pkg = pkg)
+
+  if (devtools:::uses_git(pkg$path) && !file.exists(pkg$path, ".git", "hooks", "pre-commit")) {
+    message("* Adding pre-commit hook")
+    devtools:::use_git_hook("pre-commit", devtools:::render_template("readme-rmd-pre-commit.sh"),
+                 pkg = pkg)
+  }
+
+  message("* Rendering README.Rmd to README.md for GitHub.")
+  rmarkdown::render("README.Rmd")
+
+  invisible(TRUE)
+}
 
 # Given the name or vector of names, returns a named vector reporting
 # whether each exists and is a directory.
