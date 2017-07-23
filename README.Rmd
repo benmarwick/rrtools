@@ -43,20 +43,22 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 #### 2. `devtools::use_mit_license(copyright_holder = "My Name")`
 
-- this gives MIT licence in DESCRIPTION, adds LICENSE file with our name in it
+- this gives MIT license in DESCRIPTION, adds LICENSE file with our name in it
+- you may wish to use a different license for your code, if so, replace this line with `devtools::use_gpl3_license(copyright_holder = "My Name")`, or follow the instructions for other licenses. 
 
 #### 3. `devtools::use_github(".", auth_token = "xxxx", protocol = "https", private = FALSE)` 
 
 - This will initialize a local git repository, and connect to github.com and create a remote repository there. 
 - we need to get a token from <https://github.com/settings/tokens>, and replace "xxxx" with your token
-- we found that it gives an error in RStudio and doesn't fully enable git in RStudio, so:
+- we found that this function can be a little unreliable in RStudio, sometimes giving and erros and not fully enabling git in RStudio, to work around this:
 - in the shell, we need to `git remote set-url origin https://github.com/username/pkgname.git` (it does seem to work again in RStudio after completing one commit-push cycle from the shell and restarting RStudio)
 - then we can commit, push, etc. as usual, from the shell or RStudio
 
-#### 4. `rrtools::use_readme_rmd(); devtools::use_code_of_conduct()`     
+#### 4. `rrtools::use_readme_rmd()`    
 
-- this makes readme.Rmd, ready for to add markdown code to show travis badge
-- we need to paste in test from CoC from fn output in console, ready for public contributions
+- this makes README.Rmd ready for to add markdown code to show travis badge
+- this also renders thr Rmd to and renders it to README.md, ready to display on GitHub
+- this also adds a code of conduct to the compendium, to guide other contributors
 - we need to render this after each change to refresh the readme.md, which is the doc that GitHub shows on the home page of our repository.
 
 #### 5. `rrtools::use_travis()`         

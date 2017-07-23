@@ -8,10 +8,9 @@
 \item R code to install from GitHub, if GitHub usage detected
 \item a basic example
 }
-Use \code{Rmd} if you want a rich intermingling of code and data. Use
-\code{md} for a basic README. \code{README.Rmd} will be automatically
+\code{README.Rmd} will be automatically
 added to \code{.Rbuildignore}. The resulting README is populated with default
-YAML frontmatter and R fenced code blocks (\code{md}) or chunks (\code{Rmd}).}
+YAML frontmatter and R fenced code chunks (\code{Rmd}).}
 \usage{
 use_readme_rmd(pkg = ".")
 }
@@ -26,14 +25,12 @@ Creates skeleton README files with sections for
 \item R code to install from GitHub, if GitHub usage detected
 \item a basic example
 }
-Use \code{Rmd} if you want a rich intermingling of code and data. Use
-\code{md} for a basic README. \code{README.Rmd} will be automatically
+\code{README.Rmd} will be automatically
 added to \code{.Rbuildignore}. The resulting README is populated with default
-YAML frontmatter and R fenced code blocks (\code{md}) or chunks (\code{Rmd}).
+YAML frontmatter and R fenced code chunks (\code{Rmd}).
 }
 \examples{
 \dontrun{
 use_readme_rmd()
-use_readme_md()
 }
 }

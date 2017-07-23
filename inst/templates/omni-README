@@ -23,11 +23,15 @@ knitr::opts_chunk$set(
 
 # {{{ package }}}
 
-[![Last-changedate](https://img.shields.io/badge/last%20change-`r gsub('-', '--', Sys.Date())`-brightgreen.svg)](https://github.com/{{{username}}}/{{{repo}}}/commits/master) 
-[![minimal R version](https://img.shields.io/badge/R%3E%3D-`r as.character(getRversion())`-brightgreen.svg)](https://cran.r-project.org/)
-[![Travis-CI Build Status](https://travis-ci.org/{{{username}}}/{{{repo}}}.svg?branch=master)](https://travis-ci.org/{{{username}}}/{{{repo}}}) 
+[![Travis-CI Build Status](https://travis-ci.org/{{{username}}}/{{{repo}}}.svg?branch=master)](https://travis-ci.org/{{{username}}}/{{{repo}}})
 
 The goal of {{{package}}} is to ...
+
+## Citation
+
+Please cite this compendium as:
+
+> Authors, (`r format(Sys.Date(), "%Y")`). _Title of compendium_. Accessed `r format(Sys.Date(), "%d %b %Y")`. Online at <https://doi.org/xxx/xxx>
 
 {{#github}}
 ## Installation
@@ -56,3 +60,12 @@ This is a basic example which shows you how to solve a common problem:
 {{/Rmd}}
 ## basic example code
 ```
+### Licenses
+
+Text and figures:  [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)
+
+Code: See the [DESCRIPTION](DESCRIPTION) file
+
+Data: [CC-0](http://creativecommons.org/publicdomain/zero/1.0/) attribution requested in reuse
+
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.

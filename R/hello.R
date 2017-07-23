@@ -20,7 +20,7 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
           " * Use other rrtools functions to add components to the compendium \n \n",
           "Now opening the new compendium...")
 
-  Sys.sleep(1) #
+  Sys.sleep(3) #
 
   # if we're using RStudio, open the Rproj, otherwise setwd()
   if(rstudioapi::isAvailable()) rstudioapi::callFun("openProject", paste0("./", path))
@@ -146,9 +146,6 @@ use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
 invisible(TRUE)
 }
 
-
-
-
 #' @name use_dockerfile
 #' @title Add a Dockerfile
 #'
@@ -187,10 +184,9 @@ use_dockerfile <- function(pkg = ".", rocker = "verse") {
 #' \item R code to install from GitHub, if GitHub usage detected
 #' \item a basic example
 #' }
-#' Use \code{Rmd} if you want a rich intermingling of code and data. Use
-#' \code{md} for a basic README. \code{README.Rmd} will be automatically
+#' \code{README.Rmd} will be automatically
 #' added to \code{.Rbuildignore}. The resulting README is populated with default
-#' YAML frontmatter and R fenced code blocks (\code{md}) or chunks (\code{Rmd}).
+#' YAML frontmatter and R fenced code chunks (\code{Rmd}).
 #'
 #' @param pkg package description, can be path or package name.  See
 #'   \code{\link{as.package}} for more information
@@ -199,7 +195,6 @@ use_dockerfile <- function(pkg = ".", rocker = "verse") {
 #' @examples
 #' \dontrun{
 #' use_readme_rmd()
-#' use_readme_md()
 #' }
 #' @family infrastructure
 use_readme_rmd <- function(pkg = ".") {
@@ -212,6 +207,7 @@ use_readme_rmd <- function(pkg = ".") {
 
   rrtools:::use_template("omni-README", save_as = "README.Rmd", data = pkg,
                ignore = TRUE, open = TRUE, pkg = pkg)
+
   devtools:::use_build_ignore("^README-.*\\.png$", escape = FALSE, pkg = pkg)
 
   if (devtools:::uses_git(pkg$path) && !file.exists(pkg$path, ".git", "hooks", "pre-commit")) {
@@ -220,11 +216,23 @@ use_readme_rmd <- function(pkg = ".") {
                  pkg = pkg)
   }
 
+
   message("* Rendering README.Rmd to README.md for GitHub.")
   rmarkdown::render("README.Rmd")
 
+  rrtools:::use_code_of_conduct()
+  message("* Adding code of conduct.")
+
   invisible(TRUE)
 }
+
+
+use_code_of_conduct <- function(pkg = "."){
+  pkg <- as.package(pkg)
+  rrtools::use_template("CONDUCT.md", ignore = TRUE, pkg = pkg)
+}
+
+# helpers, not exported -------------------------------------------------------
 
 # Given the name or vector of names, returns a named vector reporting
 # whether each exists and is a directory.
@@ -232,6 +240,7 @@ dir.exists <- function(x) {
   res <- file.exists(x) & file.info(x)$isdir
   stats::setNames(res, x)
 }
+
 
 use_template <- function(template, save_as = template, data = list(),
                          ignore = FALSE, open = FALSE, pkg = ".") {

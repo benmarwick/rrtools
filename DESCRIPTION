@@ -1,9 +1,11 @@
 Package: rrtools
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Creates a reproducible research compendium
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Authors@R: c(person("Ben", "Marwick", role = c("aut", "cre"), email = "benmarwick@gmail.com"),
+             person("Daniel", "Knitter", role = c("ctb")),
+             person("Patrick", "Kennedy", role = c("ctb")))
+Maintainer: Ben Marwick <benmarwick@gmail.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
