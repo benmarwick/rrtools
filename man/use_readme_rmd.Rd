@@ -2,15 +2,7 @@
 % Please edit documentation in R/hello.R
 \name{use_readme_rmd}
 \alias{use_readme_rmd}
-\title{Creates skeleton README files with sections for
-\itemize{
-\item a high-level description of the package and its goals
-\item R code to install from GitHub, if GitHub usage detected
-\item a basic example
-}
-\code{README.Rmd} will be automatically
-added to \code{.Rbuildignore}. The resulting README is populated with default
-YAML frontmatter and R fenced code chunks (\code{Rmd}).}
+\title{Creates skeleton README files with sections for}
 \usage{
 use_readme_rmd(pkg = ".")
 }
@@ -19,7 +11,6 @@ use_readme_rmd(pkg = ".")
 \code{\link{as.package}} for more information}
 }
 \description{
-Creates skeleton README files with sections for
 \itemize{
 \item a high-level description of the package and its goals
 \item R code to install from GitHub, if GitHub usage detected

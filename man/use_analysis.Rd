@@ -2,10 +2,8 @@
 % Please edit documentation in R/hello.R
 \name{use_analysis}
 \alias{use_analysis}
-\title{Adds and analysis directory (and sub-directories), and an Rmd file ready to write
-
-This will create \file{analysis/paper.Rmd}, \file{analysis/references.bib}
-and several others, and add \pkg{bookdown} to the imported packages listed in the DESCRIPTION file.}
+\alias{add_analysis}
+\title{Adds and analysis directory (and sub-directories), and an Rmd file ready to write}
 \usage{
 use_analysis(pkg = ".", template = "paper.Rmd", data = list())
 }
@@ -13,4 +11,10 @@ use_analysis(pkg = ".", template = "paper.Rmd", data = list())
 \item{pkg}{defaults to the package in the current working directory}
 
 \item{template}{the template file to use to create the main anlaysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown}
+
+\item{data}{forwarded to \code{whisker::whisker.render}}
+}
+\description{
+This will create \file{analysis/paper.Rmd}, \file{analysis/references.bib}
+and several others, and add \pkg{bookdown} to the imported packages listed in the DESCRIPTION file.
 }
