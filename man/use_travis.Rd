@@ -5,11 +5,13 @@
 \alias{add_travis}
 \title{Add a travis config file
 
-This differs from devtools by directing travis to build the Docker container and push the successful result to Docker Hub.}
+This has two options. One is the same as `devtools::use_travis`, a vanilla travis config that builds, installs and runs the custom package on travis. The other type of configuration directs travis to build the Docker container (according to the instructions in your Dockerfile) and push the successful result to Docker Hub. Using a Dockerfile is recommended because it gives greater isolation of the computational enviroment, and will result in much faster build times on travis.}
 \usage{
-use_travis(pkg = ".", browse = interactive())
+use_travis(pkg = ".", browse = interactive(), docker = TRUE)
 }
 \arguments{
 \item{browse}{open a browser window to enable Travis builds for the package
 automatically.}
+
+\item{docker}{logical, if TRUE (the default) the travis config will build a Docker container according to the instructions in the Dockerfile, and build and install the package in that container. If FALSE, the standard config for R on travis is used.}
 }

@@ -5,7 +5,7 @@
 \title{Adds and analysis directory (and sub-directories), and an Rmd file ready to write
 
 This will create \file{analysis/paper.Rmd}, \file{analysis/references.bib}
-and several others, and add \pkg{bookdown} to the imported packages.}
+and several others, and add \pkg{bookdown} to the imported packages listed in the DESCRIPTION file.}
 \usage{
 use_analysis(pkg = ".", template = "paper.Rmd", data = list())
 }

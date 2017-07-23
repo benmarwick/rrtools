@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Title Goes Here"
 author:
   - author 1
   - author 2
@@ -45,9 +45,9 @@ knitr::opts_chunk$set(
 # Results
 
 ```{r get-data, eval = FALSE}
+# Note the path that we need to use to access our data files when rendering this document
 my_data <- readr::read_csv("../data/raw_data/my_csv_file.csv")
 ```
-
 
 # Discussion
 

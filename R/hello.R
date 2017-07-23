@@ -35,23 +35,33 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
 #' @name use_travis
 #' @title Add a travis config file
 #'
-#' This differs from devtools by directing travis to build the Docker container and push the successful result to Docker Hub.
+#' This has two options. One is the same as `devtools::use_travis`, a vanilla travis config that builds, installs and runs the custom package on travis. The other type of configuration directs travis to build the Docker container (according to the instructions in your Dockerfile) and push the successful result to Docker Hub. Using a Dockerfile is recommended because it gives greater isolation of the computational enviroment, and will result in much faster build times on travis.
 #' @param browse open a browser window to enable Travis builds for the package
 #' automatically.
+#' @param docker logical, if TRUE (the default) the travis config will build a Docker container according to the instructions in the Dockerfile, and build and install the package in that container. If FALSE, the standard config for R on travis is used.
 #' @import devtools
 #' @export
 #' @aliases add_travis
-use_travis <- function(pkg = ".", browse = interactive()) {
+use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
   pkg <- devtools::as.package(pkg)
 
   gh <- devtools:::github_info(pkg$path)
   travis_url <- file.path("https://travis-ci.org", gh$fullname)
 
-  rrtools:::use_template("travis.yml",
+  if(docker){
+    rrtools:::use_template("travis.yml-with-docker",
                          ".travis.yml",
                          ignore = TRUE,
                          pkg = pkg,
                          data = gh)
+  } else {
+    gh$date <- format(Sys.Date(), "%Y-%m-%d")
+    rrtools:::use_template("travis.yml-no-docker",
+                           ".travis.yml",
+                           ignore = TRUE,
+                           pkg = pkg,
+                           data = gh)
+  }
 
   message("Next: \n",
           " * Add a travis shield to your README.Rmd:\n",
@@ -59,7 +69,9 @@ use_travis <- function(pkg = ".", browse = interactive()) {
           "(https://travis-ci.org/", gh$fullname, ".svg?branch=master)]",
           "(https://travis-ci.org/", gh$fullname, ")\n",
           " * Turn on travis for your repo at ", travis_url, "\n",
-          " * At travis, add your environment variables: DOCKER_EMAIL, DOCKER_USER, DOCKER_PASS to enable pushing to the Docker Hub"
+          ifelse(docker,
+          " * To connect Docker, go to https://travis-ci.org/, and add your environment variables: DOCKER_EMAIL, DOCKER_USER, DOCKER_PASS to enable pushing to the Docker Hub",
+          "")
   )
 
   if (browse) {
@@ -75,7 +87,7 @@ use_travis <- function(pkg = ".", browse = interactive()) {
 #' @title Adds and analysis directory (and sub-directories), and an Rmd file ready to write
 #'
 #' This will create \file{analysis/paper.Rmd}, \file{analysis/references.bib}
-#' and several others, and add \pkg{bookdown} to the imported packages.
+#' and several others, and add \pkg{bookdown} to the imported packages listed in the DESCRIPTION file.
 #' @export
 use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
   pkg <- devtools:::as.package(pkg)
@@ -85,7 +97,7 @@ use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
   message("* Adding bookdown to Imports")
   devtools:::add_desc_package(pkg, "Imports", "bookdown")
 
-  message("* Creating analysis/ directory")
+  message("* Creating analysis/ directory and contents")
   devtools:::use_directory("analysis", pkg = pkg)
   devtools:::use_directory("analysis/paper", pkg = pkg)
   devtools:::use_directory("analysis/figures", pkg = pkg)
@@ -130,6 +142,9 @@ use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
   writeLines("", file("analysis/paper/references.bib"))
   closeAllConnections()
 
+  # create a file that inform of best practices
+  invisible(file.create("analysis/data/DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND"))
+
 
   devtools:::use_build_ignore("analysis", escape = FALSE, pkg = pkg)
 
@@ -140,7 +155,7 @@ use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
           " * For adding captions & cross-referenceing in an Rmd, see https://bookdown.org/yihui/bookdown/ ", "\n",
           " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ")
 
-  devtools:::open_in_rstudio("analysis/paper/paper.Rmd")
+  devtools:::open_in_rstudio("/analysis/paper/paper.Rmd")
 
 
 invisible(TRUE)
@@ -218,10 +233,13 @@ use_readme_rmd <- function(pkg = ".") {
 
 
   message("* Rendering README.Rmd to README.md for GitHub.")
-  rmarkdown::render("README.Rmd")
+  rmarkdown::render("README.Rmd", output_format = NULL)
 
   rrtools:::use_code_of_conduct()
   message("* Adding code of conduct.")
+
+  rrtools:::use_contributing
+  message("* Adding instructions to contributors.")
 
   invisible(TRUE)
 }
@@ -230,6 +248,12 @@ use_readme_rmd <- function(pkg = ".") {
 use_code_of_conduct <- function(pkg = "."){
   pkg <- as.package(pkg)
   rrtools::use_template("CONDUCT.md", ignore = TRUE, pkg = pkg)
+}
+
+use_contributing <- function(pkg = "."){
+  pkg <- as.package(pkg)
+  gh <- devtools:::github_info(pkg$path)
+  rrtools::use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh)
 }
 
 # helpers, not exported -------------------------------------------------------

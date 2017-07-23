@@ -1,0 +1,24 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+sudo: false
+cache: packages
+
+# set pkg repo for the versioned CRAN hosted by Microsoft
+repos:
+  MRAN: "https://mran.microsoft.com/snapshot/{{{date}}}"
+  
+# install linux libraries that some R pkgs depend on, add more as needed
+addons:
+  apt:
+    packages:
+      - libudunits2-dev
+
+script:
+    # build and install custom library with custom functions
+  - Rscript -e "devtools::install()"
+    # render the main mansucript document into HTML/Word/PDF as specified in the Rmd
+  - Rscript -e "rmarkdown::render('analysis/paper.Rmd')"
+
+# be more tolerant :)
+warnings_are_errors: false
