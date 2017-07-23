@@ -1,7 +1,7 @@
 # Contributing
 
 We love pull requests from everyone. By participating in this project, you
-agree to abide by our [code of conduct]()CONDUCT.md).
+agree to abide by our [code of conduct](CONDUCT.md).
 
 ## Getting Started
 

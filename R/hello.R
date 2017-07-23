@@ -235,28 +235,29 @@ use_readme_rmd <- function(pkg = ".") {
   message("* Rendering README.Rmd to README.md for GitHub.")
   rmarkdown::render("README.Rmd", output_format = NULL)
 
-  rrtools:::use_code_of_conduct()
   message("* Adding code of conduct.")
+  rrtools:::use_code_of_conduct()
 
-  rrtools:::use_contributing
   message("* Adding instructions to contributors.")
+  rrtools:::use_contributing()
+
 
   invisible(TRUE)
 }
 
+# helpers, not exported -------------------------------------------------------
 
 use_code_of_conduct <- function(pkg = "."){
-  pkg <- as.package(pkg)
-  rrtools::use_template("CONDUCT.md", ignore = TRUE, pkg = pkg)
+  pkg <- devtools:::as.package(pkg)
+  rrtools:::use_template("CONDUCT.md", ignore = TRUE, pkg = pkg)
 }
 
 use_contributing <- function(pkg = "."){
-  pkg <- as.package(pkg)
+  pkg <- devtools:::as.package(pkg)
   gh <- devtools:::github_info(pkg$path)
-  rrtools::use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh)
+  rrtools:::use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh)
 }
 
-# helpers, not exported -------------------------------------------------------
 
 # Given the name or vector of names, returns a named vector reporting
 # whether each exists and is a directory.
