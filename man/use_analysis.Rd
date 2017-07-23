@@ -9,3 +9,8 @@ and several others, and add \pkg{bookdown} to the imported packages listed in th
 \usage{
 use_analysis(pkg = ".", template = "paper.Rmd", data = list())
 }
+\arguments{
+\item{pkg}{defaults to the package in the current working directory}
+
+\item{template}{the template file to use to create the main anlaysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown}
+}

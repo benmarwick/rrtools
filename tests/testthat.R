@@ -1,4 +1,4 @@
 library(testthat)
-library(timetest)
+library(rrtools)
 
-test_check("timetest")
+test_check("rrtools")

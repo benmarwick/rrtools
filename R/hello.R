@@ -88,9 +88,11 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
 #'
 #' This will create \file{analysis/paper.Rmd}, \file{analysis/references.bib}
 #' and several others, and add \pkg{bookdown} to the imported packages listed in the DESCRIPTION file.
+#' @param pkg defaults to the package in the current working directory
+#' @param template the template file to use to create the main anlaysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
 #' @export
 use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
-  pkg <- devtools:::as.package(pkg)
+  pkg <- devtools::as.package(pkg)
   pkg$Rmd <- TRUE
   gh <- devtools:::github_info(pkg$path)
 
@@ -146,7 +148,7 @@ use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
   invisible(file.create("analysis/data/DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND"))
 
 
-  devtools:::use_build_ignore("analysis", escape = FALSE, pkg = pkg)
+  devtools::use_build_ignore("analysis", escape = FALSE, pkg = pkg)
 
   message("Next: \n",
           " * Write your article/paper/thesis in Rmd file(s) in analysis/paper/", "\n",
@@ -166,12 +168,13 @@ invisible(TRUE)
 #'
 #' This will create a basic \file{Dockerfile} based on rocker/verse
 #' @param rocker chr, the rocker image to base this container on
+#' @import utils devtools
 #' @export
 use_dockerfile <- function(pkg = ".", rocker = "verse") {
-  pkg <- devtools:::as.package(pkg)
+  pkg <- devtools::as.package(pkg)
 
   # get R version for rocker/r-ver
-  si <- sessionInfo()
+  si <- utils::sessionInfo()
   r_version <- paste0(si$R.version$major, ".", si$R.version$minor)
 
   gh <- devtools:::github_info(pkg$path)
@@ -213,7 +216,7 @@ use_dockerfile <- function(pkg = ".", rocker = "verse") {
 #' }
 #' @family infrastructure
 use_readme_rmd <- function(pkg = ".") {
-  pkg <- devtools:::as.package(pkg)
+  pkg <- devtools::as.package(pkg)
 
   if (devtools:::uses_github(pkg$path)) {
     pkg$github <- devtools:::github_info(pkg$path)
@@ -223,11 +226,11 @@ use_readme_rmd <- function(pkg = ".") {
   rrtools:::use_template("omni-README", save_as = "README.Rmd", data = pkg,
                ignore = TRUE, open = TRUE, pkg = pkg)
 
-  devtools:::use_build_ignore("^README-.*\\.png$", escape = FALSE, pkg = pkg)
+  devtools::use_build_ignore("^README-.*\\.png$", escape = FALSE, pkg = pkg)
 
   if (devtools:::uses_git(pkg$path) && !file.exists(pkg$path, ".git", "hooks", "pre-commit")) {
     message("* Adding pre-commit hook")
-    devtools:::use_git_hook("pre-commit", devtools:::render_template("readme-rmd-pre-commit.sh"),
+    devtools::use_git_hook("pre-commit", devtools:::render_template("readme-rmd-pre-commit.sh"),
                  pkg = pkg)
   }
 
@@ -248,12 +251,12 @@ use_readme_rmd <- function(pkg = ".") {
 # helpers, not exported -------------------------------------------------------
 
 use_code_of_conduct <- function(pkg = "."){
-  pkg <- devtools:::as.package(pkg)
+  pkg <- devtools::as.package(pkg)
   rrtools:::use_template("CONDUCT.md", ignore = TRUE, pkg = pkg)
 }
 
 use_contributing <- function(pkg = "."){
-  pkg <- devtools:::as.package(pkg)
+  pkg <- devtools::as.package(pkg)
   gh <- devtools:::github_info(pkg$path)
   rrtools:::use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh)
 }
