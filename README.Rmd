@@ -20,7 +20,7 @@ The goal of rrtools is to provide instructions, templates, and functions for mak
 
 rrtools gives you a template for doing scholarly writing in a literate programming environment using [R Markdown](http://rmarkdown.rstudio.com) and [bookdown](https://bookdown.org/home/about.html). It also provides isolation of your computational environment using [Docker](https://www.docker.com/what-docker), package versioning using [MRAN](https://mran.microsoft.com/documents/rro/reproducibility/), and continuous integration using [Travis](https://docs.travis-ci.com/user/for-beginners). It makes a convenient starting point for writing a journal article, report or thesis.
 
-The functions in rrtools allow you to use R to easily follow the best practices outlined in several major scholarly publications on reproducible research. In addition to those cited above, Wilson et al. (2017), Piccolo & Frampton (2016), and Stodden & Miguez (2014) are important sources that have influenced our approach to this package. Please read those before using this package. 
+The functions in rrtools allow you to use R to easily follow the best practices outlined in several major scholarly publications on reproducible research. In addition to those cited above, Wilson et al. (2017), Piccolo & Frampton (2016), Stodden & Miguez (2014) and rOpenSci (2017a, b) are important sources that have influenced our approach to this package. Please read those before using this package. 
 
 This project was developed during the 2017 Summer School on Reproducible Research in Landscape Archaeology at the Freie Universität Berlin (17-21 July), funded and jointly organized by [Exc264 Topoi](https://www.topoi.org/), [CRC1266](http://www.sfb1266.uni-kiel.de/en), and [ISAAKiel](https://isaakiel.github.io/). Special thanks to [Sophie C. Schmidt](https://github.com/SCSchmidt) for help. The convenience functions in this package are derived from similar functions in Hadley Wickham's [`devtools`](https://github.com/hadley/devtools) package.
 
@@ -107,7 +107,7 @@ analysis/
 - the version of R in your rocker container will match the version used when you run this function, for example `rocker/verse:3.4.0`
 - [`rocker/verse`](https://github.com/rocker-org/rocker) includes R, the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX, so compendium build times are very fast on travis.
 - we need to:
-    +  edit Dockerfile to add linux dependencies (many R packages require additional libraries outside of R).
+    + edit Dockerfile to add linux dependencies (some R packages require additional libraries outside of R). You can find out what these are by browsing the DESCRIPTION files of the other packages you're using, and looking in the SystemRequirements field for each package. Often the logs on travis give error messages that include the names of missing libraries, so they are a useful source of information also. 
     + modify which Rmd files are rendered when the container is made.
     + have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this funciton generates.
 - If we want to use Travis on our project, we need to make an account at <https://hub.docker.com/> to receive our Docker container after a successful build on travis
@@ -115,7 +115,7 @@ analysis/
 
 #### 7. `rrtools::use_travis()`
 
-- this creates a minimal .travis.yml for us, by default it configures travis to build our Docker container from our Dockerfile, and build, install and run our custom package in this container. By specifying `docker = FALSE` in this function the travis file will not use Docker in travis, but run R directly on the travis infrastructure. Using Docker is recommended because it gives greater computational isolation and saves a substantial amount of time during the travis build because the base image contains many pre-compiled packages.
+- this creates a minimal `.travis.yml` file for us, by default it configures travis to build our Docker container from our Dockerfile, and build, install and run our custom package in this container. By specifying `docker = FALSE` in this function the travis file will not use Docker in travis, but run R directly on the travis infrastructure. Using Docker is recommended because it gives greater computational isolation and saves a substantial amount of time during the travis build because the base image contains many pre-compiled packages.
 - we need to:
     + run this function only when we are ready for our repository to be public. The free travis service we're using here requires your GitHub repository to be public. It will not work on private repositories. You can skip this step if you want to keep your repo private until after publication.
     + go to <https://travis-ci.org/> to connect to our repo
@@ -124,8 +124,8 @@ analysis/
 
 #### 8. `devtools::use_testthat()`
 
-- in case we have functions in R/, we need to include tests to ensure they do what we want
-- create tests.R in tests/testhat/ and check <http://r-pkgs.had.co.nz/tests.html> for template
+- in case we have functions in `R/`, we need to include tests to ensure they do what we want
+- create tests.R in `tests/testhat/` and check <http://r-pkgs.had.co.nz/tests.html> for template
 
 You should be able to follow these steps to get a new research compendium repository connected to travis and ready to write in just a few minutes.
 
@@ -141,11 +141,15 @@ Marwick, B. (2017). Computational reproducibility in archaeological research: Ba
 
 Piccolo, S. R. and M. B. Frampton (2016). "Tools and techniques for computational reproducibility." GigaScience 5(1): 30. <https://gigascience.biomedcentral.com/articles/10.1186/s13742-016-0135-4>
 
+rOpenSci community (2017a). Reproducibility in Science A Guide to enhancing reproducibility in scientific results and writing. Online at <http://ropensci.github.io/reproducibility-guide/>
+
+rOpenSci community (2017b). rrrpkg: Use of an R package to facilitate reproducible research. Online at <https://github.com/ropensci/rrrpkg>
+
 Stodden, V. & Miguez, S., (2014). Best Practices for Computational Science: Software Infrastructure and Environments for Reproducible and Extensible Research. Journal of Open Research Software. 2(1), p.e21. DOI: <http://doi.org/10.5334/jors.ay>
 
 Wickham, H. (2017) _Research compendia_. Note prepared for the 2017 rOpenSci Unconf. <https://docs.google.com/document/d/1LzZKS44y4OEJa4Azg5reGToNAZL0e0HSUwxamNY7E-Y/edit#>
 
-Wilson G, Bryan J, Cranston K, Kitzes J, Nederbragt L, et al. (2017) Good enough practices in scientific computing. _PLOS Computational Biology_ 13(6): e1005510. <https://doi.org/10.1371/journal.pcbi.1005510>
+Wilson G, Bryan J, Cranston K, Kitzes J, Nederbragt L, et al. (2017). Good enough practices in scientific computing. _PLOS Computational Biology_ 13(6): e1005510. <https://doi.org/10.1371/journal.pcbi.1005510>
 
 ## Contributing
 
