@@ -2,7 +2,8 @@
 % Please edit documentation in R/hello.R
 \name{use_compendium}
 \alias{use_compendium}
-\title{Creates an R package suitable to use as a research compendium}
+\title{Creates an R package suitable to use as a research compendium, and
+switches to the working directory of this new package, ready to work}
 \usage{
 use_compendium(path, description = getOption("devtools.desc"),
   check = FALSE, rstudio = TRUE, quiet = FALSE)

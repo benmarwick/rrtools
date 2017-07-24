@@ -1,5 +1,6 @@
 #' @name use_compendium
-#' @title Creates an R package suitable to use as a research compendium
+#' @title Creates an R package suitable to use as a research compendium, and
+#' switches to the working directory of this new package, ready to work
 #'
 #' @description This is devtools::create() with an additional step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio
 #'
@@ -14,22 +15,31 @@
 use_compendium <- function(path, description = getOption("devtools.desc"),
                            check = FALSE, rstudio = TRUE, quiet = FALSE){
 
-  devtools::create(path, description = getOption("devtools.desc"),
-                   check, rstudio, quiet)
+  devtools::create(path,
+                   description = getOption("devtools.desc"),
+                   check,
+                   rstudio,
+                   quiet)
 
   message("The package", path, " has been created \n",
-          "Next: \n",
+          "Next: \n\n",
           " * Edit the DESCRIPTION file \n",
-          " * Use other rrtools functions to add components to the compendium \n \n",
-          "Now opening the new compendium...")
+          " * Use other rrtools functions to add components to the compendium \n",
+          " Please wait a moment...  \n")
 
-  Sys.sleep(3) #
+  Sys.sleep(3) # give the user a chance to read the console output
 
   # if we're using RStudio, open the Rproj, otherwise setwd()
-  if(rstudioapi::isAvailable()) rstudioapi::callFun("openProject", paste0("./", path))
-  setwd(path)
-
-  message("Done. The working directory is currently ", getwd())
+  # when the release includes openProject", use this
+  # rstudioapi::callFun("openProject", paste0("./", path))
+  if(rstudioapi::isAvailable()) {
+   message(" Opening the new compendium in a new RStudio session...")
+   browseURL(paste0(path, "/", basename(path), ".Rproj"))
+  } else {
+   message("Now opening the new compendium...")
+   setwd(path)
+   message("Done. The working directory is currently ", getwd())
+  }
 
 }
 
@@ -58,14 +68,16 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
                          ".travis.yml",
                          ignore = TRUE,
                          pkg = pkg,
-                         data = gh)
+                         data = gh,
+                         out_path = "")
   } else {
     gh$date <- format(Sys.Date(), "%Y-%m-%d")
     use_template("travis.yml-no-docker",
                            ".travis.yml",
                            ignore = TRUE,
                            pkg = pkg,
-                           data = gh)
+                           data = gh,
+                           out_path = "")
   }
 
   message("Next: \n",
@@ -92,15 +104,16 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
 #' @aliases add_analysis
 #' @title Adds and analysis directory (and sub-directories), and an Rmd file ready to write
 #'
-#' @description This will create \file{analysis/paper.Rmd}, \file{analysis/references.bib}
+#' @description This will create \file{paper.Rmd}, \file{references.bib}
 #' and several others, and add \pkg{bookdown} to the imported packages listed in the DESCRIPTION file.
 #'
 #' @param pkg defaults to the package in the current working directory
 #' @param template the template file to use to create the main anlaysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
+#' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst/' (so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
 #' @param data forwarded to \code{whisker::whisker.render}
 #'
 #' @export
-use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
+use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list()) {
   pkg <- devtools::as.package(pkg)
   pkg$Rmd <- TRUE
   gh <- devtools:::github_info(pkg$path)
@@ -108,56 +121,32 @@ use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
   message("* Adding bookdown to Imports")
   devtools:::add_desc_package(pkg, "Imports", "bookdown")
 
-  message("* Creating analysis/ directory and contents")
-  devtools:::use_directory("analysis", pkg = pkg)
-  devtools:::use_directory("analysis/paper", pkg = pkg)
-  devtools:::use_directory("analysis/figures", pkg = pkg)
-  devtools:::use_directory("analysis/templates", pkg = pkg)
-  devtools:::use_directory("analysis/data", pkg = pkg)
-  devtools:::use_directory("analysis/data/raw_data", pkg = pkg)
-  devtools:::use_directory("analysis/data/derived_data", pkg = pkg)
+  location <- ifelse(location == "top_level", "analysis",
+                     ifelse(location == "vignettes", "vignettes",
+                            ifelse(location == "inst", "inst",
+                                   stop("invalid 'location' argument"))))
 
-  # move templates for MS Word output
-  invisible(file.copy(from = list.files(system.file("templates/word_templates/",
-                              package = "rrtools",
-                              mustWork = TRUE),
-                              full.names = TRUE),
-            to = "analysis/templates",
-            recursive = TRUE))
+ create_directories(location, pkg)
 
-  # move csl file
-  invisible(file.copy(from = system.file("templates/journal-of-archaeological-science.csl",
-                                                    package = "rrtools",
-                                                    mustWork = TRUE),
-                      to = "analysis/paper",
-                      recursive = TRUE))
-
-  template_path <- system.file("templates",
-                               template,
-                               package = "rrtools",
-                               mustWork = TRUE)
-
-  template_out <- whisker::whisker.render(readLines(template_path), data)
-
-
-  if(file.exists("analysis/paper/paper.Rmd")) stop("paper.Rmd exists already, quitting")
-  # inject the pkg name into the Rmd
-  rmd <- readLines(template_path)
-  rmd <- c(rmd[1:32], paste0("\nlibrary(", gh$repo, ")"), rmd[33:length(rmd)])
-  # use_template doesn't seem to work for this...
-  writeLines(rmd, file("analysis/paper/paper.Rmd"))
-  closeAllConnections()
-
-  # use_template doesn't seem to work for this...
-  if(file.exists("analysis/paper/references.bib")) stop("references.bib exists already, quitting")
-  writeLines("", file("analysis/paper/references.bib"))
-  closeAllConnections()
-
-  # create a file that inform of best practices
-  invisible(file.create("analysis/data/DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND"))
-
-
-  devtools::use_build_ignore("analysis", escape = FALSE, pkg = pkg)
+ switch(
+   location,
+   vignettes =  use_vignette_rmd(location,
+                                 pkg,
+                                 gh,
+                                 template),
+   analysis =   {use_paper_rmd(pkg,
+                               location = file.path(location, "paper"),
+                               gh,
+                               template);
+                devtools::use_build_ignore("analysis",
+                                           escape = FALSE,
+                                           pkg = pkg)
+     },
+   inst =       use_paper_rmd(pkg,
+                              location = file.path(location, "paper"),
+                              gh,
+                              template)
+ )
 
   message("Next: \n",
           " * Write your article/paper/thesis in Rmd file(s) in analysis/paper/", "\n",
@@ -166,8 +155,7 @@ use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
           " * For adding captions & cross-referenceing in an Rmd, see https://bookdown.org/yihui/bookdown/ ", "\n",
           " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ")
 
-  devtools:::open_in_rstudio("/analysis/paper/paper.Rmd")
-
+  devtools:::open_in_rstudio(file.path(pkg$path, location, "paper/paper.Rmd"))
 
 invisible(TRUE)
 }
@@ -198,7 +186,8 @@ use_dockerfile <- function(pkg = ".", rocker = "verse") {
                          ignore = TRUE,
                          pkg = pkg,
                          data = gh,
-                         open = TRUE)
+                         open = TRUE,
+                         out_path = "")
 
   message("Next: \n",
           " * Edit the dockerfile with your name & email", "\n",
@@ -236,8 +225,14 @@ use_readme_rmd <- function(pkg = ".") {
   }
   pkg$Rmd <- TRUE
 
-  use_template("omni-README", save_as = "README.Rmd", data = pkg,
-               ignore = TRUE, open = TRUE, pkg = pkg)
+
+  use_template("omni-README",
+               save_as = "README.Rmd",
+               data = pkg,
+               ignore = TRUE,
+               open = TRUE,
+               pkg = pkg,
+               out_path = "")
 
   devtools::use_build_ignore("^README-.*\\.png$", escape = FALSE, pkg = pkg)
 
@@ -265,13 +260,15 @@ use_readme_rmd <- function(pkg = ".") {
 
 use_code_of_conduct <- function(pkg = "."){
   pkg <- devtools::as.package(pkg)
-  use_template("CONDUCT.md", ignore = TRUE, pkg = pkg)
+  use_template("CONDUCT.md", ignore = TRUE, pkg = pkg,
+                         out_path = "")
 }
 
 use_contributing <- function(pkg = "."){
   pkg <- devtools::as.package(pkg)
   gh <- devtools:::github_info(pkg$path)
-  use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh)
+  use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh,
+                         out_path = "")
 }
 
 
@@ -284,18 +281,17 @@ dir.exists <- function(x) {
 
 
 use_template <- function(template, save_as = template, data = list(),
-                         ignore = FALSE, open = FALSE, pkg = ".") {
+                         ignore = FALSE, open = FALSE, pkg = ".",
+                         out_path) {
   pkg <- devtools::as.package(pkg)
 
-  path <- file.path(pkg$path, save_as)
+  path <- file.path(pkg$path, out_path, save_as)
   if (!devtools:::can_overwrite(path)) {
     stop("`", save_as, "` already exists.", call. = FALSE)
   }
 
-  template_path <- system.file("templates",
-                               template,
-                               package = "rrtools",
-                               mustWork = TRUE)
+  template_path <- template_path_fn(template)
+
   template_out <- whisker::whisker.render(readLines(template_path), data)
 
   message("* Creating `", save_as, "` from template.")
@@ -335,6 +331,88 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
   invisible(TRUE)
 }
 
+
+create_directories <- function(location, pkg){
+  message("* Creating ", location, "/ directory and contents")
+  devtools:::use_directory(location, pkg = pkg)
+  devtools:::use_directory(paste0(location, "/paper"), pkg = pkg)
+  devtools:::use_directory(paste0(location, "/figures"), pkg = pkg)
+  devtools:::use_directory(paste0(location, "/templates"), pkg = pkg)
+  devtools:::use_directory(paste0(location, "/data"), pkg = pkg)
+  devtools:::use_directory(paste0(location, "/data/raw_data"), pkg = pkg)
+  devtools:::use_directory(paste0(location, "/data/derived_data"), pkg = pkg)
+
+  # create a file that inform of best practices
+  invisible(file.create(paste0(location, "/data/DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND")))
+
+  # move templates for MS Word output
+  invisible(file.copy(from = list.files(system.file("templates/word_templates/",
+                                                    package = "rrtools",
+                                                    mustWork = TRUE),
+                                        full.names = TRUE),
+                      to = paste0(location, "/templates"),
+                      recursive = TRUE))
+
+  # move csl file
+  invisible(file.copy(from = system.file("templates/journal-of-archaeological-science.csl",
+                                         package = "rrtools",
+                                         mustWork = TRUE),
+                      to = paste0(location, "/paper"),
+                      recursive = TRUE))
+
+
+  # move bib file in there also
+  use_template("references.bib", pkg = pkg, data = gh,
+               out_path = file.path(location, "paper"))
+}
+
+
+use_paper_rmd <- function(pkg, location, gh, template){
+
+  use_template("paper.Rmd", pkg = pkg, data = gh,
+                         out_path = location)
+
+  # inject the pkg name into the Rmd
+  rmd <- readLines(file.path(pkg$path, location, "paper.Rmd"))
+  rmd <- c(rmd[1:32], paste0("\nlibrary(", pkg$package, ")"), rmd[33:length(rmd)])
+  # use_template doesn't seem to work for this...
+  writeLines(rmd, file.path(pkg$path, location, "paper.Rmd"))
+  closeAllConnections()
+
+
+}
+
+
+use_vignette_rmd <- function(location, pkg, gh, template, vignette_yml = "vignette-yaml"){
+
+  pkg <- devtools::as.package(pkg)
+  devtools:::check_suggested("rmarkdown")
+  devtools:::add_desc_package(pkg, "Suggests", "knitr")
+  devtools:::add_desc_package(pkg, "Suggests", "rmarkdown")
+  devtools:::add_desc_package(pkg, "VignetteBuilder", "knitr")
+  devtools:::use_directory("vignettes", pkg = pkg)
+  devtools:::use_git_ignore("inst/doc", pkg = pkg)
+
+  template_path <- template_path_fn(template)
+  rmd <- readLines(template_path)
+  vignette_yml <- readLines(template_path_fn(vignette_yml))
+
+  # we inject a bit of vignette yml in our main paper.Rmd template:
+  rmd <- c(rmd[1:18], vignette_yml, rmd[19:32], paste0("\nlibrary(", pkg$package, ")"), rmd[33:length(rmd)])
+  # use_template doesn't seem to work for this...
+  writeLines(rmd, file(paste0(location, "/paper/paper.Rmd")))
+  closeAllConnections()
+
+  devtools:::open_in_rstudio(paste0(location, "/paper/paper.Rmd"))
+}
+
+
+template_path_fn <- function(template){
+  system.file("templates",
+               template,
+               package = "rrtools",
+               mustWork = TRUE)
+}
 
 
 
