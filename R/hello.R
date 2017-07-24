@@ -26,7 +26,7 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
   Sys.sleep(3) #
 
   # if we're using RStudio, open the Rproj, otherwise setwd()
-  if(rstudioapi::isAvailable()) rstudioapi::callFun("openProject", paste0("./", path))
+  browseURL(paste0(path, "/", basename(path), ".Rproj"))
   setwd(path)
 
   message("Done. The working directory is currently ", getwd())
