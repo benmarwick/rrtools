@@ -1,3 +1,5 @@
+globalVariables(c("gh")) # suppress some warnings
+
 #' @name use_compendium
 #' @title Creates an R package suitable to use as a research compendium, and
 #' switches to the working directory of this new package, ready to work
@@ -369,7 +371,7 @@ create_directories <- function(location, pkg){
 
 use_paper_rmd <- function(pkg, location, gh, template){
 
-  use_template("paper.Rmd", pkg = pkg, data = gh,
+  use_template("paper.Rmd", pkg = pkg, data = list(gh),
                          out_path = location)
 
   # inject the pkg name into the Rmd
@@ -413,6 +415,47 @@ template_path_fn <- function(template){
                package = "rrtools",
                mustWork = TRUE)
 }
+
+#' @name current_git_commit
+#' @aliases current_git_commit
+#' @title Collect information about the last git commit for printing
+#'
+#' @description This looks into the local git repository for the project and
+#' collects basic information about the last commit, such as the date, the SHA,
+#' and the author of the commit. We can use this information
+#' to print a sentence at the end of our document that allows us to identify the
+#' exact commit that produced the rendered document output. This can be helpful
+#' for knowing what is the most current version when there are multiple
+#' versions of the rendered output in circulation among co-authors.
+#'
+#' @param path path to the git repository. For example this will be
+#' path = "../..", if we are in analysis/paper/paper.Rmd
+#'
+#' @return list
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' current_git_commit()
+#' }
+current_git_commit <- function(path){
+  repo <- git2r::repository(path)
+  last_commit <- git2r::commits(repo)[[1]]
+  sha <- last_commit@sha
+  branch <- git2r::branches(repo)[[1]]@name
+  person <-  last_commit@committer@name
+  commit_date <- git2r::when(last_commit)
+  commit_msg <- last_commit@summary
+  remote_url  <- gsub("\\.git$", "", git2r::remote_url(repo))
+  return(list(repo = repo,
+              sha = sha,
+              branch = branch,
+              person = person,
+              commit_date = commit_date,
+              commit_msg = commit_msg,
+              remote_url = remote_url))
+}
+
 
 
 

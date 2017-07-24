@@ -23,8 +23,6 @@ knitr::opts_chunk$set(
 
 # {{{ package }}}
 
-[![Travis-CI Build Status](https://travis-ci.org/{{{username}}}/{{{repo}}}.svg?branch=master)](https://travis-ci.org/{{{username}}}/{{{repo}}})
-
 The goal of {{{package}}} is to ...
 
 ### Citation
