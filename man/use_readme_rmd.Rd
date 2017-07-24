@@ -2,7 +2,7 @@
 % Please edit documentation in R/hello.R
 \name{use_readme_rmd}
 \alias{use_readme_rmd}
-\title{Creates skeleton README files with sections for}
+\title{Creates skeleton README files}
 \usage{
 use_readme_rmd(pkg = ".")
 }

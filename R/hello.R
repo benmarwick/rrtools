@@ -94,7 +94,11 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
   )
 
   if (browse) {
-    utils::browseURL(travis_url)
+    if(curl::has_internet()) {
+      utils::browseURL(travis_url)
+    } else {
+      message("No internet connection. Can't open https://travis-ci.org.")
+    }
   }
 
   invisible(TRUE)
@@ -199,7 +203,7 @@ use_dockerfile <- function(pkg = ".", rocker = "verse") {
   invisible(TRUE)
 }
 
-#' Creates skeleton README files with sections for
+#' Creates skeleton README files
 #'
 #' @description \itemize{
 #' \item a high-level description of the package and its goals
