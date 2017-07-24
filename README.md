@@ -26,6 +26,10 @@ How to use
 
 To create a reproducible research compendium using the rrtools approach, follow these steps (in [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), which we recommend, but is not required):
 
+#### 0. `setwd("base directory of your working environment")`
+
+-   this ensures that your new package will be created at the correct location
+
 #### 1. `rrtools::use_compendium("pkgname")`
 
 -   this uses `devtools::create()` to create a basic R package with the name `pkgname` (you should use a different one), and then, if you're using RStudio, opens the project. If you're not using RStudio, it sets the working directory to the `pkgname` directory.
@@ -41,7 +45,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 -   if you are connected to the internet, this initializes a local git repository, connects to [github.com](https://github.com), and creates a remote repository
 -   if you are not connected to the internet, use `devtools::use_git(".")` to initialise a git repository with your project. Reopen your project in RStudio to see the git buttons on the toolbar.
--   we need to get a token from <https://github.com/settings/tokens>, and replace "xxxx" with that token
+-   we need to get a token from <https://github.com/settings/tokens>, and replace "xxxx" with that token. Give the token at least the access right to your public repositories (public\_repo), if the resulting compendium will be public. Otherwise you need to grant repo scope to give it full access also to private repositories.
 -   we found that this function can be a little unreliable in RStudio, sometimes giving and errors and not fully enabling git in RStudio, so, to work around this:
 -   in the shell, we need to `git remote set-url origin https://github.com/username/pkgname.git` (it does seem to work again in RStudio after completing one commit-push cycle from the shell and restarting RStudio)
 -   then we can commit, push, pull etc. as usual
