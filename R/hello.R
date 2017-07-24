@@ -1,3 +1,5 @@
+globalVariables(c("gh")) # suppress some warnings
+
 #' @name use_compendium
 #' @title Creates an R package suitable to use as a research compendium, and
 #' switches to the working directory of this new package, ready to work
