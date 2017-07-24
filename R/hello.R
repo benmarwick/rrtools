@@ -1,18 +1,24 @@
-
 #' @name use_compendium
 #' @title Creates an R package suitable to use as a research compendium
 #'
-#' This is devtools::create() with an additional step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio
-#' @param browse open a browser window to enable Travis builds for the package
-#' automatically.
+#' @description This is devtools::create() with an additional step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio
+#'
+#' @param path location to create new package. The last component of the path will be used as the package name
+#' @param description list of description values to override default values or add additional values
+#' @param check if TRUE, will automatically run \code{devtools::check}
+#' @param rstudio create an RStudio project file? (with \code{devtools::use_rstudio})
+#' @param quiet if FALSE, the default, prints informative messages
+#'
 #' @import devtools rstudioapi
 #' @export
-#' @aliases add_travis
 use_compendium <- function(path, description = getOption("devtools.desc"),
                            check = FALSE, rstudio = TRUE, quiet = FALSE){
 
-  devtools::create(path, description = getOption("devtools.desc"),
-                   check, rstudio, quiet)
+  devtools::create(path,
+                   description = getOption("devtools.desc"),
+                   check,
+                   rstudio,
+                   quiet)
 
   message("The package", path, " has been created \n",
           "Next: \n",
@@ -33,15 +39,17 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
 
 
 #' @name use_travis
+#' @aliases add_travis
 #' @title Add a travis config file
 #'
-#' This has two options. One is the same as `devtools::use_travis`, a vanilla travis config that builds, installs and runs the custom package on travis. The other type of configuration directs travis to build the Docker container (according to the instructions in your Dockerfile) and push the successful result to Docker Hub. Using a Dockerfile is recommended because it gives greater isolation of the computational enviroment, and will result in much faster build times on travis.
-#' @param browse open a browser window to enable Travis builds for the package
-#' automatically.
+#' @description This has two options. One is the same as `devtools::use_travis`, a vanilla travis config that builds, installs and runs the custom package on travis. The other type of configuration directs travis to build the Docker container (according to the instructions in your Dockerfile) and push the successful result to Docker Hub. Using a Dockerfile is recommended because it gives greater isolation of the computational enviroment, and will result in much faster build times on travis.
+#'
+#' @param pkg defaults to the package in the current working directory
+#' @param browse open a browser window to enable Travis builds for the package automatically
 #' @param docker logical, if TRUE (the default) the travis config will build a Docker container according to the instructions in the Dockerfile, and build and install the package in that container. If FALSE, the standard config for R on travis is used.
+#'
 #' @import devtools
 #' @export
-#' @aliases add_travis
 use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
   pkg <- devtools::as.package(pkg)
 
@@ -49,7 +57,7 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
   travis_url <- file.path("https://travis-ci.org", gh$fullname)
 
   if(docker){
-    rrtools:::use_template("travis.yml-with-docker",
+    use_template("travis.yml-with-docker",
                          ".travis.yml",
                          ignore = TRUE,
                          pkg = pkg,
@@ -57,7 +65,7 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
                          out_path = "")
   } else {
     gh$date <- format(Sys.Date(), "%Y-%m-%d")
-    rrtools:::use_template("travis.yml-no-docker",
+    use_template("travis.yml-no-docker",
                            ".travis.yml",
                            ignore = TRUE,
                            pkg = pkg,
@@ -86,12 +94,17 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
 
 
 #' @name use_analysis
+#' @aliases add_analysis
 #' @title Adds and analysis directory (and sub-directories), and an Rmd file ready to write
 #'
-#' This will create \file{analysis/paper.Rmd}, \file{analysis/references.bib}
+#' @description This will create \file{paper.Rmd}, \file{references.bib}
 #' and several others, and add \pkg{bookdown} to the imported packages listed in the DESCRIPTION file.
+#'
 #' @param pkg defaults to the package in the current working directory
 #' @param template the template file to use to create the main anlaysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
+#' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst/' (so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
+#' @param data forwarded to \code{whisker::whisker.render}
+#'
 #' @export
 use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list()) {
   pkg <- devtools::as.package(pkg)
@@ -110,15 +123,23 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
 
  switch(
    location,
-   vignettes =  use_vignette_rmd(location, pkg, gh, template),
-   analysis =   {use_paper_rmd(pkg, location = file.path(location, "paper"), gh, template);
-                devtools::use_build_ignore("analysis", escape = FALSE, pkg = pkg)
+   vignettes =  use_vignette_rmd(location,
+                                 pkg,
+                                 gh,
+                                 template),
+   analysis =   {use_paper_rmd(pkg,
+                               location = file.path(location, "paper"),
+                               gh,
+                               template);
+                devtools::use_build_ignore("analysis",
+                                           escape = FALSE,
+                                           pkg = pkg)
      },
-   inst =       use_paper_rmd(pkg, location = file.path(location, "paper"), gh, template)
+   inst =       use_paper_rmd(pkg,
+                              location = file.path(location, "paper"),
+                              gh,
+                              template)
  )
-
-
-
 
   message("Next: \n",
           " * Write your article/paper/thesis in Rmd file(s) in analysis/paper/", "\n",
@@ -129,15 +150,17 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
 
   devtools:::open_in_rstudio(file.path(pkg$path, location, "paper/paper.Rmd"))
 
-
 invisible(TRUE)
 }
 
 #' @name use_dockerfile
 #' @title Add a Dockerfile
 #'
-#' This will create a basic \file{Dockerfile} based on rocker/verse
+#' @description This will create a basic \file{Dockerfile} based on rocker/verse
+#'
+#' @param pkg defaults to the package in the current working directory
 #' @param rocker chr, the rocker image to base this container on
+#'
 #' @import utils devtools
 #' @export
 use_dockerfile <- function(pkg = ".", rocker = "verse") {
@@ -151,7 +174,7 @@ use_dockerfile <- function(pkg = ".", rocker = "verse") {
   gh$r_version <- r_version
   gh$rocker <- rocker
 
-  rrtools:::use_template("Dockerfile",
+  use_template("Dockerfile",
                          "Dockerfile",
                          ignore = TRUE,
                          pkg = pkg,
@@ -168,7 +191,8 @@ use_dockerfile <- function(pkg = ".", rocker = "verse") {
 }
 
 #' Creates skeleton README files with sections for
-#' \itemize{
+#'
+#' @description \itemize{
 #' \item a high-level description of the package and its goals
 #' \item R code to install from GitHub, if GitHub usage detected
 #' \item a basic example
@@ -194,8 +218,14 @@ use_readme_rmd <- function(pkg = ".") {
   }
   pkg$Rmd <- TRUE
 
-  rrtools:::use_template("omni-README", save_as = "README.Rmd", data = pkg,
-               ignore = TRUE, open = TRUE, pkg = pkg, out_path = "")
+
+  use_template("omni-README",
+               save_as = "README.Rmd",
+               data = pkg,
+               ignore = TRUE,
+               open = TRUE,
+               pkg = pkg,
+               out_path = "")
 
   devtools::use_build_ignore("^README-.*\\.png$", escape = FALSE, pkg = pkg)
 
@@ -210,10 +240,10 @@ use_readme_rmd <- function(pkg = ".") {
   rmarkdown::render("README.Rmd", output_format = NULL)
 
   message("* Adding code of conduct.")
-  rrtools:::use_code_of_conduct()
+  use_code_of_conduct()
 
   message("* Adding instructions to contributors.")
-  rrtools:::use_contributing()
+  use_contributing()
 
 
   invisible(TRUE)
@@ -223,14 +253,14 @@ use_readme_rmd <- function(pkg = ".") {
 
 use_code_of_conduct <- function(pkg = "."){
   pkg <- devtools::as.package(pkg)
-  rrtools:::use_template("CONDUCT.md", ignore = TRUE, pkg = pkg,
+  use_template("CONDUCT.md", ignore = TRUE, pkg = pkg,
                          out_path = "")
 }
 
 use_contributing <- function(pkg = "."){
   pkg <- devtools::as.package(pkg)
   gh <- devtools:::github_info(pkg$path)
-  rrtools:::use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh,
+  use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh,
                          out_path = "")
 }
 
@@ -325,10 +355,9 @@ create_directories <- function(location, pkg){
 }
 
 
-
 use_paper_rmd <- function(pkg, location, gh, template){
 
-  rrtools:::use_template("paper.Rmd", pkg = pkg, data = gh,
+  use_template("paper.Rmd", pkg = pkg, data = gh,
                          out_path = location)
 
   # inject the pkg name into the Rmd
@@ -339,7 +368,7 @@ use_paper_rmd <- function(pkg, location, gh, template){
   closeAllConnections()
 
   # move bib file in there also
-  rrtools:::use_template("references.bib", pkg = pkg, data = gh,
+  use_template("references.bib", pkg = pkg, data = gh,
                          out_path = location)
 
 }
@@ -347,7 +376,7 @@ use_paper_rmd <- function(pkg, location, gh, template){
 
 use_vignette_rmd <- function(location, pkg, gh, template, vignette_yml = "vignette-yaml"){
 
-  pkg <- devtools:::as.package(pkg)
+  pkg <- devtools::as.package(pkg)
   devtools:::check_suggested("rmarkdown")
   devtools:::add_desc_package(pkg, "Suggests", "knitr")
   devtools:::add_desc_package(pkg, "Suggests", "rmarkdown")
@@ -367,9 +396,6 @@ use_vignette_rmd <- function(location, pkg, gh, template, vignette_yml = "vignet
 
   devtools:::open_in_rstudio(paste0(location, "/paper/paper.Rmd"))
 }
-
-
-
 
 
 template_path_fn <- function(template){

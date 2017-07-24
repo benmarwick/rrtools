@@ -2,12 +2,15 @@
 % Please edit documentation in R/hello.R
 \name{use_dockerfile}
 \alias{use_dockerfile}
-\title{Add a Dockerfile
-
-This will create a basic \file{Dockerfile} based on rocker/verse}
+\title{Add a Dockerfile}
 \usage{
 use_dockerfile(pkg = ".", rocker = "verse")
 }
 \arguments{
+\item{pkg}{defaults to the package in the current working directory}
+
 \item{rocker}{chr, the rocker image to base this container on}
+}
+\description{
+This will create a basic \file{Dockerfile} based on rocker/verse
 }

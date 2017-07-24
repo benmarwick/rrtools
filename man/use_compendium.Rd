@@ -2,15 +2,22 @@
 % Please edit documentation in R/hello.R
 \name{use_compendium}
 \alias{use_compendium}
-\alias{add_travis}
-\title{Creates an R package suitable to use as a research compendium
-
-This is devtools::create() with an additional step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio}
+\title{Creates an R package suitable to use as a research compendium}
 \usage{
 use_compendium(path, description = getOption("devtools.desc"),
   check = FALSE, rstudio = TRUE, quiet = FALSE)
 }
 \arguments{
-\item{browse}{open a browser window to enable Travis builds for the package
-automatically.}
+\item{path}{location to create new package. The last component of the path will be used as the package name}
+
+\item{description}{list of description values to override default values or add additional values}
+
+\item{check}{if TRUE, will automatically run \code{devtools::check}}
+
+\item{rstudio}{create an RStudio project file? (with \code{devtools::use_rstudio})}
+
+\item{quiet}{if FALSE, the default, prints informative messages}
+}
+\description{
+This is devtools::create() with an additional step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio
 }
