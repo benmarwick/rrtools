@@ -1,8 +1,8 @@
 ---
 title: "Title Goes Here"
 author:
-  - author 1^[University of Somewhere]
-  - author 2^[University of Nowhere]
+  - author 1
+  - author 2
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
     bookdown::html_document2:
@@ -34,6 +34,8 @@ knitr::opts_chunk$set(
 
 # Introduction
 
+Here is a citation [@Marwick2017]
+
 # Background
 
 ```{r demo, eval = FALSE}
@@ -53,4 +55,24 @@ my_data <- readr::read_csv("../data/raw_data/my_csv_file.csv")
 
 # Conclusion
 
+# Acknowledgements
+
 # References 
+
+### Colophon
+
+This report was generated on `r Sys.time()` using the following computational environment and dependencies: 
+
+```{r colophon, cache = FALSE}
+# which R packages and versions?
+devtools::session_info()
+ 
+# what commit is this file at? You may need to change the path value
+# if your Rmd is not in analysis/paper/
+current_commit <- rrtools::current_git_commit(path = "../..")
+```
+
+The current git commit of this file is `r current_commit$sha`, which is on the `r current_commit$branch` branch and was made by `r current_commit$person` on `r current_commit$commit_date`. The current commit message is "`r current_commit$commit_msg`". The repository is online at <`r current_commit$remote_url`>
+
+
+
