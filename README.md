@@ -28,7 +28,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 #### 0. `setwd("base directory of your working environment")`
 
--   this ensures that your new package will be created at the correct location
+-   this ensures that your new package will be created in the correct directory
 
 #### 1. `rrtools::use_compendium("pkgname")`
 
