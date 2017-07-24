@@ -1,5 +1,6 @@
 #' @name use_compendium
-#' @title Creates an R package suitable to use as a research compendium
+#' @title Creates an R package suitable to use as a research compendium, and
+#' switches to the working directory of this new package, ready to work
 #'
 #' @description This is devtools::create() with an additional step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio
 #'
@@ -21,18 +22,24 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
                    quiet)
 
   message("The package", path, " has been created \n",
-          "Next: \n",
+          "Next: \n\n",
           " * Edit the DESCRIPTION file \n",
-          " * Use other rrtools functions to add components to the compendium \n \n",
-          "Now opening the new compendium...")
+          " * Use other rrtools functions to add components to the compendium \n",
+          " Please wait a moment...  \n")
 
-  Sys.sleep(3) #
+  Sys.sleep(3) # give the user a chance to read the console output
 
   # if we're using RStudio, open the Rproj, otherwise setwd()
-  if(rstudioapi::isAvailable()) rstudioapi::callFun("openProject", paste0("./", path))
-  setwd(path)
-
-  message("Done. The working directory is currently ", getwd())
+  # when the release includes openProject", use this
+  # rstudioapi::callFun("openProject", paste0("./", path))
+  if(rstudioapi::isAvailable()) {
+   message(" Opening the new compendium in a new RStudio session...")
+   browseURL(paste0(path, "/", basename(path), ".Rproj"))
+  } else {
+   message("Now opening the new compendium...")
+   setwd(path)
+   message("Done. The working directory is currently ", getwd())
+  }
 
 }
 
@@ -352,6 +359,11 @@ create_directories <- function(location, pkg){
                                          mustWork = TRUE),
                       to = paste0(location, "/paper"),
                       recursive = TRUE))
+
+
+  # move bib file in there also
+  use_template("references.bib", pkg = pkg, data = gh,
+               out_path = file.path(location, "paper"))
 }
 
 
@@ -367,9 +379,6 @@ use_paper_rmd <- function(pkg, location, gh, template){
   writeLines(rmd, file.path(pkg$path, location, "paper.Rmd"))
   closeAllConnections()
 
-  # move bib file in there also
-  use_template("references.bib", pkg = pkg, data = gh,
-                         out_path = location)
 
 }
 

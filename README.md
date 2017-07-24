@@ -24,12 +24,13 @@ devtools::install_github("benmarwick/rrtools")
 How to use
 ----------
 
-To create a reproducible research compendium using the rrtools approach, follow these steps (in [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), which we recommend, but is not required):
+To create a reproducible research compendium using the rrtools approach, follow these steps. We use [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), and recommend it, but is not required for these steps to work. We recommend copy-pasting these directly into your console, and editing the options before running. We don't recommend saving these lines in a script in your project: they are meant to be once-off setup functions.
 
 #### 1. `rrtools::use_compendium("pkgname")`
 
 -   this uses `devtools::create()` to create a basic R package with the name `pkgname` (you should use a different one), and then, if you're using RStudio, opens the project. If you're not using RStudio, it sets the working directory to the `pkgname` directory.
--   we need to edit the DESCRIPTION file to include accurate metadata
+-   we need to choose where we want our compendium package to be located on our computer. We recommend two ways you can do this. First, you can specify a full path to this function, for example, `rrtools::use_compendium("C:/Users/bmarwick/Desktop/pkgname")`. Second, you can set the working directory in RStudio using the drop-down menu: `Session` -&gt; `Set Working Directory`
+-   we need to edit the `DESCRIPTION` file to include accurate metadata
 -   we need to periodically update the `Imports:` section with the names of packages used in the code we write in the Rmd document(s) (e.g., `devtools::use_package("dplyr", "imports")`)
 
 #### 2. `devtools::use_mit_license(copyright_holder = "My Name")`
@@ -51,15 +52,14 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   this generates README.Rmd and renders it to README.md, ready to display on GitHub
 -   the Rmd contains:
     -   a template citation to show others how to cite your project, we need to edit this to include the correct title and [DOI](https://doi.org)
-    -   badges to automatically show the last edit date, the R version used, and the status of the last build on travis
     -   text giving license information for the text, figures, code and data in your compendium
--   this also adds two other markdown files: a code of conduct for users, and basic instructions for people who want to contribute to your project, including for first-timers to git and GitHub
+-   this also adds two other markdown files: a code of conduct for users (CONDUCT.md), and basic instructions for people who want to contribute to your project (CONTRIBUTING.md), including for first-timers to git and GitHub
 -   we need to render this document after each change to refresh README.md, which is the file that GitHub displays on the home page of our repository
 
 #### 5. `rrtools::use_analysis()`
 
--   this has three options: create a top-level `analysis/` directory, or create an `inst/` directory (so that all the sub-directories are available after the package is installed), or create a `vingettes/` directory (and automatically update the `DESCRIPTION`). The default is a top-level `analysis/`
--   For each option the contents of the sub-directories are the same, with the following (suing the default `analysis/` for example):
+-   this has three `location` options: create a top-level `analysis/` directory, or create an `inst/` directory (so that all the sub-directories are available after the package is installed), or create a `vingettes/` directory (and automatically update the `DESCRIPTION`). The default is a top-level `analysis/`
+-   For each option the contents of the sub-directories are the same, with the following (using the default `analysis/` for example):
 
 <!-- -->
 
@@ -81,7 +81,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
         └── template.Rmd
 
 -   the `paper.Rmd` in `analysis/paper/` is ready to write in and render with bookdown
--   the `references.bib` file is empty, ready to insert reference details
+-   the `references.bib` file is has just one item to demonstrate the format, its ready to insert more reference details
 -   you can replace the supplied `csl` file with one from <https://github.com/citation-style-language/>
 -   we recommend using the [citr addin](https://github.com/crsh/citr) and [Zotero](https://www.zotero.org/) for highly efficient citation insertion while writing in an Rmd file.
 -   remember that `Imports:` field in the `DESCRIPTION` file must include the names of all packages used in analysis documents (e.g. `paper.Rmd`)
@@ -90,7 +90,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 -   this creates a basic Dockerfile using [`rocker/verse`](https://github.com/rocker-org/rocker) as the base image.
 -   the version of R in your rocker container will match the version used when you run this function, for example `rocker/verse:3.4.0`
--   [`rocker/verse`](https://github.com/rocker-org/rocker) includes R, the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX, so compendium build times are very fast, both locally and on travis.
+-   [`rocker/verse`](https://github.com/rocker-org/rocker) includes R, the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX, so compendium build times are very fast on travis.
 -   we need to edit Dockerfile to add linux dependencies (many R packages require additional libraries outside of R).
 -   we need to modify which Rmd files are rendered when the container is made.
 -   we do not need to be online or using a public repo to make a Dockerfile. If we want to make the docker container then we need to be online, but we can make the container locally and keep it private until we are ready.
