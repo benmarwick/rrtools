@@ -7,7 +7,8 @@
 This will create \file{analysis/paper.Rmd}, \file{analysis/references.bib}
 and several others, and add \pkg{bookdown} to the imported packages listed in the DESCRIPTION file.}
 \usage{
-use_analysis(pkg = ".", template = "paper.Rmd", data = list())
+use_analysis(pkg = ".", location = "top_level", template = "paper.Rmd",
+  data = list())
 }
 \arguments{
 \item{pkg}{defaults to the package in the current working directory}

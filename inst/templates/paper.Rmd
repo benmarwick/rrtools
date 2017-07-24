@@ -1,8 +1,8 @@
 ---
 title: "Title Goes Here"
 author:
-  - author 1
-  - author 2
+  - author 1^[University of Somewhere]
+  - author 2^[University of Nowhere]
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
     bookdown::html_document2:
