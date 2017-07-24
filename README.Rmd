@@ -35,6 +35,10 @@ devtools::install_github("benmarwick/rrtools")
 
 To create a reproducible research compendium using the rrtools approach, follow these steps (in [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), which we recommend, but is not required):
 
+#### 0. `setwd("base directory of your working environment")`
+
+- this ensures that your new package will be created at the correct location
+
 #### 1. `rrtools::use_compendium("pkgname")`
 
 - this uses `devtools::create()` to create a basic R package with the name `pkgname` (you should use a different one), and then, if you're using RStudio, opens the project. If you're not using RStudio, it sets the working directory to the `pkgname` directory.
