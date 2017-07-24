@@ -166,7 +166,7 @@ use_analysis <- function(pkg = ".", template = 'paper.Rmd', data = list()) {
           " * For adding captions & cross-referenceing in an Rmd, see https://bookdown.org/yihui/bookdown/ ", "\n",
           " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ")
 
-  devtools:::open_in_rstudio("/analysis/paper/paper.Rmd")
+  devtools:::open_in_rstudio("analysis/paper/paper.Rmd")
 
 
 invisible(TRUE)
