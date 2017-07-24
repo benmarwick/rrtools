@@ -10,7 +10,7 @@ Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
 Imports: devtools, git2r, whisker, rstudioapi, rmarkdown, knitr,
-    bookdown
+    bookdown, curl
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/benmarwick/rrtools
