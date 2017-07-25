@@ -25,3 +25,6 @@ YAML frontmatter and R fenced code chunks (\code{Rmd}).
 use_readme_rmd()
 }
 }
+\seealso{
+Other infrastructure: \code{\link{use_build_ignore}}
+}
