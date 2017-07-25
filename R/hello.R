@@ -1,4 +1,4 @@
-globalVariables(c("gh")) # suppress some warnings
+globalVariables(c("gh", "opts", "getProjectDir", "libDir", ".packrat_mutables", "pkgDescriptionDependencies", "union_write", "yesno", "github_POST", "github_GET", "dropSystemPackages", "readDcf", "recursivePackageDependencies", "silent", "sort_c")) # suppress some warnings
 
 #' @name use_compendium
 #' @title Creates an R package suitable to use as a research compendium, and
@@ -12,7 +12,8 @@ globalVariables(c("gh")) # suppress some warnings
 #' @param rstudio create an RStudio project file? (with \code{devtools::use_rstudio})
 #' @param quiet if FALSE, the default, prints informative messages
 #'
-#' @import devtools rstudioapi
+#' @importFrom devtools create
+#' @importFrom rstudioapi isAvailable
 #' @export
 use_compendium <- function(path, description = getOption("devtools.desc"),
                            check = FALSE, rstudio = TRUE, quiet = FALSE){
@@ -23,7 +24,7 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
                    rstudio,
                    quiet)
 
-  message("The package", path, " has been created \n",
+  message("The package ", path, " has been created \n",
           "Next: \n\n",
           " * Edit the DESCRIPTION file \n",
           " * Use other rrtools functions to add components to the compendium \n",
@@ -57,12 +58,13 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
 #' @param browse open a browser window to enable Travis builds for the package automatically
 #' @param docker logical, if TRUE (the default) the travis config will build a Docker container according to the instructions in the Dockerfile, and build and install the package in that container. If FALSE, the standard config for R on travis is used.
 #'
-#' @import devtools
+#' @importFrom curl has_internet
+#' @importFrom utils browseURL
 #' @export
 use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
 
-  gh <- devtools:::github_info(pkg$path)
+  gh <- github_info(pkg$path)
   travis_url <- file.path("https://travis-ci.org", gh$fullname)
 
   if(docker){
@@ -117,15 +119,14 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
 #' @param template the template file to use to create the main anlaysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
 #' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst/' (so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
 #' @param data forwarded to \code{whisker::whisker.render}
-#'
 #' @export
 use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list()) {
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
   pkg$Rmd <- TRUE
-  gh <- devtools:::github_info(pkg$path)
+  gh <- github_info(pkg$path)
 
   message("* Adding bookdown to Imports")
-  devtools:::add_desc_package(pkg, "Imports", "bookdown")
+  add_desc_package(pkg, "Imports", "bookdown")
 
   location <- ifelse(location == "top_level", "analysis",
                      ifelse(location == "vignettes", "vignettes",
@@ -144,7 +145,7 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
                                location = file.path(location, "paper"),
                                gh,
                                template);
-                devtools::use_build_ignore("analysis",
+                use_build_ignore("analysis",
                                            escape = FALSE,
                                            pkg = pkg)
      },
@@ -161,7 +162,7 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
           " * For adding captions & cross-referenceing in an Rmd, see https://bookdown.org/yihui/bookdown/ ", "\n",
           " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ")
 
-  devtools:::open_in_rstudio(file.path(pkg$path, location, "paper/paper.Rmd"))
+  open_in_rstudio(file.path(pkg$path, location, "paper/paper.Rmd"))
 
 invisible(TRUE)
 }
@@ -177,13 +178,13 @@ invisible(TRUE)
 #' @import utils devtools
 #' @export
 use_dockerfile <- function(pkg = ".", rocker = "verse") {
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
 
   # get R version for rocker/r-ver
   si <- utils::sessionInfo()
   r_version <- paste0(si$R.version$major, ".", si$R.version$minor)
 
-  gh <- devtools:::github_info(pkg$path)
+  gh <- github_info(pkg$path)
   gh$r_version <- r_version
   gh$rocker <- rocker
 
@@ -216,7 +217,7 @@ use_dockerfile <- function(pkg = ".", rocker = "verse") {
 #'
 #' @param pkg package description, can be path or package name.  See
 #'   \code{\link{as.package}} for more information
-#' @import devtools
+#' @importFrom rmarkdown render
 #' @export
 #' @examples
 #' \dontrun{
@@ -224,10 +225,10 @@ use_dockerfile <- function(pkg = ".", rocker = "verse") {
 #' }
 #' @family infrastructure
 use_readme_rmd <- function(pkg = ".") {
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
 
-  if (devtools:::uses_github(pkg$path)) {
-    pkg$github <- devtools:::github_info(pkg$path)
+  if (uses_github(pkg$path)) {
+    pkg$github <- github_info(pkg$path)
   }
   pkg$Rmd <- TRUE
 
@@ -240,11 +241,11 @@ use_readme_rmd <- function(pkg = ".") {
                pkg = pkg,
                out_path = "")
 
-  devtools::use_build_ignore("^README-.*\\.png$", escape = FALSE, pkg = pkg)
+  use_build_ignore("^README-.*\\.png$", escape = FALSE, pkg = pkg)
 
-  if (devtools:::uses_git(pkg$path) && !file.exists(pkg$path, ".git", "hooks", "pre-commit")) {
+  if (uses_git(pkg$path) && !file.exists(pkg$path, ".git", "hooks", "pre-commit")) {
     message("* Adding pre-commit hook")
-    devtools::use_git_hook("pre-commit", devtools:::render_template("readme-rmd-pre-commit.sh"),
+    use_git_hook("pre-commit", render_template("readme-rmd-pre-commit.sh"),
                  pkg = pkg)
   }
 
@@ -265,14 +266,14 @@ use_readme_rmd <- function(pkg = ".") {
 # helpers, not exported -------------------------------------------------------
 
 use_code_of_conduct <- function(pkg = "."){
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
   use_template("CONDUCT.md", ignore = TRUE, pkg = pkg,
                          out_path = "")
 }
 
 use_contributing <- function(pkg = "."){
-  pkg <- devtools::as.package(pkg)
-  gh <- devtools:::github_info(pkg$path)
+  pkg <- as.package(pkg)
+  gh <-  github_info(pkg$path)
   use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh,
                          out_path = "")
 }
@@ -289,10 +290,10 @@ dir.exists <- function(x) {
 use_template <- function(template, save_as = template, data = list(),
                          ignore = FALSE, open = FALSE, pkg = ".",
                          out_path) {
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
 
   path <- file.path(pkg$path, out_path, save_as)
-  if (!devtools:::can_overwrite(path)) {
+  if (!can_overwrite(path)) {
     stop("`", save_as, "` already exists.", call. = FALSE)
   }
 
@@ -305,23 +306,23 @@ use_template <- function(template, save_as = template, data = list(),
 
   if (ignore) {
     message("* Adding `", save_as, "` to `.Rbuildignore`.")
-    devtools::use_build_ignore(save_as, pkg = pkg)
+    use_build_ignore(save_as, pkg = pkg)
   }
 
   if (open) {
     message("* Modify `", save_as, "`.")
-    devtools:::open_in_rstudio(path)
+    open_in_rstudio(path)
   }
 
   invisible(TRUE)
 }
 
 use_directory <- function(path, ignore = FALSE, pkg = ".") {
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
   pkg_path <- file.path(pkg$path, path)
 
   if (file.exists(pkg_path)) {
-    if (!devtools:::is_dir(pkg_path)) {
+    if (!is_dir(pkg_path)) {
       stop("`", path, "` exists but is not a directory.", call. = FALSE)
     }
   } else {
@@ -331,7 +332,7 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
 
   if (ignore) {
     message("* Adding `", path, "` to `.Rbuildignore`.")
-    devtools::use_build_ignore(path, pkg = pkg)
+    use_build_ignore(path, pkg = pkg)
   }
 
   invisible(TRUE)
@@ -340,13 +341,13 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
 
 create_directories <- function(location, pkg){
   message("* Creating ", location, "/ directory and contents")
-  devtools:::use_directory(location, pkg = pkg)
-  devtools:::use_directory(paste0(location, "/paper"), pkg = pkg)
-  devtools:::use_directory(paste0(location, "/figures"), pkg = pkg)
-  devtools:::use_directory(paste0(location, "/templates"), pkg = pkg)
-  devtools:::use_directory(paste0(location, "/data"), pkg = pkg)
-  devtools:::use_directory(paste0(location, "/data/raw_data"), pkg = pkg)
-  devtools:::use_directory(paste0(location, "/data/derived_data"), pkg = pkg)
+  use_directory(location, pkg = pkg)
+  use_directory(paste0(location, "/paper"), pkg = pkg)
+  use_directory(paste0(location, "/figures"), pkg = pkg)
+  use_directory(paste0(location, "/templates"), pkg = pkg)
+  use_directory(paste0(location, "/data"), pkg = pkg)
+  use_directory(paste0(location, "/data/raw_data"), pkg = pkg)
+  use_directory(paste0(location, "/data/derived_data"), pkg = pkg)
 
   # create a file that inform of best practices
   invisible(file.create(paste0(location, "/data/DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND")))
@@ -391,13 +392,13 @@ use_paper_rmd <- function(pkg, location, gh, template){
 
 use_vignette_rmd <- function(location, pkg, gh, template, vignette_yml = "vignette-yaml"){
 
-  pkg <- devtools::as.package(pkg)
-  devtools:::check_suggested("rmarkdown")
-  devtools:::add_desc_package(pkg, "Suggests", "knitr")
-  devtools:::add_desc_package(pkg, "Suggests", "rmarkdown")
-  devtools:::add_desc_package(pkg, "VignetteBuilder", "knitr")
-  devtools:::use_directory("vignettes", pkg = pkg)
-  devtools:::use_git_ignore("inst/doc", pkg = pkg)
+  pkg <- as.package(pkg)
+  check_suggested("rmarkdown")
+  add_desc_package(pkg, "Suggests", "knitr")
+  add_desc_package(pkg, "Suggests", "rmarkdown")
+  add_desc_package(pkg, "VignetteBuilder", "knitr")
+  use_directory("vignettes", pkg = pkg)
+  use_git_ignore("inst/doc", pkg = pkg)
 
   template_path <- template_path_fn(template)
   rmd <- readLines(template_path)
@@ -409,7 +410,7 @@ use_vignette_rmd <- function(location, pkg, gh, template, vignette_yml = "vignet
   writeLines(rmd, file(paste0(location, "/paper/paper.Rmd")))
   closeAllConnections()
 
-  devtools:::open_in_rstudio(paste0(location, "/paper/paper.Rmd"))
+  open_in_rstudio(paste0(location, "/paper/paper.Rmd"))
 }
 
 
@@ -436,6 +437,7 @@ template_path_fn <- function(template){
 #' path = "../..", if we are in analysis/paper/paper.Rmd
 #'
 #' @return list
+#' @importFrom git2r repository commits branches when remote_url
 #' @export
 #'
 #' @examples
@@ -460,6 +462,46 @@ current_git_commit <- function(path){
               remote_url = remote_url))
 }
 
+
+#' @name knit_and_update_desc_imports
+#' @aliases knit_and_update_desc_imports
+#' @title Update the package DESCRIPTION with packages used in the Rmd
+#'
+#' @description This looks into the Rmd file and identifies packages used
+#' in the code there. Then it updates the DESCRIPTION file of the custom
+#' compendium package that contains the Rmd. It adds the names of packages
+#' used in the Rmd to the Imports field of the DESCRIPTION. It is intended
+#' to be used as a knitr hook with something like this in the paper.Rmd
+#' YAML
+#' \code{knit: (function(inputFile, encoding) { knit_and_update_desc_imports(inputFile, encoding) })}
+#'
+#' @param file path to the Rmd
+#'
+#' @return nothing
+#' @import packrat
+#' @importFrom rprojroot find_root has_file
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' ---
+#' knit: (function(inputFile, encoding) { knit_and_update_desc_imports(inputFile, encoding) }
+#' ---
+#' }
+
+knit_and_update_desc_imports <- function(inputFile, encoding){
+
+  # scan Rmd for uses of pkgs in our code
+  pkgs_in_Rmd <- packrat:::fileDependencies(inputFile)
+
+  # add them to imports
+  path_to_desc <-  rprojroot::find_root(rprojroot::has_file("DESCRIPTION"), ".")
+  invisible(sapply(pkgs_in_Rmd, function(i) add_desc_package(path_to_desc, "Imports", i)))
+
+  # knit the doc to HTML/Word/PDF
+  rmarkdown::render(inputFile, encoding = encoding)
+
+}
 
 
 

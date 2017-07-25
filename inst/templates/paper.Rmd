@@ -16,6 +16,7 @@ keywords: |
   keyword 1; keyword 2; keyword 3
 highlights: |
   These are the highlights. 
+knit: (function(inputFile, encoding) { rrtools::knit_and_update_desc_imports(inputFile, encoding) })
 ---
 
 
