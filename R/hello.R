@@ -463,45 +463,4 @@ current_git_commit <- function(path){
 }
 
 
-#' @name knit_and_update_desc_imports
-#' @aliases knit_and_update_desc_imports
-#' @title Update the package DESCRIPTION with packages used in the Rmd
-#'
-#' @description This looks into the Rmd file and identifies packages used
-#' in the code there. Then it updates the DESCRIPTION file of the custom
-#' compendium package that contains the Rmd. It adds the names of packages
-#' used in the Rmd to the Imports field of the DESCRIPTION. It is intended
-#' to be used as a knitr hook with something like this in the paper.Rmd
-#' YAML
-#' \code{knit: (function(inputFile, encoding) { knit_and_update_desc_imports(inputFile, encoding) })}
-#'
-#' @param file path to the Rmd
-#'
-#' @return nothing
-#' @import packrat
-#' @importFrom rprojroot find_root has_file
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' ---
-#' knit: (function(inputFile, encoding) { knit_and_update_desc_imports(inputFile, encoding) }
-#' ---
-#' }
-
-knit_and_update_desc_imports <- function(inputFile, encoding){
-
-  # scan Rmd for uses of pkgs in our code
-  pkgs_in_Rmd <- packrat:::fileDependencies(inputFile)
-
-  # add them to imports
-  path_to_desc <-  rprojroot::find_root(rprojroot::has_file("DESCRIPTION"), ".")
-  invisible(sapply(pkgs_in_Rmd, function(i) add_desc_package(path_to_desc, "Imports", i)))
-
-  # knit the doc to HTML/Word/PDF
-  rmarkdown::render(inputFile, encoding = encoding)
-
-}
-
-
 
