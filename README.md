@@ -32,13 +32,13 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 -   this uses `devtools::create()` to create a basic R package with the name `pkgname` (you should use a different one), and then, if you're using RStudio, opens the project. If you're not using RStudio, it sets the working directory to the `pkgname` directory.
 -   we need to:
-    -   choose where we want our compendium package to be located on our computer. We recommend two ways you can do this. First, you can specify a full path to this function, for example, `rrtools::use_compendium("C:/Users/bmarwick/Desktop/pkgname")`. Second, you can set the working directory in RStudio using the drop-down menu: `Session` -&gt; `Set Working Directory` and then run `rrtools::use_compendium("pkgname")`.
-    -   edit the `DESCRIPTION` file to include accurate metadata
+    -   choose where we want our compendium package to be located on our computer. We recommend two ways you can do this. First, you can specify a full path to this function, for example, `rrtools::use_compendium("C:/Users/bmarwick/Desktop/pkgname")`. Second, you can set the working directory by means of the setwd command, for example, `setwd("C:/Users/bmarwick/Desktop/pkgname")` or using the drop-down menu in RStudio: `Session` -&gt; `Set Working Directory` and then run `rrtools::use_compendium("pkgname")`.
+    -   edit the `DESCRIPTION` file (located in your `pkgname` directory) to include accurate metadata
     -   periodically update the `Imports:` section with the names of packages used in the code we write in the Rmd document(s) (e.g., `devtools::use_package("dplyr", "imports")`)
 
 #### 2. `devtools::use_mit_license(copyright_holder = "My Name")`
 
--   this references the MIT license in the [DESCRIPTION](DESCRIPTION) file and adds a [LICENSE](LICENSE) file with the given name
+-   this references the MIT license in the DESCRIPTION file and adds a LICENSE file with the given name
 -   you may wish to use a different license for your code, if so, replace this line with `devtools::use_gpl3_license(copyright_holder = "My Name")`, or follow the instructions for other licenses.
 
 #### 3. `devtools::use_github(".", auth_token = "xxxx", protocol = "https", private = FALSE)`
@@ -47,7 +47,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   if you are not connected to the internet, use `devtools::use_git(".")` to initialise a git repository with your project. Reopen your project in RStudio to see the git buttons on the toolbar.
 -   we need to:
     -   install and configure git on our system *before* running this line. See <http://happygitwithr.com> for easy steps to do this.
-    -   get a token from <https://github.com/settings/tokens>, and replace "xxxx" with that token. When you get your personal access token (PAT) from <https://github.com/settings/tokens> (click "Generate new token"), make sure the "repo" scope is included by checking the "repo" box. Don't save this token in your project, keep it elsewere.
+    -   get a token from <https://github.com/settings/tokens>, and replace "xxxx" with that token
 -   we found that this function can be a little unreliable in RStudio:
     -   sometimes giving and errors
     -   not fully enabling git in RStudio,
@@ -61,8 +61,8 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   the Rmd contains:
     -   a template citation to show others how to cite your project, we need to edit this to include the correct title and [DOI](https://doi.org)
     -   text giving license information for the text, figures, code and data in your compendium
--   this also adds two other markdown files: a code of conduct for users [CONDUCT.md](CONDUCT.md), and basic instructions for people who want to contribute to your project [CONTRIBUTING.md](CONTRIBUTING.md), including for first-timers to git and GitHub
--   we need to render this document after each change to refresh [README.md](README.md), which is the file that GitHub displays on the home page of our repository
+-   this also adds two other markdown files: a code of conduct for users (CONDUCT.md), and basic instructions for people who want to contribute to your project (CONTRIBUTING.md), including for first-timers to git and GitHub
+-   we need to render this document after each change to refresh README.md, which is the file that GitHub displays on the home page of our repository
 
 #### 5. `rrtools::use_analysis()`
 
@@ -103,7 +103,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   the version of R in your rocker container will match the version used when you run this function, for example `rocker/verse:3.4.0`
 -   [`rocker/verse`](https://github.com/rocker-org/rocker) includes R, the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX, so compendium build times are very fast on travis.
 -   we need to:
-    -   edit Dockerfile to add linux dependencies (some R packages require additional libraries outside of R). You can find out what these are by browsing the [DESCRIPTION](DESCRIPTION) files of the other packages you're using, and looking in the SystemRequirements field for each package. Often the logs on travis give error messages that include the names of missing libraries, so they are a useful source of information also.
+    -   edit Dockerfile to add linux dependencies (some R packages require additional libraries outside of R). You can find out what these are by browsing the DESCRIPTION files of the other packages you're using, and looking in the SystemRequirements field for each package. Often the logs on travis give error messages that include the names of missing libraries, so they are a useful source of information also.
     -   modify which Rmd files are rendered when the container is made.
     -   have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this funciton generates.
 -   If we want to use Travis on our project, we need to make an account at <https://hub.docker.com/> to receive our Docker container after a successful build on travis
