@@ -41,7 +41,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 - this uses `devtools::create()` to create a basic R package with the name `pkgname` (you should use a different one), and then, if you're using RStudio, opens the project. If you're not using RStudio, it sets the working directory to the `pkgname` directory.
 - we need to:
-    + choose where we want our compendium package to be located on our computer. We recommend two ways you can do this. First, you can specify a full path to this function, for example, `rrtools::use_compendium("C:/Users/bmarwick/Desktop/pkgname")`. Second, you can set the working directory by means of the setwd command, for example, `setwd("C:/Users/bmarwick/Desktop/pkgname")` or using the drop-down menu in RStudio: `Session` -> `Set Working Directory` and then run `rrtools::use_compendium("pkgname")`.
+    + choose where we want our compendium package to be located on our computer. We recommend two ways you can do this. First, you can specify a full path to this function, for example, `rrtools::use_compendium("C:/Users/bmarwick/Desktop/pkgname")`. Second, you can set the working directory in RStudio using the drop-down menu: `Session` -> `Set Working Directory` and then run `rrtools::use_compendium("pkgname")`.
     + edit the `DESCRIPTION` file (located in your `pkgname` directory) to include accurate metadata
     + periodically update the `Imports:` section with the names of packages used in the code we write in the Rmd document(s) (e.g., `devtools::use_package("dplyr", "imports")`)
 
