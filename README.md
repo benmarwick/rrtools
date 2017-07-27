@@ -7,7 +7,7 @@ rrtools: Tools for Writing Reproducible Research in R
 
 The goal of rrtools is to provide instructions, templates, and functions for making a basic compendium suitable for doing reproducible research with [R](https://www.r-project.org). This package documents the key steps and provides convenient functions for quickly creating a new research compendium. The approach is based generally on Kitzes et al. (2017), and more specifically on Marwick (2017) and Wickham's (2017) work using the R package structure as the basis for a research compendium.
 
-rrtools gives you a template for doing scholarly writing in a literate programming environment using [R Markdown](http://rmarkdown.rstudio.com) and [bookdown](https://bookdown.org/home/about.html). It also provides isolation of your computational environment using [Docker](https://www.docker.com/what-docker), package versioning using [MRAN](https://mran.microsoft.com/documents/rro/reproducibility/), and continuous integration using [Travis](https://docs.travis-ci.com/user/for-beginners). It makes a convenient starting point for writing a journal article, report or thesis.
+rrtools provides a template for doing scholarly writing in a literate programming environment using [R Markdown](http://rmarkdown.rstudio.com) and [bookdown](https://bookdown.org/home/about.html). It also allows for isolation of your computational environment using [Docker](https://www.docker.com/what-docker), package versioning using [MRAN](https://mran.microsoft.com/documents/rro/reproducibility/), and continuous integration using [Travis](https://docs.travis-ci.com/user/for-beginners). It makes a convenient starting point for writing a journal article, report, or thesis.
 
 The functions in rrtools allow you to use R to easily follow the best practices outlined in several major scholarly publications on reproducible research. In addition to those cited above, Wilson et al. (2017), Piccolo & Frampton (2016), Stodden & Miguez (2014) and rOpenSci (2017a, b) are important sources that have influenced our approach to this package. Please read those before using this package.
 
@@ -32,42 +32,38 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 -   this uses `devtools::create()` to create a basic R package with the name `pkgname` (you should use a different one), and then, if you're using RStudio, opens the project. If you're not using RStudio, it sets the working directory to the `pkgname` directory.
 -   we need to:
-    -   choose where we want our compendium package to be located on our computer. We recommend two ways you can do this. First, you can specify a full path to this function, for example, `rrtools::use_compendium("C:/Users/bmarwick/Desktop/pkgname")`. Second, you can set the working directory in RStudio using the drop-down menu: `Session` -&gt; `Set Working Directory` and then run `rrtools::use_compendium("pkgname")`.
+    -   choose a location for the compendium package. We recommend two ways to do this. First, you can specify the full path directly, (e.g., `rrtools::use_compendium("C:/Users/bmarwick/Desktop/pkgname")`). Alternatively, you can set the working directory in RStudio using the drop-down menu: `Session` -&gt; `Set Working Directory` and then run `rrtools::use_compendium("pkgname")`.
     -   edit the `DESCRIPTION` file (located in your `pkgname` directory) to include accurate metadata
-    -   periodically update the `Imports:` section with the names of packages used in the code we write in the Rmd document(s) (e.g., `devtools::use_package("dplyr", "imports")`)
+    -   periodically update the `Imports:` section of the `DESCRIPTION` file with the names of packages used in the code we write in the Rmd document(s) (e.g., `devtools::use_package("dplyr", "imports")`)
 
 #### 2. `devtools::use_mit_license(copyright_holder = "My Name")`
 
--   this references the MIT license in the [DESCRIPTION](DESCRIPTION) file and adds a [LICENSE](LICENSE) file with the given name
--   you may wish to use a different license for your code, if so, replace this line with `devtools::use_gpl3_license(copyright_holder = "My Name")`, or follow the instructions for other licenses.
+-   this adds a reference to the MIT license in the [DESCRIPTION](DESCRIPTION) file and generates a [LICENSE](LICENSE) file listing the name provided as the copyright holder
+-   to use a different license, replace this line with `devtools::use_gpl3_license(copyright_holder = "My Name")`, or follow the instructions for other licenses
 
 #### 3. `devtools::use_github(".", auth_token = "xxxx", protocol = "https", private = FALSE)`
 
--   if you are connected to the internet, this initializes a local git repository, connects to [github.com](https://github.com), and creates a remote repository
--   if you are not connected to the internet, use `devtools::use_git(".")` to initialise a git repository with your project. Reopen your project in RStudio to see the git buttons on the toolbar.
+-   if you are connected to the internet, this initializes a local git repository, connects to [GitHub](https://github.com), and creates a remote repository
+-   if you are not connected to the internet, use `devtools::use_git(".")` to initialise a local git repository for your project. Reopen your project in RStudio to see the git buttons on the toolbar.
 -   we need to:
-    -   install and configure git on our system *before* running this line. See <http://happygitwithr.com> for easy steps to do this.
-    -   get a token from <https://github.com/settings/tokens>, and replace "xxxx" with that token. When you get your personal access token (PAT) from <https://github.com/settings/tokens> (click "Generate new token"), make sure the "repo" scope is included by checking the "repo" box. Don't save this token in your project, keep it elsewere.
--   we found that this function can be a little unreliable in RStudio:
-    -   sometimes giving and errors
-    -   not fully enabling git in RStudio,
--   to work around this unreliability:
-    -   in the shell, we need to `git remote set-url origin https://github.com/username/pkgname.git`
+    -   install and configure git *before* running this line. See [Happy Git With R](http://happygitwithr.com) for details.
+    -   get a [personal access token](https://github.com/settings/tokens), and replace "xxxx" with that token. When you do so (click "Generate new token"), make sure the "repo" scope is included by checking the "repo" box. Don't save this token in your project, keep it elsewhere.
+-   we have found that this function can be a little unreliable in RStudio, sometimes giving an error and not fully enabling git in RStudio. To work around this:
+    -   in the shell, run `git remote set-url origin https://github.com/username/pkgname.git`
     -   restart RStudio, then we can commit, push, pull etc. as usual
 
 #### 4. `rrtools::use_readme_rmd()`
 
--   this generates README.Rmd and renders it to README.md, ready to display on GitHub
--   the Rmd contains:
-    -   a template citation to show others how to cite your project, we need to edit this to include the correct title and [DOI](https://doi.org)
-    -   text giving license information for the text, figures, code and data in your compendium
--   this also adds two other markdown files: a code of conduct for users [CONDUCT.md](CONDUCT.md), and basic instructions for people who want to contribute to your project [CONTRIBUTING.md](CONTRIBUTING.md), including for first-timers to git and GitHub
--   we need to render this document after each change to refresh [README.md](README.md), which is the file that GitHub displays on the home page of our repository
+-   this generates [README.Rmd](README.Rmd) and renders it to [README.md](README.md), ready to display on GitHub. It contains:
+    -   a template citation to show others how to cite your project. Edit this to include the correct title and [DOI](https://doi.org).
+    -   license information for the text, figures, code and data in your compendium
+-   this also adds two other markdown files: a code of conduct for users [CONDUCT.md](CONDUCT.md), and basic instructions for people who want to contribute to your project [CONTRIBUTING.md](CONTRIBUTING.md), including for first-timers to git and GitHub.
+-   render this document after each change to refresh [README.md](README.md), which is the file that GitHub displays on the repository home page
 
 #### 5. `rrtools::use_analysis()`
 
--   this has three `location` options: create a top-level `analysis/` directory, or create an `inst/` directory (so that all the sub-directories are available after the package is installed), or create a `vingettes/` directory (and automatically update the `DESCRIPTION`). The default is a top-level `analysis/`
--   For each option the contents of the sub-directories are the same, with the following (using the default `analysis/` for example):
+-   this has three `location` options: create a top-level `analysis/` directory, create an `inst/` directory (so that all the sub-directories are available after the package is installed), or create a `vingettes/` directory (and automatically update the `DESCRIPTION`). The default is a top-level `analysis/`.
+-   for each option, the contents of the sub-directories are the same, with the following (using the default `analysis/` for example):
 
 <!-- -->
 
@@ -88,29 +84,28 @@ To create a reproducible research compendium using the rrtools approach, follow 
         ├── template.docx  # used to style the output of the paper.Rmd
         └── template.Rmd
 
--   the `paper.Rmd` is ready to write in and render with bookdown:
-    -   it has a reference to the `references.bib` file
-    -   it has a reference to the supplied `csl` file to style the reference list
-    -   it has a colophon that adds some git commit details to the end of the document. This means that the output file (HTML/PDF/Word) is always tracable to a specific state of the code.
--   the `references.bib` file is has just one item to demonstrate the format, its ready to insert more reference details
--   you can replace the supplied `csl` file with one from <https://github.com/citation-style-language/>
--   we recommend using the [citr addin](https://github.com/crsh/citr) and [Zotero](https://www.zotero.org/) for highly efficient citation insertion while writing in an Rmd file.
--   remember that `Imports:` field in the `DESCRIPTION` file must include the names of all packages used in analysis documents (e.g. `paper.Rmd`)
+-   the `paper.Rmd` is ready to write in and render with bookdown. It includes:
+    -   a YAML header that identifies the `references.bib` file and the supplied `csl` file (to style the reference list)
+    -   a colophon that adds some git commit details to the end of the document. This means that the output file (HTML/PDF/Word) is always traceable to a specific state of the code.
+-   the `references.bib` file has just one item to demonstrate the format. It is ready to insert more reference details.
+-   you can replace the supplied `csl` file with a different citation style from <https://github.com/citation-style-language/>
+-   we recommend using the [citr addin](https://github.com/crsh/citr) and [Zotero](https://www.zotero.org/) to efficiently insert citations while writing in an Rmd file
+-   remember that the `Imports:` field in the `DESCRIPTION` file must include the names of all packages used in analysis documents (e.g. `paper.Rmd`)
 
 #### 6. `rrtools::use_dockerfile()`
 
--   this creates a basic Dockerfile using [`rocker/verse`](https://github.com/rocker-org/rocker) as the base image.
--   the version of R in your rocker container will match the version used when you run this function, for example `rocker/verse:3.4.0`
--   [`rocker/verse`](https://github.com/rocker-org/rocker) includes R, the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX, so compendium build times are very fast on travis.
+-   this creates a basic Dockerfile using [`rocker/verse`](https://github.com/rocker-org/rocker) as the base image
+-   the version of R in your rocker container will match the version used when you run this function (e.g., `rocker/verse:3.4.0`)
+-   [`rocker/verse`](https://github.com/rocker-org/rocker) includes R, the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX, so compendium build times are very fast on travis
 -   we need to:
-    -   edit Dockerfile to add linux dependencies (some R packages require additional libraries outside of R). You can find out what these are by browsing the [DESCRIPTION](DESCRIPTION) files of the other packages you're using, and looking in the SystemRequirements field for each package. Often the logs on travis give error messages that include the names of missing libraries, so they are a useful source of information also.
-    -   modify which Rmd files are rendered when the container is made.
-    -   have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this funciton generates.
--   If we want to use Travis on our project, we need to make an account at <https://hub.docker.com/> to receive our Docker container after a successful build on travis
+    -   edit the Dockerfile to add linux dependencies (for R packages that require additional libraries outside of R). You can find out what these are by browsing the [DESCRIPTION](DESCRIPTION) files of the other packages you're using, and looking in the SystemRequirements field for each package. If you are getting build errors on travis, check the logs. Often, the error messages will include the names of missing libraries.
+    -   modify which Rmd files are rendered when the container is made
+    -   have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this function generates.
+-   if we want to use travis on our project, we need to make an account at <https://hub.docker.com/> to receive our Docker container after a successful build on travis
 
 #### 7. `rrtools::use_travis()`
 
--   this creates a minimal `.travis.yml` file for us, by default it configures travis to build our Docker container from our Dockerfile, and build, install and run our custom package in this container. By specifying `docker = FALSE` in this function the travis file will not use Docker in travis, but run R directly on the travis infrastructure. Using Docker is recommended because it gives greater computational isolation and saves a substantial amount of time during the travis build because the base image contains many pre-compiled packages.
+-   this creates a minimal `.travis.yml` file. By default it configures travis to build our Docker container from our Dockerfile, and build, install and run our custom package in this container. By specifying `docker = FALSE` in this function, the travis file will not use Docker in travis, but run R directly on the travis infrastructure. We recommend using Docker because it offers greater computational isolation and saves a substantial amount of time during the travis build because the base image contains many pre-compiled packages.
 -   we need to:
     -   run this function only when we are ready for our repository to be public. The free travis service we're using here requires your GitHub repository to be public. It will not work on private repositories. You can skip this step if you want to keep your repo private until after publication.
     -   go to <https://travis-ci.org/> to connect to our repo
@@ -119,7 +114,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 #### 8. `devtools::use_testthat()`
 
--   in case we have functions in `R/`, we need to include tests to ensure they do what we want
+-   if you add functions in `R/`, include tests to ensure they function as intended
 -   create tests.R in `tests/testhat/` and check <http://r-pkgs.had.co.nz/tests.html> for template
 
 You should be able to follow these steps to get a new research compendium repository connected to travis and ready to write in just a few minutes.
