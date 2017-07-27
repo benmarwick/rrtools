@@ -154,4 +154,4 @@ Wilson G, Bryan J, Cranston K, Kitzes J, Nederbragt L, et al. (2017). Good enoug
 
 ## Contributing
 
-Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+If you would like to contribute to this project, please start by reading our [Guide to Contributing](CONTRIBUTING.md). Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
