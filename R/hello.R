@@ -191,7 +191,7 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
 #' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst/' (so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
 #' @param data forwarded to \code{whisker::whisker.render}
 #' @export
-use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list()) {
+use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list(), open_data = TRUE) {
   pkg <- as.package(pkg)
   pkg$Rmd <- TRUE
   gh <- github_info(pkg$path)
@@ -225,6 +225,8 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
                               gh,
                               template)
  )
+
+ # if(open_data) use_git_ignore()
 
   message("Next: \n",
           " * Write your article/paper/thesis in Rmd file(s) in analysis/paper/", "\n",

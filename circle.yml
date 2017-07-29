@@ -1,20 +1,20 @@
 machine:
   services:
-  - docker
+    - docker
 
 dependencies:
   override:
-  - docker info
-  - docker build -t $DOCKER_USER/rrtools  .
+    - docker info
+    - docker build -t $DOCKER_USER/rrtools  .
 
 test:
   override:
   # see if we can start container...
-  - docker run --name rrtools -d -p 8787:8787 $DOCKER_USER/rrtools
+    - docker run --name rrtools -d -p 8787:8787 $DOCKER_USER/rrtools
 
 deployment:
   hub:
     branch: master
-      commands:
+    commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push $DOCKER_USER/rrtools
