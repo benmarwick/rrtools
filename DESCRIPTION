@@ -10,8 +10,8 @@ Authors@R: c(person("Ben", "Marwick", role = c("aut", "cre"), email = "benmarwic
              person("Clemens", "Schmid", role = "ctb"),
              person("Ricarda", "Braun", role = "ctb"))
 Maintainer: Ben Marwick <benmarwick@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Instructions, templates, and functions for making a basic 
+    compendium suitable for doing reproducible research with R.
 License: MIT + file LICENSE
 Imports: devtools, git2r, whisker, rstudioapi, rmarkdown, knitr,
     bookdown, curl, jsonlite, methods, httr
