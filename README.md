@@ -98,17 +98,10 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   the version of R in your rocker container will match the version used when you run this function (e.g., `rocker/verse:3.4.0`)
 -   [`rocker/verse`](https://github.com/rocker-org/rocker) includes R, the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX, so compendium build times are very fast on travis
 -   we need to:
-<<<<<<< HEAD
-    -   edit Dockerfile to add linux dependencies (some R packages require additional libraries outside of R). You can find out what these are by browsing the [DESCRIPTION](DESCRIPTION) files of the other packages you're using, and looking in the SystemRequirements field for each package. Often the logs on travis give error messages that include the names of missing libraries, so they are a useful source of information also.
-    -   modify which Rmd files are rendered when the container is made.
-    -   have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this funciton generates. Or we can use `rrtools::use_circleci()` to build our Docker container privately, from a private GitHub repo.
--   If we want to use Travis on our project, we need to make an account at <https://hub.docker.com/> to receive our Docker container after a successful build on travis
-=======
     -   edit the Dockerfile to add linux dependencies (for R packages that require additional libraries outside of R). You can find out what these are by browsing the [DESCRIPTION](DESCRIPTION) files of the other packages you're using, and looking in the SystemRequirements field for each package. If you are getting build errors on travis, check the logs. Often, the error messages will include the names of missing libraries.
     -   modify which Rmd files are rendered when the container is made
-    -   have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this function generates.
--   if we want to use travis on our project, we need to make an account at <https://hub.docker.com/> to receive our Docker container after a successful build on travis
->>>>>>> b9cf7f17f419bd34cfaf945df55ae76fd5f8882e
+    -   have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this funciton generates. Or we can use `rrtools::use_circleci()` to build our Docker container privately at <https://circleci.com>, from a private GitHub repo.
+-   If we want to use Travis on our project, we need to make an account at <https://hub.docker.com/> to receive our Docker container after a successful build on travis
 
 #### 7. `rrtools::use_travis()`
 
@@ -117,7 +110,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
     -   go to <https://travis-ci.org/> to connect to our repo
     -   add environment variables to enable push of the Docker container to the Docker Hub
     -   make an account at <https://hub.docker.com/> to host our Docker container
--   Note that you should run this function only when we are ready for our GitHub repository to be public. The free travis service we're using here requires your GitHub repository to be public. It will not work on private repositories. If you want to keep your GitHub repo private until after publication, you can use `rrtools::use_circleci()` for running free private continuous integration tests, instead of travis. With `rrtools::use_circleci(docker_hub = FALSE)` we can stop our Docker container from appearing on Docker Hub, so our Docker container stays completely private.
+-   Note that you should run this function only when we are ready for our GitHub repository to be public. The free travis service we're using here requires your GitHub repository to be public. It will not work on private repositories. If you want to keep your GitHub repo private until after publication, you can use `rrtools::use_circleci()` for running free private continuous integration tests at <https://circleci.com>, instead of travis. With `rrtools::use_circleci(docker_hub = FALSE)` we can stop our Docker container from appearing on Docker Hub, so our Docker container stays completely private.
 
 #### 8. `devtools::use_testthat()`
 
