@@ -521,12 +521,12 @@ template_path_fn <- function(template){
 #' }
 current_git_commit <- function(path){
   repo <- git2r::repository(path)
-  last_commit <- git2r::commits(repo)[[1]]
-  sha <- last_commit@sha
-  branch <- git2r::branches(repo)[[1]]@name
-  person <-  last_commit@committer@name
-  commit_date <- git2r::when(last_commit)
-  commit_msg <- last_commit@summary
+  last_commit <- git2r::head(repo) # git2r::commits(repo)[[1]]
+  sha <- devtools:::git_repo_sha1(repo)
+  branch <- names(git2r::branches(repo)[1])
+  person <-  git2r::commits(repo)[[1]]@committer@name
+  commit_date <- git2r::when(git2r::commits(repo)[[1]])
+  commit_msg <- git2r::commits(repo)[[1]]@summary
   remote_url  <- gsub("\\.git$", "", git2r::remote_url(repo))
   return(list(repo = repo,
               sha = sha,
