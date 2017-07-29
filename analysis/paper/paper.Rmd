@@ -71,10 +71,11 @@ devtools::session_info()
  
 # what commit is this file at? You may need to change the path value
 # if your Rmd is not in analysis/paper/
-current_commit <- rrtools::current_git_commit(path = "../..")
+#current_commit <- rrtools::current_git_commit(path = "../..")
 ```
 
-The current git commit of this file is `r current_commit$sha`, which is on the `r current_commit$branch` branch and was made by `r current_commit$person` on `r current_commit$commit_date`. The current commit message is "`r current_commit$commit_msg`". The repository is online at <`r current_commit$remote_url`>
-
+```{r}
+# The current git commit of this file is `r current_commit$sha`, which is on the `r current_commit$branch` branch and was made by `r current_commit$person` on `r current_commit$commit_date`. The current commit message is "`r current_commit$commit_msg`". The repository is online at <`r current_commit$remote_url`>
+`
 
 
