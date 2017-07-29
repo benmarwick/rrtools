@@ -1,0 +1,20 @@
+machine:
+  services:
+  - docker
+
+dependencies:
+  override:
+  - docker info
+  - docker build -t $DOCKER_USER/{{{repo}}}  .
+
+test:
+  override:
+  # see if we can start container...
+  - docker run --name {{{repo}}} -d -p 8787:8787 $DOCKER_USER/{{{repo}}}
+
+deployment:
+  hub:
+    branch: master
+      commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push $DOCKER_USER/{{{repo}}}

@@ -3,7 +3,7 @@
 rrtools: Tools for Writing Reproducible Research in R
 =====================================================
 
-[![Travis-CI Build Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://travis-ci.org/benmarwick/rrtools)
+[![Travis-CI Build Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://travis-ci.org/benmarwick/rrtools) [![Circle-CI Build Status](https://circleci.com/gh/benmarwick/rrtools.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/benmarwick/rrtools)
 
 The goal of rrtools is to provide instructions, templates, and functions for making a basic compendium suitable for doing reproducible research with [R](https://www.r-project.org). This package documents the key steps and provides convenient functions for quickly creating a new research compendium. The approach is based generally on Kitzes et al. (2017), and more specifically on Marwick (2017) and Wickham's (2017) work using the R package structure as the basis for a research compendium.
 
@@ -105,17 +105,17 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   we need to:
     -   edit Dockerfile to add linux dependencies (some R packages require additional libraries outside of R). You can find out what these are by browsing the [DESCRIPTION](DESCRIPTION) files of the other packages you're using, and looking in the SystemRequirements field for each package. Often the logs on travis give error messages that include the names of missing libraries, so they are a useful source of information also.
     -   modify which Rmd files are rendered when the container is made.
-    -   have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this funciton generates.
+    -   have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this funciton generates. Or we can use `rrtools::use_circleci()` to build our Docker container privately, from a private GitHub repo.
 -   If we want to use Travis on our project, we need to make an account at <https://hub.docker.com/> to receive our Docker container after a successful build on travis
 
 #### 7. `rrtools::use_travis()`
 
 -   this creates a minimal `.travis.yml` file for us, by default it configures travis to build our Docker container from our Dockerfile, and build, install and run our custom package in this container. By specifying `docker = FALSE` in this function the travis file will not use Docker in travis, but run R directly on the travis infrastructure. Using Docker is recommended because it gives greater computational isolation and saves a substantial amount of time during the travis build because the base image contains many pre-compiled packages.
 -   we need to:
-    -   run this function only when we are ready for our repository to be public. The free travis service we're using here requires your GitHub repository to be public. It will not work on private repositories. You can skip this step if you want to keep your repo private until after publication.
     -   go to <https://travis-ci.org/> to connect to our repo
     -   add environment variables to enable push of the Docker container to the Docker Hub
     -   make an account at <https://hub.docker.com/> to host our Docker container
+-   Note that you should run this function only when we are ready for our GitHub repository to be public. The free travis service we're using here requires your GitHub repository to be public. It will not work on private repositories. If you want to keep your GitHub repo private until after publication, you can use `rrtools::use_circleci()` for running free private continuous integration tests, instead of travis. With `rrtools::use_circleci(docker_hub = FALSE)` we can stop our Docker container from appearing on Docker Hub, so our Docker container stays completely private.
 
 #### 8. `devtools::use_testthat()`
 
