@@ -14,13 +14,8 @@ RUN . /etc/environment \
   && sudo apt-get update \
   && sudo apt-get install libudunits2-dev -y \
 
-
-
   # build this compendium package
   && R -e "devtools::install('/rrtools', dep=TRUE)" \
-
-    # what pkg versions do we have?
-  &&  R -e "devtools::session_info()" \
 
  # render the manuscript into a docx
   && R -e "rmarkdown::render('/rrtools/analysis/paper/paper.Rmd')"
