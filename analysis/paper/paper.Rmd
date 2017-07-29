@@ -50,7 +50,7 @@ Here is a citation [@Marwick2017]
 
 ```{r get-data, eval = FALSE}
 # Note the path that we need to use to access our data files when rendering this document
-my_data <- readr::read_csv("../data/raw_data/my_csv_file.csv")
+# my_data <- readr::read_csv("../data/raw_data/my_csv_file.csv")
 ```
 
 # Discussion
@@ -71,7 +71,7 @@ devtools::session_info()
  
 # what commit is this file at? You may need to change the path value
 # if your Rmd is not in analysis/paper/
-#current_commit <- rrtools::current_git_commit(path = "../..")
+current_commit <- rrtools::current_git_commit(path = "../..")
 ```
 
 ```{r}
