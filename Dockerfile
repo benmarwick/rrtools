@@ -15,7 +15,7 @@ RUN . /etc/environment \
   && sudo apt-get install libudunits2-dev -y \
 
   # what pkg versions do we have?
-  && devtools::session_info() \
+  &&  R -e "devtools::session_info()" \
 
   # build this compendium package
   && R -e "devtools::install('/rrtools', dep=TRUE)" \
