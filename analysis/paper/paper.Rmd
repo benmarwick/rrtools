@@ -76,6 +76,6 @@ devtools::session_info()
 
 ```{r}
 # The current git commit of this file is `r current_commit$sha`, which is on the `r current_commit$branch` branch and was made by `r current_commit$person` on `r current_commit$commit_date`. The current commit message is "`r current_commit$commit_msg`". The repository is online at <`r current_commit$remote_url`>
-`
+```
 
 
