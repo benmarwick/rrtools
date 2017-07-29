@@ -226,14 +226,16 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
                               template)
  )
 
- # if(open_data) use_git_ignore()
+ if (!open_data) use_git_ignore("*/data/*")
 
   message("Next: \n",
           " * Write your article/paper/thesis in Rmd file(s) in analysis/paper/", "\n",
           " * Add the citation style libray file (csl) to replace the default in analysis/paper/", "\n",
           " * Add reference details to the references.bib in analysis/paper/", "\n",
           " * For adding captions & cross-referenceing in an Rmd, see https://bookdown.org/yihui/bookdown/ ", "\n",
-          " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ")
+          " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ", "\n",
+          ifelse(!open_data,
+          " * Your data files are NOT tracked by Git and will not be pushed to GitHub", ""))
 
   open_in_rstudio(file.path(pkg$path, location, "paper/paper.Rmd"))
 

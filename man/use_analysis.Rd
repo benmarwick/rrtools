@@ -6,7 +6,7 @@
 \title{Adds and analysis directory (and sub-directories), and an Rmd file ready to write}
 \usage{
 use_analysis(pkg = ".", location = "top_level", template = "paper.Rmd",
-  data = list())
+  data = list(), open_data = TRUE)
 }
 \arguments{
 \item{pkg}{defaults to the package in the current working directory}
