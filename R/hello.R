@@ -115,7 +115,7 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
 #' The advantage of Circle-CI over Travis is that Circle-CI will freely work with
 #' private GitHub repositories. Only the paid service from Travis will work
 #' with private GitHub repositories. Before using this function you need
-#' to create an account with Circle-CI, using youg GitHub account. If you want
+#' to create an account with Circle-CI, using your GitHub account. If you want
 #' Circle-CI to run on a private GitHub repo, make sure you give Circle-CI
 #' access to 'all repos' when you log in with your GitHub credentials.
 #'
@@ -181,13 +181,13 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
 
 #' @name use_analysis
 #' @aliases add_analysis
-#' @title Adds and analysis directory (and sub-directories), and an Rmd file ready to write
+#' @title Adds an analysis directory (and sub-directories), and an Rmd file ready to write
 #'
 #' @description This will create \file{paper.Rmd}, \file{references.bib}
 #' and several others, and add \pkg{bookdown} to the imported packages listed in the DESCRIPTION file.
 #'
 #' @param pkg defaults to the package in the current working directory
-#' @param template the template file to use to create the main anlaysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
+#' @param template the template file to use to create the main analysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
 #' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst/' (so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
 #' @param data forwarded to \code{whisker::whisker.render}
 #' @export
