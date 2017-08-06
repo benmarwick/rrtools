@@ -16,7 +16,7 @@ This will build the Docker container on the Circle-CI service.
 The advantage of Circle-CI over Travis is that Circle-CI will freely work with
 private GitHub repositories. Only the paid service from Travis will work
 with private GitHub repositories. Before using this function you need
-to create an account with Circle-CI, using youg GitHub account. If you want
+to create an account with Circle-CI, using your GitHub account. If you want
 Circle-CI to run on a private GitHub repo, make sure you give Circle-CI
 access to 'all repos' when you log in with your GitHub credentials.
 }
