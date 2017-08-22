@@ -16,6 +16,8 @@ use_analysis(pkg = ".", location = "top_level", template = "paper.Rmd",
 \item{template}{the template file to use to create the main analysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown}
 
 \item{data}{forwarded to \code{whisker::whisker.render}}
+
+\item{open_data}{should git track the files in the data directory?}
 }
 \description{
 This will create \file{paper.Rmd}, \file{references.bib}

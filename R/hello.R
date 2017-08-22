@@ -121,6 +121,7 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
 #'
 #' @param pkg defaults to the package in the current working directory
 #' @param browse open a browser window to enable Circle-CI builds for the package automatically
+#' @param docker_hub should circleci push to Docker Hub after a successful build?
 #'
 #' @importFrom curl has_internet
 #' @importFrom utils browseURL
@@ -190,6 +191,7 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
 #' @param template the template file to use to create the main analysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
 #' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst/' (so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
 #' @param data forwarded to \code{whisker::whisker.render}
+#' @param open_data should git track the files in the data directory?
 #' @export
 use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list(), open_data = TRUE) {
   pkg <- as.package(pkg)

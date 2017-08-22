@@ -10,6 +10,8 @@ use_circleci(pkg = ".", browse = interactive(), docker_hub = TRUE)
 \item{pkg}{defaults to the package in the current working directory}
 
 \item{browse}{open a browser window to enable Circle-CI builds for the package automatically}
+
+\item{docker_hub}{should circleci push to Docker Hub after a successful build?}
 }
 \description{
 This will build the Docker container on the Circle-CI service.
