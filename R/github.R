@@ -11,11 +11,11 @@ github_auth <- function(token) {
 github_response <- function(req) {
   text <- httr::content(req, as = "text")
   parsed <- jsonlite::fromJSON(text, simplifyVector = FALSE)
-  
+
   if (httr::status_code(req) >= 400) {
     stop(github_error(req))
   }
-  
+
   parsed
 }
 
@@ -26,7 +26,7 @@ github_error <- function(req) {
                        list(message = text)
                      })
   errors <- vapply(parsed$errors, `[[`, "message", FUN.VALUE = character(1))
-  
+
   structure(
     list(
       call = sys.call(-1),
@@ -39,7 +39,7 @@ github_error <- function(req) {
 
 github_GET <- function(path, ..., pat = github_pat(),
                        host = "https://api.github.com") {
-  
+
   url <- httr::parse_url(host)
   url$path <- paste(url$path, path, sep = "/")
   ## May remove line below at release of httr > 1.1.0
@@ -51,7 +51,7 @@ github_GET <- function(path, ..., pat = github_pat(),
 
 github_POST <- function(path, body, ..., pat = github_pat(),
                         host = "https://api.github.com") {
-  
+
   url <- httr::parse_url(host)
   url$path <- paste(url$path, path, sep = "/")
   ## May remove line below at release of httr > 1.1.0
@@ -64,7 +64,7 @@ github_POST <- function(path, body, ..., pat = github_pat(),
 github_rate_limit <- function() {
   req <- github_GET("rate_limit")
   core <- req$resources$core
-  
+
   reset <- as.POSIXct(core$reset, origin = "1970-01-01")
   cat(core$remaining, " / ", core$limit,
       " (Reset ", strftime(reset, "%H:%M:%S"), ")\n", sep = "")
