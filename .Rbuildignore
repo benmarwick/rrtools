@@ -7,3 +7,4 @@
 ^Dockerfile$
 analysis
 ^circle\.yml$
+^CONTRIBUTING\.md$
