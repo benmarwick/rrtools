@@ -3,17 +3,17 @@
 \name{use_analysis}
 \alias{use_analysis}
 \alias{add_analysis}
-\title{Adds and analysis directory (and sub-directories), and an Rmd file ready to write}
+\title{Adds an analysis directory (and sub-directories), and an Rmd file ready to write}
 \usage{
 use_analysis(pkg = ".", location = "top_level", template = "paper.Rmd",
-  data = list())
+  data = list(), open_data = TRUE)
 }
 \arguments{
 \item{pkg}{defaults to the package in the current working directory}
 
 \item{location}{the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst/' (so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).}
 
-\item{template}{the template file to use to create the main anlaysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown}
+\item{template}{the template file to use to create the main analysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown}
 
 \item{data}{forwarded to \code{whisker::whisker.render}}
 }

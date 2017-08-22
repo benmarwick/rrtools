@@ -6,3 +6,4 @@
 ^CONDUCT\.md$
 ^Dockerfile$
 analysis
+^circle\.yml$

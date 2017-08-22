@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   echo = FALSE,
   comment = "#>",
-  fig.path = "figures"
+  fig.path = "../figures/"
 )
 ```
 
@@ -66,13 +66,12 @@ This report was generated on `r Sys.time()` using the following computational en
 ```{r colophon, cache = FALSE}
 # which R packages and versions?
 devtools::session_info()
- 
-# what commit is this file at? You may need to change the path value
-# if your Rmd is not in analysis/paper/
-current_commit <- rrtools::current_git_commit(path = "../..")
 ```
 
-The current git commit of this file is `r current_commit$sha`, which is on the `r current_commit$branch` branch and was made by `r current_commit$person` on `r current_commit$commit_date`. The current commit message is "`r current_commit$commit_msg`". The repository is online at <`r current_commit$remote_url`>
+The current Git commit details are:
 
-
-
+```{r}
+# what commit is this file at? You may need to change the path value
+# if your Rmd is not in analysis/paper/
+git2r::repository("../..")
+```

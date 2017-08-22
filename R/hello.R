@@ -107,20 +107,91 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
 }
 
 
+#' @name use_circleci
+#' @aliases use_circleci
+#' @title Add a circleci config file
+#'
+#' @description This will build the Docker container on the Circle-CI service.
+#' The advantage of Circle-CI over Travis is that Circle-CI will freely work with
+#' private GitHub repositories. Only the paid service from Travis will work
+#' with private GitHub repositories. Before using this function you need
+#' to create an account with Circle-CI, using your GitHub account. If you want
+#' Circle-CI to run on a private GitHub repo, make sure you give Circle-CI
+#' access to 'all repos' when you log in with your GitHub credentials.
+#'
+#' @param pkg defaults to the package in the current working directory
+#' @param browse open a browser window to enable Circle-CI builds for the package automatically
+#'
+#' @importFrom curl has_internet
+#' @importFrom utils browseURL
+#' @export
+use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
+  pkg <- as.package(pkg)
+
+  gh <- github_info(pkg$path)
+  circleci_url <- file.path("https://circleci.com/gh/", gh$username)
+
+  if(docker_hub){
+
+    use_template("circle.yml-with-docker-hub",
+                 "circle.yml",
+                 ignore = TRUE,
+                 pkg = pkg,
+                 data = gh,
+                 out_path = "")
+
+  } else {
+
+    use_template("circle.yml-without-docker-hub",
+                 "circle.yml",
+                 ignore = TRUE,
+                 pkg = pkg,
+                 data = gh,
+                 out_path = "")
+
+  }
+
+
+  message("Next: \n",
+          " * Add a circleci shield to your README.Rmd:\n",
+          "[![Circle-CI Build Status]",
+          "(https://circleci.com/gh/", gh$fullname, ".svg?style=shield&circle-token=:circle-token)]",
+          "(https://circleci.com/gh/", gh$fullname, ")\n",
+          " * Turn on circleci for your repo at ", circleci_url, "\n",
+          "   and add your environment variables: DOCKER_EMAIL, ", "\n",
+          "   DOCKER_USER, DOCKER_PASS.",  "\n",
+          ifelse(docker_hub,
+          paste0(" * Your Docker container will be pushed to the Docker Hub", "\n",
+          "   if the build completes successfully", "\n" ),
+          paste0(" * Your Docker container will be kept private and NOT be pushed to the Docker Hub", "\n" )))
+
+  if (browse) {
+    if(curl::has_internet()) {
+      utils::browseURL(circleci_url)
+    } else {
+      message("No internet connection. Can't open ", circleci_url)
+    }
+  }
+
+  invisible(TRUE)
+}
+
+
+
 
 #' @name use_analysis
 #' @aliases add_analysis
-#' @title Adds and analysis directory (and sub-directories), and an Rmd file ready to write
+#' @title Adds an analysis directory (and sub-directories), and an Rmd file ready to write
 #'
 #' @description This will create \file{paper.Rmd}, \file{references.bib}
 #' and several others, and add \pkg{bookdown} to the imported packages listed in the DESCRIPTION file.
 #'
 #' @param pkg defaults to the package in the current working directory
-#' @param template the template file to use to create the main anlaysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
+#' @param template the template file to use to create the main analysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
 #' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst/' (so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
 #' @param data forwarded to \code{whisker::whisker.render}
 #' @export
-use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list()) {
+use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list(), open_data = TRUE) {
   pkg <- as.package(pkg)
   pkg$Rmd <- TRUE
   gh <- github_info(pkg$path)
@@ -155,12 +226,16 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
                               template)
  )
 
+ if (!open_data) use_git_ignore("*/data/*")
+
   message("Next: \n",
           " * Write your article/paper/thesis in Rmd file(s) in analysis/paper/", "\n",
           " * Add the citation style libray file (csl) to replace the default in analysis/paper/", "\n",
           " * Add reference details to the references.bib in analysis/paper/", "\n",
           " * For adding captions & cross-referenceing in an Rmd, see https://bookdown.org/yihui/bookdown/ ", "\n",
-          " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ")
+          " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ", "\n",
+          ifelse(!open_data,
+          " * Your data files are NOT tracked by Git and will not be pushed to GitHub", ""))
 
   open_in_rstudio(file.path(pkg$path, location, "paper/paper.Rmd"))
 
@@ -420,47 +495,3 @@ template_path_fn <- function(template){
                package = "rrtools",
                mustWork = TRUE)
 }
-
-#' @name current_git_commit
-#' @aliases current_git_commit
-#' @title Collect information about the last git commit for printing
-#'
-#' @description This looks into the local git repository for the project and
-#' collects basic information about the last commit, such as the date, the SHA,
-#' and the author of the commit. We can use this information
-#' to print a sentence at the end of our document that allows us to identify the
-#' exact commit that produced the rendered document output. This can be helpful
-#' for knowing what is the most current version when there are multiple
-#' versions of the rendered output in circulation among co-authors.
-#'
-#' @param path path to the git repository. For example this will be
-#' path = "../..", if we are in analysis/paper/paper.Rmd
-#'
-#' @return list
-#' @importFrom git2r repository commits branches when remote_url
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' current_git_commit()
-#' }
-current_git_commit <- function(path){
-  repo <- git2r::repository(path)
-  last_commit <- git2r::commits(repo)[[1]]
-  sha <- last_commit@sha
-  branch <- git2r::branches(repo)[[1]]@name
-  person <-  last_commit@committer@name
-  commit_date <- git2r::when(last_commit)
-  commit_msg <- last_commit@summary
-  remote_url  <- gsub("\\.git$", "", git2r::remote_url(repo))
-  return(list(repo = repo,
-              sha = sha,
-              branch = branch,
-              person = person,
-              commit_date = commit_date,
-              commit_msg = commit_msg,
-              remote_url = remote_url))
-}
-
-
-
