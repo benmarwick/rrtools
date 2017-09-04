@@ -193,7 +193,7 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
 #' @param data forwarded to \code{whisker::whisker.render}
 #' @param open_data should git track the files in the data directory?
 #' @export
-use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list(), open_data = TRUE) {
+use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list(), data_in_git = TRUE) {
   pkg <- as.package(pkg)
   pkg$Rmd <- TRUE
   gh <- github_info(pkg$path)
@@ -228,7 +228,7 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
                               template)
  )
 
- if (!open_data) use_git_ignore("*/data/*")
+ if (!data_in_git) use_git_ignore("*/data/*")
 
   message("Next: \n",
           " * Write your article/paper/thesis in Rmd file(s) in analysis/paper/", "\n",
@@ -251,36 +251,56 @@ invisible(TRUE)
 #'
 #' @param pkg defaults to the package in the current working directory
 #' @param rocker chr, the rocker image to base this container on
+#' @param rmd_to_knit, chr, path to the Rmd file to render in the Docker
+#' container, relative to the top level of the compendium
+#' (i.e. "analysis/paper/paper.Rmd"). There's no need to specify this if your Rmd
+#' to render is at "analysis/paper/paper.Rmd", "vignettes/paper/paper.Rmd" or
+#' "inst/paper/paper.Rmd". If you have a custom directory structure, and a custom
+#' file name for the Rmd file, you can specify that file path and name here so
+#' Docker can find the file to render in the container.B
 #'
 #' @import utils devtools
 #' @export
-use_dockerfile <- function(pkg = ".", rocker = "verse") {
+
+use_dockerfile <- function(pkg = ".", rocker = "verse", rmd_to_knit = "path_to_rmd") {
   pkg <- as.package(pkg)
 
   # get R version for rocker/r-ver
   si <- utils::sessionInfo()
   r_version <- paste0(si$R.version$major, ".", si$R.version$minor)
 
+  # get path to Rmd file to knit
+  if(rmd_to_knit == "path_to_rmd"){
+    dir_list   <- list.dirs()
+    paper_dir  <- dir_list[grep(pattern = "/paper", dir_list)]
+    rmd_path   <- regmatches(paper_dir, regexpr("analysis|vignettes|inst", paper_dir))
+    rmd_path <-  file.path(rmd_path, "paper/paper.Rmd")
+  } else {
+    rmd_path <- rmd_to_knit
+  }
+
+
+  # assign variables for whisker
   gh <- github_info(pkg$path)
   gh$r_version <- r_version
   gh$rocker <- rocker
+  gh$rmd_path <- rmd_path
 
   use_template("Dockerfile",
-                         "Dockerfile",
-                         ignore = TRUE,
-                         pkg = pkg,
-                         data = gh,
-                         open = TRUE,
-                         out_path = "")
+               "Dockerfile",
+               ignore = TRUE,
+               pkg = pkg,
+               data = gh,
+               open = TRUE,
+               out_path = "")
 
   message("Next: \n",
           " * Edit the dockerfile with your name & email", "\n",
           " * Edit the dockerfile to include system dependencies, such as linux libraries that are needed by the R packages you're using", "\n",
-          " * Edit the last line of the  dockerfile to specify which Rmd should be rendered in the Docker container", "\n"  )
+          " * Check the last line of the dockerfile to specify which Rmd should be rendered in the Docker container, edit if necessary", "\n"  )
 
   invisible(TRUE)
 }
-
 #' Creates skeleton README files
 #'
 #' @description \itemize{
@@ -326,7 +346,6 @@ use_readme_rmd <- function(pkg = ".") {
                  pkg = pkg)
   }
 
-
   message("* Rendering README.Rmd to README.md for GitHub.")
   rmarkdown::render("README.Rmd", output_format = NULL)
 
@@ -335,7 +354,6 @@ use_readme_rmd <- function(pkg = ".") {
 
   message("* Adding instructions to contributors.")
   use_contributing()
-
 
   invisible(TRUE)
 }

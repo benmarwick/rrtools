@@ -17,5 +17,6 @@ RUN . /etc/environment \
   # build this compendium package
   && R -e "devtools::install('/{{{repo}}}', dep=TRUE)" \
 
- # render the manuscript into a docx
-  && R -e "rmarkdown::render('/{{{repo}}}/analysis/paper/paper.Rmd')"
+ # render the manuscript into a docx, you'll need to edit this if you've
+ # customised the location and name of your main Rmd file
+  && R -e "rmarkdown::render('/{{{repo}}}/{{{rmd_path}}}')"
