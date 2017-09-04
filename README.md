@@ -5,7 +5,7 @@ rrtools: Tools for Writing Reproducible Research in R
 
 [![Travis-CI Build Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://travis-ci.org/benmarwick/rrtools) [![Circle-CI Build Status](https://circleci.com/gh/benmarwick/rrtools.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/benmarwick/rrtools)
 
-The goal of rrtools is to provide instructions, templates, and functions for making a basic compendium suitable for doing reproducible research with [R](https://www.r-project.org). This package documents the key steps and provides convenient functions for quickly creating a new research compendium. The approach is based generally on Kitzes et al. (2017), and more specifically on Marwick (2017) and Wickham's (2017) work using the R package structure as the basis for a research compendium.
+The goal of rrtools is to provide instructions, templates, and functions for making a basic compendium suitable for doing reproducible research with [R](https://www.r-project.org). This package documents the key steps and provides convenient functions for quickly creating a new research compendium. The approach is based generally on Kitzes et al. (2017), and more specifically on Marwick (2017), Marwick et al. (2017), and Wickham's (2017) work using the R package structure as the basis for a research compendium.
 
 rrtools provides a template for doing scholarly writing in a literate programming environment using [R Markdown](http://rmarkdown.rstudio.com) and [bookdown](https://bookdown.org/home/about.html). It also allows for isolation of your computational environment using [Docker](https://www.docker.com/what-docker), package versioning using [MRAN](https://mran.microsoft.com/documents/rro/reproducibility/), and continuous integration using [Travis](https://docs.travis-ci.com/user/for-beginners). It makes a convenient starting point for writing a journal article, report, or thesis.
 
@@ -62,7 +62,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 #### 5. `rrtools::use_analysis()`
 
--   this has three `location` options: create a top-level `analysis/` directory, create an `inst/` directory (so that all the sub-directories are available after the package is installed), or create a `vingettes/` directory (and automatically update the `DESCRIPTION`). The default is a top-level `analysis/`.
+-   this function has three `location =` options: create a top-level `analysis/` directory, create an `inst/` directory (so that all the sub-directories are available after the package is installed), or create a `vingettes/` directory (and automatically update the `DESCRIPTION`). The default is a top-level `analysis/`.
 -   for each option, the contents of the sub-directories are the same, with the following (using the default `analysis/` for example):
 
 <!-- -->
@@ -90,7 +90,8 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   the `references.bib` file has just one item to demonstrate the format. It is ready to insert more reference details.
 -   you can replace the supplied `csl` file with a different citation style from <https://github.com/citation-style-language/>
 -   we recommend using the [citr addin](https://github.com/crsh/citr) and [Zotero](https://www.zotero.org/) to efficiently insert citations while writing in an Rmd file
--   remember that the `Imports:` field in the `DESCRIPTION` file must include the names of all packages used in analysis documents (e.g. `paper.Rmd`)
+-   remember that the `Imports:` field in the `DESCRIPTION` file must include the names of all packages used in analysis documents (e.g. `paper.Rmd`). We have a helper function `rrtools::add_dependencies_to_description()` that will scan the Rmd file, identify libraries used in there, and add them to the `DESCRIPTION` file.
+-   this function has an `data_in_git =` argument, which is `TRUE` by defail. If set to `FALSE` you will exclude files in the `data/` directory from being tracked by git and prevent them from appearing on GitHub. You should set `data_in_git = FALSE` if your data files are large (&gt;100 mb is the limit for GitHub) or you do not want to make the data files publicly accessible on GitHub.
 
 #### 6. `rrtools::use_dockerfile()`
 
@@ -125,6 +126,8 @@ References
 Kitzes, J., Turek, D., & Deniz, F. (Eds.). (2017). *The Practice of Reproducible Research: Case Studies and Lessons from the Data-Intensive Sciences*. Oakland, CA: University of California Press. <https://www.practicereproducibleresearch.org>
 
 Marwick, B. (2017). Computational reproducibility in archaeological research: Basic principles and a case study of their implementation. *Journal of Archaeological Method and Theory*, 24(2), 424-450. <https:doi.org/10.1007/s10816-015-9272-9>
+
+Marwick, B., Boettiger, C. & L. Mullen (2017). Packaging data analytical work reproducibly using R (and friends). *PeerJ Preprints* 5:e3192v1 <https://doi.org/10.7287/peerj.preprints.3192v1>
 
 Piccolo, S. R. and M. B. Frampton (2016). "Tools and techniques for computational reproducibility." GigaScience 5(1): 30. <https://gigascience.biomedcentral.com/articles/10.1186/s13742-016-0135-4>
 

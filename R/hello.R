@@ -262,7 +262,7 @@ invisible(TRUE)
 #' @import utils devtools
 #' @export
 
-use_dockerfile <- function(pkg = ".", rocker = "verse", rmd_to_knit = "path_to_rmd") {
+  use_dockerfile <- function(pkg = ".", rocker = "verse", rmd_to_knit = "path_to_rmd") {
   pkg <- as.package(pkg)
 
   # get R version for rocker/r-ver
@@ -276,7 +276,8 @@ use_dockerfile <- function(pkg = ".", rocker = "verse", rmd_to_knit = "path_to_r
     rmd_path   <- regmatches(paper_dir, regexpr("analysis|vignettes|inst", paper_dir))
     rmd_path <-  file.path(rmd_path, "paper/paper.Rmd")
   } else {
-    rmd_path <- rmd_to_knit
+    #  preempt the string with home directory notation or back-slash (thx Matt Harris)
+    rmd_path <- gsub("^.|^/|^./|^~/","",rmd_to_knit)
   }
 
 
