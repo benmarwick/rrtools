@@ -61,10 +61,22 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
 #' @importFrom curl has_internet
 #' @importFrom utils browseURL
 #' @export
-use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
+use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE, rmd_to_knit = "path_to_rmd") {
   pkg <- as.package(pkg)
 
+  # get path to Rmd file to knit
+  if(rmd_to_knit == "path_to_rmd"){
+    dir_list   <- list.dirs()
+    paper_dir  <- dir_list[grep(pattern = "/paper", dir_list)]
+    rmd_path   <- regmatches(paper_dir, regexpr("analysis|vignettes|inst", paper_dir))
+    rmd_path <-  file.path(rmd_path, "paper/paper.Rmd")
+  } else {
+    #  preempt the string with home directory notation or back-slash (thx Matt Harris)
+    rmd_path <- gsub("^.|^/|^./|^~/","",rmd_to_knit)
+  }
+
   gh <- github_info(pkg$path)
+  gh$rmd_path <- rmd_path
   travis_url <- file.path("https://travis-ci.org", gh$fullname)
 
   if(docker){

@@ -1,28 +1,25 @@
-# Build our Docker container and R pkg on Travis
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-env:
-  global:
-  - REPO=benmarwick/rrtools
+language: R
+sudo: false
+cache: packages
 
-sudo: required
+# set pkg repo for the versioned CRAN hosted by Microsoft
+repos:
+  MRAN: "https://mran.microsoft.com/snapshot/2017-09-06"
 
+# install linux libraries that some R pkgs depend on, add more as needed
+addons:
+  apt:
+    packages:
+      - libudunits2-dev
+
+script:
+    # build and install custom library with custom functions
+  - Rscript -e "devtools::install()"
+    # render the main mansucript document into HTML/Word/PDF as specified in the Rmd
+    # you may need to edit the path and file name to point to the Rmd file to render
+  - R -e "rmarkdown::render('/rrtools/analysis/paper/paper.Rmd')"
+
+# be more tolerant :)
 warnings_are_errors: false
-
-language: generic
-
-services:
-  - docker
-
-before_install:
-    # create & run container using our dockerfile, i.e. compile pkg and render Rmd to Word doc
-  - docker build -t $REPO .
-
-# push our custom docker container to docker hub, env vars stored on travis-ci.org
-after_success:
-  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-  - export REPO=$REPO
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - docker build -f Dockerfile -t $REPO:$COMMIT .
-  - docker tag $REPO:$COMMIT $REPO:$TAG
-  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
-  - docker push $REPO
