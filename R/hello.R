@@ -216,10 +216,13 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
   location <- ifelse(location == "top_level", "analysis",
                      ifelse(location == "vignettes", "vignettes",
                             ifelse(location == "inst", "inst",
-                                   stop("invalid 'location' argument"))))
+                                   ifelse(location == "thesis", "thesis",
+                                   stop("invalid 'location' argument")))))
 
+  # create file structure...
  create_directories(location, pkg)
 
+ # add template files for paper.Rmd, .bib, etc. ...
  switch(
    location,
    vignettes =  use_vignette_rmd(location,
@@ -227,31 +230,34 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
                                  gh,
                                  template),
    analysis =   {use_paper_rmd(pkg,
-                               location = file.path(location, "paper"),
-                               gh,
-                               template);
+                                location = file.path(location, "paper"),
+                                gh,
+                                template);
                 use_build_ignore("analysis",
-                                           escape = FALSE,
-                                           pkg = pkg)
+                                 escape = FALSE,
+                                 pkg = pkg)
      },
    inst =       use_paper_rmd(pkg,
-                              location = file.path(location, "paper"),
-                              gh,
-                              template)
+                               location = file.path(location, "paper"),
+                               gh,
+                               template),
+   thesis =     use_build_ignore("thesis",
+                                 escape = FALSE,
+                                 pkg = pkg)
  )
 
  if (!data_in_git) use_git_ignore("*/data/*")
 
   message("Next: \n",
-          " * Write your article/paper/thesis in Rmd file(s) in analysis/paper/", "\n",
-          " * Add the citation style libray file (csl) to replace the default in analysis/paper/", "\n",
-          " * Add reference details to the references.bib in analysis/paper/", "\n",
+          " * Write your article/paper/thesis in Rmd file(s)", "\n",
+          " * Add the citation style libray file (csl) to replace the default provided here", "\n",
+          " * Add reference details to the references.bib", "\n",
           " * For adding captions & cross-referenceing in an Rmd, see https://bookdown.org/yihui/bookdown/ ", "\n",
           " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ", "\n",
           ifelse(!data_in_git,
           " * Your data files are NOT tracked by Git and will not be pushed to GitHub", ""))
 
-  open_in_rstudio(file.path(pkg$path, location, "paper/paper.Rmd"))
+
 
 invisible(TRUE)
 }
@@ -448,6 +454,8 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
 
 
 create_directories <- function(location, pkg){
+
+  ifelse(location %in% c("top_level", "vignettes", "inst"), {
   message("* Creating ", location, "/ directory and contents")
   use_directory(location, pkg = pkg)
   use_directory(paste0(location, "/paper"), pkg = pkg)
@@ -479,6 +487,20 @@ create_directories <- function(location, pkg){
   # move bib file in there also
   use_template("references.bib", pkg = pkg, data = gh,
                out_path = file.path(location, "paper"))
+
+  }, # else do this..
+  {
+
+    message("* Creating ", location, "/ directory and contents")
+    use_directory(location, pkg = pkg)
+    invisible(file.copy(from = system.file("templates/thesis_template/.",
+                                           package = "rrtools",
+                                           mustWork = TRUE),
+                        to = paste0(location),
+                        recursive = TRUE))
+
+
+  })
 }
 
 
