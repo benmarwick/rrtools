@@ -9,3 +9,4 @@ analysis
 ^circle\.yml$
 ^CONTRIBUTING\.md$
 thesis
+^LICENSE\.md$
