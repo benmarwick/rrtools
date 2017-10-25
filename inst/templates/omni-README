@@ -44,11 +44,11 @@ devtools::install_github("{{{username}}}/{{{repo}}}")
 
 ### Licenses
 
-**Text and figures:**  [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)
+**Text and figures :**  [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)
 
-**Code:** See the [DESCRIPTION](DESCRIPTION) file
+**Code :** See the [DESCRIPTION](DESCRIPTION) file
 
-$\textbf{Data:}$ [CC-0](http://creativecommons.org/publicdomain/zero/1.0/) attribution requested in reuse
+**Data :** [CC-0](http://creativecommons.org/publicdomain/zero/1.0/) attribution requested in reuse
 
 ### Contributions
 
