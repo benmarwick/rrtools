@@ -41,10 +41,10 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   this adds a reference to the MIT license in the [DESCRIPTION](DESCRIPTION) file and generates a [LICENSE](LICENSE) file listing the name provided as the copyright holder
 -   to use a different license, replace this line with `usethis::use_gpl3_license(copyright_holder = "My Name")`, or follow the instructions for other licenses
 
-#### 3. `usethis::use_github(".", auth_token = "xxxx", protocol = "https", private = FALSE)`
+#### 3. `devtools::use_github(".", auth_token = "xxxx", protocol = "https", private = FALSE)`
 
 -   if you are connected to the internet, this initializes a local git repository, connects to [GitHub](https://github.com), and creates a remote repository
--   if you are not connected to the internet, use `usethis::use_git(".")` to initialise a local git repository for your project. Reopen your project in RStudio to see the git buttons on the toolbar.
+-   if you are not connected to the internet, use `devtools::use_git(".")` to initialise a local git repository for your project. Reopen your project in RStudio to see the git buttons on the toolbar.
 -   we need to:
     -   install and configure git *before* running this line. See [Happy Git With R](http://happygitwithr.com) for details.
     -   get a [personal access token](https://github.com/settings/tokens), and replace "xxxx" with that token. When you do so (click "Generate new token"), make sure the "repo" scope is included by checking the "repo" box. Don't save this token in your project, keep it elsewhere.
@@ -59,7 +59,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 
 #### 5. `rrtools::use_analysis()`
 
--   this function has four `location =` options: `top_level` to create a top-level `analysis/` directory, `inst` to create an `inst/` directory (so that all the sub-directories are available after the package is installed), `vingettes` to create a `vingettes/` directory (and automatically update the `DESCRIPTION`), and `thesis` to create a top-level `thesis/` directory (e.g. with one Rmd file per chapter, to be knit into a single document, using [thesisdown](https://github.com/ismayc/thesisdown)). The default is a top-level `analysis/`.
+-   this function has three `location =` options: `top_level` to create a top-level `analysis/` directory, `inst` to create an `inst/` directory (so that all the sub-directories are available after the package is installed), and `vingettes` to create a `vingettes/` directory (and automatically update the `DESCRIPTION`). The default is a top-level `analysis/`.
 -   for each option, the contents of the sub-directories are the same, with the following (using the default `analysis/` for example):
 
 <!-- -->
@@ -89,6 +89,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   we recommend using the [citr addin](https://github.com/crsh/citr) and [Zotero](https://www.zotero.org/) to efficiently insert citations while writing in an Rmd file
 -   remember that the `Imports:` field in the `DESCRIPTION` file must include the names of all packages used in analysis documents (e.g. `paper.Rmd`). We have a helper function `rrtools::add_dependencies_to_description()` that will scan the Rmd file, identify libraries used in there, and add them to the `DESCRIPTION` file.
 -   this function has an `data_in_git =` argument, which is `TRUE` by defail. If set to `FALSE` you will exclude files in the `data/` directory from being tracked by git and prevent them from appearing on GitHub. You should set `data_in_git = FALSE` if your data files are large (&gt;100 mb is the limit for GitHub) or you do not want to make the data files publicly accessible on GitHub.
+-   if you're writing a PhD thesis, replace `rrtools::use_analysis()` with `rmarkdown::draft('index.Rmd', template = 'thesis', package = 'huskydown', create_dir = TRUE)` to create a thesis template from the [huskydown package](https://github.com/benmarwick/huskydown)
 
 #### 6. `rrtools::use_dockerfile()`
 

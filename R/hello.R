@@ -201,7 +201,7 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
 #'
 #' @param pkg defaults to the package in the current working directory
 #' @param template the template file to use to create the main analysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
-#' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst/' (so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
+#' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst' (for the inst/ directory, so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
 #' @param data forwarded to \code{whisker::whisker.render}
 #' @param open_data should git track the files in the data directory?
 #' @export
@@ -216,8 +216,7 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
   location <- ifelse(location == "top_level", "analysis",
                      ifelse(location == "vignettes", "vignettes",
                             ifelse(location == "inst", "inst",
-                                   ifelse(location == "thesis", "thesis",
-                                   stop("invalid 'location' argument")))))
+                                   stop("invalid 'location' argument"))))
 
   # create file structure...
  create_directories(location, pkg)
@@ -240,10 +239,7 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
    inst =       use_paper_rmd(pkg,
                                location = file.path(location, "paper"),
                                gh,
-                               template),
-   thesis =     use_build_ignore("thesis",
-                                 escape = FALSE,
-                                 pkg = pkg)
+                               template)
  )
 
  if (!data_in_git) use_git_ignore("*/data/*")
@@ -455,7 +451,7 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
 
 create_directories <- function(location, pkg){
 
-  ifelse(location %in% c("top_level", "vignettes", "inst"), {
+  if (location %in% c("analysis", "vignettes", "inst")) {
   message("* Creating ", location, "/ directory and contents")
   use_directory(location, pkg = pkg)
   use_directory(paste0(location, "/paper"), pkg = pkg)
@@ -488,19 +484,20 @@ create_directories <- function(location, pkg){
   use_template("references.bib", pkg = pkg, data = gh,
                out_path = file.path(location, "paper"))
 
-  }, # else do this..
+  } else # else do this..
   {
+    # BM: I think we want to let the user have some more control
+    # over this, and leave thesis/book out of here?
+    # message("* Creating ", location, "/ directory and contents")
+    # use_directory(location, pkg = pkg)
+    # invisible(file.copy(from = system.file("templates/thesis_template/.",
+    #                                        package = "rrtools",
+    #                                        mustWork = TRUE),
+    #                     to = paste0(location),
+    #                     recursive = TRUE))
 
-    message("* Creating ", location, "/ directory and contents")
-    use_directory(location, pkg = pkg)
-    invisible(file.copy(from = system.file("templates/thesis_template/.",
-                                           package = "rrtools",
-                                           mustWork = TRUE),
-                        to = paste0(location),
-                        recursive = TRUE))
 
-
-  })
+  }
 }
 
 
