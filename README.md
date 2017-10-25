@@ -74,7 +74,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
     ├── figures/
     |
     ├── data/
-    │   ├── raw_data/       # data obtained from elswhere
+    │   ├── raw_data/       # data obtained from elsewhere
     │   └── derived_data/   # data generated during the analysis
     |
     └──  templates
