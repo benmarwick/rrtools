@@ -5,9 +5,15 @@
 #' the package DESCRIPTION.
 #'
 #' @param path location of individual file or directory where to search for scripts.
+#' @param description_file location of description file to be updated.
+#' @param just_packages just give back a character vector of the found packages.
 #'
 #' @export
-add_dependencies_to_description <- function(path = getwd()) {
+add_dependencies_to_description <- function(
+  path = getwd(),
+  description_file = "DESCRIPTION",
+  just_packages = FALSE
+) {
 
   # check if directory or single file
   if (utils::file_test("-d", path)) {
@@ -41,9 +47,9 @@ add_dependencies_to_description <- function(path = getwd()) {
       l_libs <- unlist(l_libs)
       # get libraries explicitly called via require()
       require_lines <- grep(pattern = "require", x = current_file, value = TRUE)
-      r_libs <- strsplit(library_lines, split = "require\\(")
-      r_libs <- lapply(l_libs, function(x){strsplit(x[2], split = "\\)")})
-      r_libs <- unlist(l_libs)
+      r_libs <- strsplit(require_lines, split = "require\\(")
+      r_libs <- lapply(r_libs, function(x){strsplit(x[2], split = "\\)")})
+      r_libs <- unlist(r_libs)
       # get libraries implicitly called via ::
       point_lines <- grep(pattern = "::", x = current_file, value = TRUE)
       # search for all collections of alphanumeric signs in between the
@@ -72,15 +78,29 @@ add_dependencies_to_description <- function(path = getwd()) {
     pkgs <- pkgs[pkgs %in% utils::available.packages(repos = "https://cran.r-project.org")[,1]==TRUE]
   }
 
+  # if the just_packages option is selected, just give back the list of packages
+  if (just_packages) {
+    return(pkgs)
+  }
+
   # read DESCRIPTION file
-  tmp <- readLines("DESCRIPTION")
+  tmp <- readLines(description_file)
+  # check, if Imports fields is available
+  if (length(grep("Imports", tmp)) == 0) {
+    # if no: add it
+    tmp[length(tmp)+1] <- "Imports:"
+  }
   # get line where Imports starts
   i_begin <- grep("Imports", tmp)
   # get line where Imports ends (determination via search for next ":")
-  i_end <- i_begin + grep(":", tmp[(i_begin + 1):length(tmp)])[1] - 1
   # if Imports is the last tag, set i_end to the last line
-  if(is.na(i_end)) {
+  if((i_begin + 1) >= length(tmp)) {
     i_end <- length(tmp)
+  } else {
+    i_end <- i_begin + grep(":", tmp[(i_begin + 1):length(tmp)])[1] - 1
+    if(is.na(i_end)) {
+      i_end <- length(tmp)
+    }
   }
   # check which packages are already present in DESCRIPTION
   present <- unlist(lapply(
@@ -113,5 +133,5 @@ add_dependencies_to_description <- function(path = getwd()) {
   # add newly created package string to last line of Imports
   tmp[i_end] <- paste0(tmp[i_end], ",", to_add_final)
   # write result back into DESCRIPTION file
-  writeLines(text = tmp, con = "DESCRIPTION")
+  writeLines(text = tmp, con = description_file)
 }
