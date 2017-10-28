@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R: c(person("Ben", "Marwick", role = c("aut", "cre"), email = "benmarwick@gmail.com"),
              person("Daniel", "Knitter", role = "ctb"),
              person("Patrick", "Kennedy", role = "ctb"),
-             person("Nils", "Müller-Scheeßel", role = "ctb"),
+             person("Nils", "Muller-Scheessel", role = "ctb"),
              person("Martin", "Hinz", role = "ctb"),
              person("Clemens", "Schmid", role = "ctb"),
              person("Ricarda", "Braun", role = "ctb"))
@@ -14,7 +14,8 @@ Description: Instructions, templates, and functions for making a basic
     compendium suitable for doing reproducible research with R.
 License: MIT + file LICENSE
 Imports: devtools, git2r, whisker, rstudioapi, rmarkdown, knitr,
-    bookdown, curl, RCurl, jsonlite, methods, httr
+    bookdown, curl, RCurl, jsonlite, methods, httr, usethis,
+    readr (>= 1.1.1)
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/benmarwick/rrtools
