@@ -61,10 +61,22 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
 #' @importFrom curl has_internet
 #' @importFrom utils browseURL
 #' @export
-use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE) {
+use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE, rmd_to_knit = "path_to_rmd") {
   pkg <- as.package(pkg)
 
+  # get path to Rmd file to knit
+  if(rmd_to_knit == "path_to_rmd"){
+    dir_list   <- list.dirs()
+    paper_dir  <- dir_list[grep(pattern = "/paper", dir_list)]
+    rmd_path   <- regmatches(paper_dir, regexpr("analysis|vignettes|inst", paper_dir))
+    rmd_path <-  file.path(rmd_path, "paper/paper.Rmd")
+  } else {
+    #  preempt the string with home directory notation or back-slash (thx Matt Harris)
+    rmd_path <- gsub("^.|^/|^./|^~/","",rmd_to_knit)
+  }
+
   gh <- github_info(pkg$path)
+  gh$rmd_path <- rmd_path
   travis_url <- file.path("https://travis-ci.org", gh$fullname)
 
   if(docker){
@@ -189,11 +201,11 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
 #'
 #' @param pkg defaults to the package in the current working directory
 #' @param template the template file to use to create the main analysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
-#' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst/' (so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
+#' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst' (for the inst/ directory, so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
 #' @param data forwarded to \code{whisker::whisker.render}
 #' @param open_data should git track the files in the data directory?
 #' @export
-use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list(), open_data = TRUE) {
+use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list(), data_in_git = TRUE) {
   pkg <- as.package(pkg)
   pkg$Rmd <- TRUE
   gh <- github_info(pkg$path)
@@ -206,8 +218,10 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
                             ifelse(location == "inst", "inst",
                                    stop("invalid 'location' argument"))))
 
+  # create file structure...
  create_directories(location, pkg)
 
+ # add template files for paper.Rmd, .bib, etc. ...
  switch(
    location,
    vignettes =  use_vignette_rmd(location,
@@ -215,31 +229,31 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
                                  gh,
                                  template),
    analysis =   {use_paper_rmd(pkg,
-                               location = file.path(location, "paper"),
-                               gh,
-                               template);
+                                location = file.path(location, "paper"),
+                                gh,
+                                template);
                 use_build_ignore("analysis",
-                                           escape = FALSE,
-                                           pkg = pkg)
+                                 escape = FALSE,
+                                 pkg = pkg)
      },
    inst =       use_paper_rmd(pkg,
-                              location = file.path(location, "paper"),
-                              gh,
-                              template)
+                               location = file.path(location, "paper"),
+                               gh,
+                               template)
  )
 
- if (!open_data) use_git_ignore("*/data/*")
+ if (!data_in_git) use_git_ignore("*/data/*")
 
   message("Next: \n",
-          " * Write your article/paper/thesis in Rmd file(s) in analysis/paper/", "\n",
-          " * Add the citation style libray file (csl) to replace the default in analysis/paper/", "\n",
-          " * Add reference details to the references.bib in analysis/paper/", "\n",
+          " * Write your article/paper/thesis in Rmd file(s)", "\n",
+          " * Add the citation style libray file (csl) to replace the default provided here", "\n",
+          " * Add reference details to the references.bib", "\n",
           " * For adding captions & cross-referenceing in an Rmd, see https://bookdown.org/yihui/bookdown/ ", "\n",
           " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ", "\n",
-          ifelse(!open_data,
+          ifelse(!data_in_git,
           " * Your data files are NOT tracked by Git and will not be pushed to GitHub", ""))
 
-  open_in_rstudio(file.path(pkg$path, location, "paper/paper.Rmd"))
+
 
 invisible(TRUE)
 }
@@ -251,36 +265,57 @@ invisible(TRUE)
 #'
 #' @param pkg defaults to the package in the current working directory
 #' @param rocker chr, the rocker image to base this container on
+#' @param rmd_to_knit, chr, path to the Rmd file to render in the Docker
+#' container, relative to the top level of the compendium
+#' (i.e. "analysis/paper/paper.Rmd"). There's no need to specify this if your Rmd
+#' to render is at "analysis/paper/paper.Rmd", "vignettes/paper/paper.Rmd" or
+#' "inst/paper/paper.Rmd". If you have a custom directory structure, and a custom
+#' file name for the Rmd file, you can specify that file path and name here so
+#' Docker can find the file to render in the container.B
 #'
 #' @import utils devtools
 #' @export
-use_dockerfile <- function(pkg = ".", rocker = "verse") {
+
+  use_dockerfile <- function(pkg = ".", rocker = "verse", rmd_to_knit = "path_to_rmd") {
   pkg <- as.package(pkg)
 
   # get R version for rocker/r-ver
   si <- utils::sessionInfo()
   r_version <- paste0(si$R.version$major, ".", si$R.version$minor)
 
+  # get path to Rmd file to knit
+  if(rmd_to_knit == "path_to_rmd"){
+    dir_list   <- list.dirs()
+    paper_dir  <- dir_list[grep(pattern = "/paper", dir_list)]
+    rmd_path   <- regmatches(paper_dir, regexpr("analysis|vignettes|inst", paper_dir))
+    rmd_path <-  file.path(rmd_path, "paper/paper.Rmd")
+  } else {
+    #  preempt the string with home directory notation or back-slash (thx Matt Harris)
+    rmd_path <- gsub("^.|^/|^./|^~/","",rmd_to_knit)
+  }
+
+
+  # assign variables for whisker
   gh <- github_info(pkg$path)
   gh$r_version <- r_version
   gh$rocker <- rocker
+  gh$rmd_path <- rmd_path
 
   use_template("Dockerfile",
-                         "Dockerfile",
-                         ignore = TRUE,
-                         pkg = pkg,
-                         data = gh,
-                         open = TRUE,
-                         out_path = "")
+               "Dockerfile",
+               ignore = TRUE,
+               pkg = pkg,
+               data = gh,
+               open = TRUE,
+               out_path = "")
 
   message("Next: \n",
           " * Edit the dockerfile with your name & email", "\n",
           " * Edit the dockerfile to include system dependencies, such as linux libraries that are needed by the R packages you're using", "\n",
-          " * Edit the last line of the  dockerfile to specify which Rmd should be rendered in the Docker container", "\n"  )
+          " * Check the last line of the dockerfile to specify which Rmd should be rendered in the Docker container, edit if necessary", "\n"  )
 
   invisible(TRUE)
 }
-
 #' Creates skeleton README files
 #'
 #' @description \itemize{
@@ -326,7 +361,6 @@ use_readme_rmd <- function(pkg = ".") {
                  pkg = pkg)
   }
 
-
   message("* Rendering README.Rmd to README.md for GitHub.")
   rmarkdown::render("README.Rmd", output_format = NULL)
 
@@ -335,7 +369,6 @@ use_readme_rmd <- function(pkg = ".") {
 
   message("* Adding instructions to contributors.")
   use_contributing()
-
 
   invisible(TRUE)
 }
@@ -417,6 +450,8 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
 
 
 create_directories <- function(location, pkg){
+
+  if (location %in% c("analysis", "vignettes", "inst")) {
   message("* Creating ", location, "/ directory and contents")
   use_directory(location, pkg = pkg)
   use_directory(paste0(location, "/paper"), pkg = pkg)
@@ -448,6 +483,21 @@ create_directories <- function(location, pkg){
   # move bib file in there also
   use_template("references.bib", pkg = pkg, data = gh,
                out_path = file.path(location, "paper"))
+
+  } else # else do this..
+  {
+    # BM: I think we want to let the user have some more control
+    # over this, and leave thesis/book out of here?
+    # message("* Creating ", location, "/ directory and contents")
+    # use_directory(location, pkg = pkg)
+    # invisible(file.copy(from = system.file("templates/thesis_template/.",
+    #                                        package = "rrtools",
+    #                                        mustWork = TRUE),
+    #                     to = paste0(location),
+    #                     recursive = TRUE))
+
+
+  }
 }
 
 

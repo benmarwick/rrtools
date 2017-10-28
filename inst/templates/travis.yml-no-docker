@@ -7,7 +7,7 @@ cache: packages
 # set pkg repo for the versioned CRAN hosted by Microsoft
 repos:
   MRAN: "https://mran.microsoft.com/snapshot/{{{date}}}"
-  
+
 # install linux libraries that some R pkgs depend on, add more as needed
 addons:
   apt:
@@ -18,7 +18,8 @@ script:
     # build and install custom library with custom functions
   - Rscript -e "devtools::install()"
     # render the main mansucript document into HTML/Word/PDF as specified in the Rmd
-  - Rscript -e "rmarkdown::render('analysis/paper.Rmd')"
+    # you may need to edit the path and file name to point to the Rmd file to render
+  - R -e "rmarkdown::render('{{{rmd_path}}}')"
 
 # be more tolerant :)
 warnings_are_errors: false

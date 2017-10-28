@@ -1,8 +1,8 @@
 # get the base image, the rocker/verse has R, RStudio and pandoc
-FROM rocker/verse:3.4.0
+FROM rocker/verse:3.4.1
 
 # required
-MAINTAINER Your Name <your_email@somewhere.com>
+MAINTAINER Ben Marwick <benmarwick@gmail.com>
 
 COPY . /rrtools
 
@@ -17,5 +17,6 @@ RUN . /etc/environment \
   # build this compendium package
   && R -e "devtools::install('/rrtools', dep=TRUE)" \
 
- # render the manuscript into a docx
+ # render the manuscript into a docx, you'll need to edit this if you've
+ # customised the location and name of your main Rmd file
   && R -e "rmarkdown::render('/rrtools/analysis/paper/paper.Rmd')"
