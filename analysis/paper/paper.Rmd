@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
   fig.path = "figures"
 )
 
-library(rrtools)
+devtools::load_all(".", quiet = T)
 ```
 
 # Introduction
