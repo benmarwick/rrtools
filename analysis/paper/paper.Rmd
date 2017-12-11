@@ -6,8 +6,8 @@ author:
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
     bookdown::html_document2:
-    fig_caption: yes
-    reference_docx: "../templates/jas/template.docx" # Insert path for the DOCX file
+      fig_caption: yes
+      reference_docx: "../templates/jas/template.docx" # Insert path for the DOCX file
 bibliography: references.bib
 csl: "../templates/jas/journal-of-archaeological-science.csl" # Insert path for the bib-style
 abstract: |
