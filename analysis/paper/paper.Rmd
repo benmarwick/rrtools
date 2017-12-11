@@ -31,7 +31,8 @@ knitr::opts_chunk$set(
   fig.path = "figures"
 )
 
-devtools::load_all(".", quiet = T)
+# Load the current package with all its environment specific objects 
+devtools::load_all(".", quiet = T) # you may replace this with library(package_name)
 ```
 
 # Introduction
