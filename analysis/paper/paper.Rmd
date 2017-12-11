@@ -1,15 +1,15 @@
 ---
 title: "Title Goes Here"
 author:
-  - author 1
-  - author 2
+  - Author One
+  - Author Two
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
     bookdown::html_document2:
     fig_caption: yes
-    reference_docx: templates/template.docx
+    reference_docx: "../templates/jas/template.docx" # Insert path for the DOCX file
 bibliography: references.bib
-csl: journal-of-archaeological-science.csl
+csl: "../templates/jas/journal-of-archaeological-science.csl" # Insert path for the bib-style
 abstract: |
   Text of abstract
 keywords: |
