@@ -60,8 +60,10 @@ Here is a citation [@Marwick2017]
 
 # Acknowledgements
 
-# References 
-<div id="refs"></div>
+# References
+<!-- You may include the references here for the word or html output files by uncommenting the following line (this will not work for PDF files):  -->
+<!-- <div id="refs"></div> -->
+
 
 ### Colophon
 

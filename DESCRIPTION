@@ -8,7 +8,7 @@ Authors@R: c(person("Ben", "Marwick", role = c("aut", "cre"), email = "benmarwic
              person("Nils", "Muller-Scheessel", role = "ctb"),
              person("Martin", "Hinz", role = "ctb"),
              person("Clemens", "Schmid", role = "ctb"),
-             person("Ricarda", "Braun", role = "ctb"))
+             person("Ricarda", "Braun", role = "ctb"),
              person("Wojciech", "Francuzik", role = "ctb"))
 Maintainer: Ben Marwick <benmarwick@gmail.com>
 Description: Instructions, templates, and functions for making a basic 
