@@ -5,11 +5,11 @@ author:
   - Author Two
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
-    bookdown::html_document2:
+    bookdown::word_document2:
       fig_caption: yes
-      reference_docx: "../templates/jas/template.docx" # Insert path for the DOCX file
+      reference_docx: "../templates/template.docx" # Insert path for the DOCX file
 bibliography: references.bib
-csl: "../templates/jas/journal-of-archaeological-science.csl" # Insert path for the bib-style
+csl: "../templates/journal-of-archaeological-science.csl" # Insert path for the bib-style
 abstract: |
   Text of abstract
 keywords: |
@@ -28,11 +28,10 @@ knitr::opts_chunk$set(
   message = FALSE,
   echo = FALSE,
   comment = "#>",
-  fig.path = "figures"
+  fig.path = "../figures/"
 )
 
-# Load the current package with all its environment specific objects 
-devtools::load_all(".", quiet = T) # you may replace this with library(package_name)
+library(rrtools) # Or use devtools::load_all('.', quiet = T) if your code is in script files, rather than as functions in the `/R` diretory
 ```
 
 # Introduction
@@ -51,7 +50,7 @@ Here is a citation [@Marwick2017]
 
 ```{r get-data, eval = FALSE}
 # Note the path that we need to use to access our data files when rendering this document
-# my_data <- readr::read_csv("../data/raw_data/my_csv_file.csv")
+my_data <- readr::read_csv("../data/raw_data/my_csv_file.csv")
 ```
 
 # Discussion
@@ -60,10 +59,14 @@ Here is a citation [@Marwick2017]
 
 # Acknowledgements
 
-# References
-<!-- You may include the references here for the word or html output files by uncommenting the following line (this will not work for PDF files):  -->
-<!-- <div id="refs"></div> -->
+<!-- The following line inserts a page break when the output is MS Word. For page breaks in PDF, use \newpage on its own line.  -->
+##### pagebreak
 
+# References 
+<!-- The following line ensures the references appear here for the MS Word or HTML output files, rather than right at the end of the document (this will not work for PDF files):  -->
+<div id="refs"></div>
+
+##### pagebreak
 
 ### Colophon
 
@@ -81,5 +84,3 @@ The current Git commit details are:
 # if your Rmd is not in analysis/paper/
 git2r::repository("../..")
 ```
-
-

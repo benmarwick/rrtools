@@ -476,7 +476,7 @@ create_directories <- function(location, pkg){
   invisible(file.copy(from = system.file("templates/journal-of-archaeological-science.csl",
                                          package = "rrtools",
                                          mustWork = TRUE),
-                      to = paste0(location, "/paper"),
+                      to = paste0(location, "/templates"),
                       recursive = TRUE))
 
 
@@ -508,7 +508,7 @@ use_paper_rmd <- function(pkg, location, gh, template){
 
   # inject the pkg name into the Rmd
   rmd <- readLines(file.path(pkg$path, location, "paper.Rmd"))
-  rmd <- c(rmd[1:32], paste0("\nlibrary(", pkg$package, ")"), rmd[33:length(rmd)])
+  rmd <- c(rmd[1:32], paste0("\nlibrary(", pkg$package, ") # Or use devtools::load_all('.', quiet = T) if your code is in script files, rather than as functions in the `/R` diretory"), rmd[33:length(rmd)])
   # use_template doesn't seem to work for this...
   writeLines(rmd, file.path(pkg$path, location, "paper.Rmd"))
   closeAllConnections()
