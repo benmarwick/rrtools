@@ -36,10 +36,10 @@ To create a reproducible research compendium using the rrtools approach, follow 
     -   edit the `DESCRIPTION` file (located in your `pkgname` directory) to include accurate metadata
     -   periodically update the `Imports:` section of the `DESCRIPTION` file with the names of packages used in the code we write in the Rmd document(s) (e.g., `devtools::use_package("dplyr", "imports")`)
 
-#### 2. `usethis::use_mit_license(copyright_holder = "My Name")`
+#### 2. `usethis::use_mit_license(name = "My Name")`
 
 -   this adds a reference to the MIT license in the [DESCRIPTION](DESCRIPTION) file and generates a [LICENSE](LICENSE) file listing the name provided as the copyright holder
--   to use a different license, replace this line with `usethis::use_gpl3_license(copyright_holder = "My Name")`, or follow the instructions for other licenses
+-   to use a different license, replace this line with `usethis::use_gpl3_license(name = "My Name")`, or follow the instructions for other licenses
 
 #### 3. `devtools::use_github(".", auth_token = "xxxx", protocol = "https", private = FALSE)`
 
@@ -90,6 +90,7 @@ To create a reproducible research compendium using the rrtools approach, follow 
 -   remember that the `Imports:` field in the `DESCRIPTION` file must include the names of all packages used in analysis documents (e.g. `paper.Rmd`). We have a helper function `rrtools::add_dependencies_to_description()` that will scan the Rmd file, identify libraries used in there, and add them to the `DESCRIPTION` file.
 -   this function has an `data_in_git =` argument, which is `TRUE` by defail. If set to `FALSE` you will exclude files in the `data/` directory from being tracked by git and prevent them from appearing on GitHub. You should set `data_in_git = FALSE` if your data files are large (&gt;100 mb is the limit for GitHub) or you do not want to make the data files publicly accessible on GitHub.
 -   if you're writing a PhD thesis, replace `rrtools::use_analysis()` with `rmarkdown::draft('index.Rmd', template = 'thesis', package = 'huskydown', create_dir = TRUE)` to create a thesis template from the [huskydown package](https://github.com/benmarwick/huskydown)
+-   The `paper.Rmd` file loads the current package using the `devtools::load_all(".")` command. This ensures that environment variables from the `R/*.R` files are also loaded and accessible from the `paper.Rmd` file. This way relative file path issues are avoided, and code can be seemlesly executed from within the `paper.Rmd` file. If it is more convinient - the userw might replace it with `library("library_name")` if they are only writing **functions** for the `/R` directory, and most of the analysis is conducted and sourced from the `paper.Rmd` file itself.
 
 #### 6. `rrtools::use_dockerfile()`
 
