@@ -462,21 +462,21 @@ create_directories <- function(location, pkg){
   use_directory(paste0(location, "/data/derived_data"), pkg = pkg)
 
   # create a file that inform of best practices
-  invisible(file.create(paste0(location, "/data/DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND")))
+  invisible(file.create(paste0(pkg$path, "/", location, "/data/DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND")))
 
   # move templates for MS Word output
   invisible(file.copy(from = list.files(system.file("templates/word_templates/",
                                                     package = "rrtools",
                                                     mustWork = TRUE),
                                         full.names = TRUE),
-                      to = paste0(location, "/templates"),
+                      to = paste0(pkg$path, "/", location, "/templates"),
                       recursive = TRUE))
 
   # move csl file
   invisible(file.copy(from = system.file("templates/journal-of-archaeological-science.csl",
                                          package = "rrtools",
                                          mustWork = TRUE),
-                      to = paste0(location, "/templates"),
+                      to = paste0(pkg$path, "/", location, "/templates"),
                       recursive = TRUE))
 
 
