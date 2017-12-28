@@ -4,10 +4,15 @@
 \alias{add_dependencies_to_description}
 \title{Searches for external packages and adds them to the Imports field in the description}
 \usage{
-add_dependencies_to_description(path = getwd())
+add_dependencies_to_description(path = getwd(),
+  description_file = "DESCRIPTION", just_packages = FALSE)
 }
 \arguments{
 \item{path}{location of individual file or directory where to search for scripts.}
+
+\item{description_file}{location of description file to be updated.}
+
+\item{just_packages}{just give back a character vector of the found packages.}
 }
 \description{
 Scans script files (.R, .Rmd, .Rnw, .Rpres, etc.) for external package dependencies indicated by
