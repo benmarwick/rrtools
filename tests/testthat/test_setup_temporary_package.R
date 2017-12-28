@@ -1,3 +1,4 @@
+context("Create temporary directory in file system")
 
 # create temporary directory in file system
 playground_path <- paste0(tempdir(), "/testpackages")
@@ -15,4 +16,8 @@ devtools::create(
   rstudio = FALSE,
   quiet = TRUE
 )
+
+test_that("there is a temporary directory for testing", {
+  expect_true(grepl("testpackages", playground_path))
+})
 

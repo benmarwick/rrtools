@@ -20,30 +20,30 @@ use_git <- function(message = "Initial commit", pkg = ".") {
 
 use_git_with_config <- function(message, pkg, add_user_config = FALSE, quiet = FALSE) {
   pkg <- as.package(pkg)
-  
+
   if (uses_git(pkg$path)) {
     message("* Git is already initialized")
     return(invisible())
   }
-  
+
   if (!quiet) {
     message("* Initialising repo")
   }
   r <- git2r::init(pkg$path)
-  
+
   if (add_user_config) {
     git2r::config(r, global = FALSE, user.name = "user", user.email = "user@email.xx")
   }
-  
+
   use_git_ignore(c(".Rproj.user", ".Rhistory", ".RData"), pkg = pkg, quiet = quiet)
-  
+
   if (!quiet) {
     message("* Adding files and committing")
   }
   paths <- unlist(git2r::status(r))
   git2r::add(r, paths)
   git2r::commit(r, message)
-  
+
   invisible()
 }
 
@@ -103,28 +103,31 @@ use_git_with_config <- function(message, pkg, add_user_config = FALSE, quiet = F
 use_github <- function(auth_token = github_pat(), private = FALSE, pkg = ".",
                        host = "https://api.github.com",
                        protocol = c("ssh", "https"), credentials = NULL) {
-  
+
   if (is.null(auth_token)) {
     stop("GITHUB_PAT required to create new repo")
   }
-  
+
   protocol <- match.arg(protocol)
-  
+
   pkg <- as.package(pkg)
   use_git(pkg = pkg)
-  
+
   if (uses_github(pkg$path)) {
     message("* GitHub is already initialized")
     return(invisible())
   }
-  
+
   message("* Checking title and description")
   message("  Title: ", pkg$title)
   message("  Description: ", pkg$description)
-  if (yesno("Are title and description ok?")) {
-    return(invisible())
+  if (interactive() && !yesno("Are title and description ok?")) {
+    TRUE
+  } else {
+    FALSE
   }
-  
+
+
   message("* Creating GitHub repository")
   create <-
     github_POST(
@@ -137,19 +140,19 @@ use_github <- function(auth_token = github_pat(), private = FALSE, pkg = ".",
       ),
       host = host
     )
-  
+
   message("* Adding GitHub remote")
   r <- git2r::repository(pkg$path)
   origin_url <- switch(protocol, https = create$clone_url, ssh = create$ssh_url)
   git2r::remote_add(r, "origin", origin_url)
-  
+
   message("* Adding GitHub links to DESCRIPTION")
   use_github_links(pkg$path, auth_token = auth_token, host = host)
   if (git_uncommitted(pkg$path)) {
     git2r::add(r, "DESCRIPTION")
     git2r::commit(r, "Add GitHub links to DESCRIPTION")
   }
-  
+
   message("* Pushing to GitHub and setting remote tracking branch")
   if (protocol == "ssh") {
     ## [1] push via ssh required for success setting remote tracking branch
@@ -162,9 +165,9 @@ use_github <- function(auth_token = github_pat(), private = FALSE, pkg = ".",
     git2r::push(r, "origin", "refs/heads/master", credentials = cred)
   }
   git2r::branch_set_upstream(git2r::head(r), "origin/master")
-  
+
   message("* View repo at ", create$html_url)
-  
+
   invisible(NULL)
 }
 
@@ -182,17 +185,17 @@ use_github <- function(auth_token = github_pat(), private = FALSE, pkg = ".",
 #' @keywords internal
 use_git_hook <- function(hook, script, pkg = ".") {
   pkg <- as.package(pkg)
-  
+
   git_dir <- file.path(pkg$path, ".git")
   if (!file.exists(git_dir)) {
     stop("This project doesn't use git", call. = FALSE)
   }
-  
+
   hook_dir <- file.path(git_dir, "hooks")
   if (!file.exists(hook_dir)) {
     dir.create(hook_dir)
   }
-  
+
   hook_path <- file.path(hook_dir, hook)
   writeLines(script, hook_path)
   Sys.chmod(hook_path, "0744")
@@ -201,15 +204,15 @@ use_git_hook <- function(hook, script, pkg = ".") {
 
 use_git_ignore <- function(ignores, directory = ".", pkg = ".", quiet = FALSE) {
   pkg <- as.package(pkg)
-  
+
   paths <- paste0("`", ignores, "`", collapse = ", ")
   if (!quiet) {
     message("* Adding ", paths, " to ", file.path(directory, ".gitignore"))
   }
-  
+
   path <- file.path(pkg$path, directory, ".gitignore")
   union_write(path, ignores)
-  
+
   invisible(TRUE)
 }
 
@@ -232,22 +235,22 @@ use_git_ignore <- function(ignores, directory = ".", pkg = ".", quiet = FALSE) {
 #' @export
 use_github_links <- function(pkg = ".", auth_token = github_pat(),
                              host = "https://api.github.com") {
-  
+
   if (!uses_github(pkg)) {
     stop("Cannot detect that package already uses GitHub.\n",
          "You might want to run use_github().")
   }
-  
+
   gh_info <- github_info(pkg)
   pkg <- as.package(pkg)
-  
+
   desc_path <- file.path(pkg$path, "DESCRIPTION")
   desc <- new_desc <- read_dcf(desc_path)
-  
+
   path_to_repo <- paste("repos", gh_info$fullname, sep = "/")
   res <- github_GET(path = path_to_repo, pat = auth_token, host = host)
   github_URL <- res$html_url
-  
+
   fill <- function(d, f, filler) {
     if (is.null(d[[f]]) || identical(d[[f]], "")) {
       d[[f]] <- filler
@@ -258,9 +261,9 @@ use_github_links <- function(pkg = ".", auth_token = github_pat(),
   }
   new_desc <- fill(new_desc, "URL", github_URL)
   new_desc <- fill(new_desc, "BugReports", file.path(github_URL, "issues"))
-  
+
   if (!identical(desc, new_desc))
     write_dcf(desc_path, new_desc)
-  
+
   new_desc[c("URL", "BugReports")]
 }

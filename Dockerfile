@@ -15,6 +15,7 @@ RUN . /etc/environment \
   && sudo apt-get install libudunits2-dev -y \
 
   # build this compendium package
+  && R -e "devtools::install_github('r-lib/usethis')" \
   && R -e "devtools::install('/rrtools', dep=TRUE)" \
 
  # render the manuscript into a docx, you'll need to edit this if you've
