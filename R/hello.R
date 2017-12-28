@@ -365,23 +365,23 @@ use_readme_rmd <- function(pkg = ".") {
   rmarkdown::render("README.Rmd", output_format = NULL)
 
   message("* Adding code of conduct.")
-  use_code_of_conduct()
+  use_code_of_conduct(pkg)
 
   message("* Adding instructions to contributors.")
-  use_contributing()
+  use_contributing(pkg)
 
   invisible(TRUE)
 }
 
 # helpers, not exported -------------------------------------------------------
 
-use_code_of_conduct <- function(pkg = "."){
+use_code_of_conduct <- function(pkg){
   pkg <- as.package(pkg)
   use_template("CONDUCT.md", ignore = TRUE, pkg = pkg,
                          out_path = "")
 }
 
-use_contributing <- function(pkg = "."){
+use_contributing <- function(pkg){
   pkg <- as.package(pkg)
   gh <-  github_info(pkg$path)
   use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh,
