@@ -57,11 +57,18 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
 #' @param pkg defaults to the package in the current working directory
 #' @param browse open a browser window to enable Travis builds for the package automatically
 #' @param docker logical, if TRUE (the default) the travis config will build a Docker container according to the instructions in the Dockerfile, and build and install the package in that container. If FALSE, the standard config for R on travis is used.
+#' @param ask should the function ask with \code{yesno()} if an old .travis.yml should be overwritten with a new one? default: TRUE
 #'
 #' @importFrom curl has_internet
 #' @importFrom utils browseURL
 #' @export
-use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE, rmd_to_knit = "path_to_rmd") {
+use_travis <- function(
+  pkg = ".",
+  browse = interactive(),
+  docker = TRUE,
+  rmd_to_knit = "path_to_rmd",
+  ask = TRUE
+) {
   pkg <- as.package(pkg)
 
   # get path to Rmd file to knit
@@ -85,7 +92,8 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE, rmd_to_
                          ignore = TRUE,
                          pkg = pkg,
                          data = gh,
-                         out_path = "")
+                         out_path = "",
+                         ask = ask)
   } else {
     gh$date <- format(Sys.Date(), "%Y-%m-%d")
     use_template("travis.yml-no-docker",
@@ -93,7 +101,8 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE, rmd_to_
                            ignore = TRUE,
                            pkg = pkg,
                            data = gh,
-                           out_path = "")
+                           out_path = "",
+                           ask = ask)
   }
 
   message("Next: \n",
@@ -405,11 +414,11 @@ dir.exists <- function(x) {
 
 use_template <- function(template, save_as = template, data = list(),
                          ignore = FALSE, open = FALSE, pkg = ".",
-                         out_path) {
+                         out_path, ask = TRUE) {
   pkg <- as.package(pkg)
 
   path <- file.path(pkg$path, out_path, save_as)
-  if (!can_overwrite(path)) {
+  if (!can_overwrite(path, ask = ask)) {
     stop("`", save_as, "` already exists.", call. = FALSE)
   }
 
