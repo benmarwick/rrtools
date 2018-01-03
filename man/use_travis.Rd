@@ -15,6 +15,8 @@ use_travis(pkg = ".", browse = interactive(), docker = TRUE,
 
 \item{docker}{logical, if TRUE (the default) the travis config will build a Docker container according to the instructions in the Dockerfile, and build and install the package in that container. If FALSE, the standard config for R on travis is used.}
 
+\item{rmd_to_knit}{path to .Rmd file that should be knitted by the virtual build environment: default is "path_to_rmd" which causes the function to search for a paper.Rmd file by itself.}
+
 \item{ask}{should the function ask with \code{yesno()} if an old .travis.yml should be overwritten with a new one? default: TRUE}
 }
 \description{
