@@ -318,17 +318,21 @@ invisible(TRUE)
 }
 #' Creates skeleton README files
 #'
-#' @description \itemize{
+#' @description
+#' \code{README.Rmd} will be automatically
+#' added to \code{.Rbuildignore}. The resulting README is populated with default
+#' YAML frontmatter and R fenced code chunks (\code{Rmd}).
+#' Your readme should contain:
+#' \itemize{
 #' \item a high-level description of the package and its goals
 #' \item R code to install from GitHub, if GitHub usage detected
 #' \item a basic example
 #' }
-#' \code{README.Rmd} will be automatically
-#' added to \code{.Rbuildignore}. The resulting README is populated with default
-#' YAML frontmatter and R fenced code chunks (\code{Rmd}).
 #'
 #' @param pkg package description, can be path or package name.  See
 #'   \code{\link{as.package}} for more information
+#' @param render_readme should the README.Rmd be directly rendered to
+#' a github markdown document? default: TRUE
 #' @importFrom rmarkdown render
 #' @export
 #' @examples
@@ -336,7 +340,7 @@ invisible(TRUE)
 #' use_readme_rmd()
 #' }
 #' @family infrastructure
-use_readme_rmd <- function(pkg = ".") {
+use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
   pkg <- as.package(pkg)
 
   if (uses_github(pkg$path)) {
@@ -361,8 +365,10 @@ use_readme_rmd <- function(pkg = ".") {
                  pkg = pkg)
   }
 
-  message("* Rendering README.Rmd to README.md for GitHub.")
-  rmarkdown::render("README.Rmd", output_format = NULL)
+  if (render_readme) {
+    message("* Rendering README.Rmd to README.md for GitHub.")
+    rmarkdown::render("README.Rmd", output_format = NULL)
+  }
 
   message("* Adding code of conduct.")
   use_code_of_conduct(pkg)
