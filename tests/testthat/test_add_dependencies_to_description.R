@@ -14,7 +14,7 @@ description_path <- paste0(package_path, "/DESCRIPTION")
 
 #### run function ####
 
-add_dependencies_to_description(
+rrtools::add_dependencies_to_description(
   package_path,
   description_path,
   just_packages = F
