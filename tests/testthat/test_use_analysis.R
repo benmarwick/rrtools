@@ -2,7 +2,9 @@ context("use_analysis()")
 
 #### run function ####
 
-use_analysis(pkg = package_path)
+suppressMessages(
+  rrtools::use_analysis(pkg = package_path)
+)
 
 #### check results ####
 

@@ -92,12 +92,12 @@ open_in_rstudio <- function(path) {
 
 }
 
-can_overwrite <- function(path) {
+can_overwrite <- function(path, ask = TRUE) {
   name <- basename(path)
 
   if (!file.exists(path)) {
     TRUE
-  } else if (interactive() && !yesno("Overwrite `", name, "`?")) {
+  } else if (ask && (interactive() && !yesno("Overwrite `", name, "`?"))) {
     TRUE
   } else {
     FALSE

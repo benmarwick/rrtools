@@ -1,24 +1,21 @@
 # Build our Docker container and R pkg on Travis
+language: r
+sudo: required
+cache: packages
 
 env:
   global:
   - REPO=$DOCKER_USER/rrtools
 
-sudo: required
-
 warnings_are_errors: false
-
-language: generic
 
 services:
   - docker
 
-before_install:
-    # create & run container using our dockerfile, i.e. compile pkg and render Rmd to Word doc
-  - docker build -t $REPO .
-
-# push our custom docker container to docker hub, env vars stored on travis-ci.org
 after_success:
+  # create & run container using our dockerfile, i.e. compile pkg and render Rmd to Word doc
+  - docker build -t $REPO .
+  # push our custom docker container to docker hub, env vars stored on travis-ci.org
   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=$DOCKER_USER/rrtools
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`

@@ -4,21 +4,25 @@
 \alias{use_readme_rmd}
 \title{Creates skeleton README files}
 \usage{
-use_readme_rmd(pkg = ".")
+use_readme_rmd(pkg = ".", render_readme = TRUE)
 }
 \arguments{
 \item{pkg}{package description, can be path or package name.  See
 \code{\link{as.package}} for more information}
+
+\item{render_readme}{should the README.Rmd be directly rendered to
+a github markdown document? default: TRUE}
 }
 \description{
+\code{README.Rmd} will be automatically
+added to \code{.Rbuildignore}. The resulting README is populated with default
+YAML frontmatter and R fenced code chunks (\code{Rmd}).
+Your readme should contain:
 \itemize{
 \item a high-level description of the package and its goals
 \item R code to install from GitHub, if GitHub usage detected
 \item a basic example
 }
-\code{README.Rmd} will be automatically
-added to \code{.Rbuildignore}. The resulting README is populated with default
-YAML frontmatter and R fenced code chunks (\code{Rmd}).
 }
 \examples{
 \dontrun{

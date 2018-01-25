@@ -57,11 +57,19 @@ use_compendium <- function(path, description = getOption("devtools.desc"),
 #' @param pkg defaults to the package in the current working directory
 #' @param browse open a browser window to enable Travis builds for the package automatically
 #' @param docker logical, if TRUE (the default) the travis config will build a Docker container according to the instructions in the Dockerfile, and build and install the package in that container. If FALSE, the standard config for R on travis is used.
+#' @param rmd_to_knit path to .Rmd file that should be knitted by the virtual build environment: default is "path_to_rmd" which causes the function to search for a paper.Rmd file by itself.
+#' @param ask should the function ask with \code{yesno()} if an old .travis.yml should be overwritten with a new one? default: TRUE
 #'
 #' @importFrom curl has_internet
 #' @importFrom utils browseURL
 #' @export
-use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE, rmd_to_knit = "path_to_rmd") {
+use_travis <- function(
+  pkg = ".",
+  browse = interactive(),
+  docker = TRUE,
+  rmd_to_knit = "path_to_rmd",
+  ask = TRUE
+) {
   pkg <- as.package(pkg)
 
   # get path to Rmd file to knit
@@ -85,7 +93,8 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE, rmd_to_
                          ignore = TRUE,
                          pkg = pkg,
                          data = gh,
-                         out_path = "")
+                         out_path = "",
+                         ask = ask)
   } else {
     gh$date <- format(Sys.Date(), "%Y-%m-%d")
     use_template("travis.yml-no-docker",
@@ -93,7 +102,8 @@ use_travis <- function(pkg = ".", browse = interactive(), docker = TRUE, rmd_to_
                            ignore = TRUE,
                            pkg = pkg,
                            data = gh,
-                           out_path = "")
+                           out_path = "",
+                           ask = ask)
   }
 
   message("Next: \n",
@@ -318,17 +328,21 @@ invisible(TRUE)
 }
 #' Creates skeleton README files
 #'
-#' @description \itemize{
+#' @description
+#' \code{README.Rmd} will be automatically
+#' added to \code{.Rbuildignore}. The resulting README is populated with default
+#' YAML frontmatter and R fenced code chunks (\code{Rmd}).
+#' Your readme should contain:
+#' \itemize{
 #' \item a high-level description of the package and its goals
 #' \item R code to install from GitHub, if GitHub usage detected
 #' \item a basic example
 #' }
-#' \code{README.Rmd} will be automatically
-#' added to \code{.Rbuildignore}. The resulting README is populated with default
-#' YAML frontmatter and R fenced code chunks (\code{Rmd}).
 #'
 #' @param pkg package description, can be path or package name.  See
 #'   \code{\link{as.package}} for more information
+#' @param render_readme should the README.Rmd be directly rendered to
+#' a github markdown document? default: TRUE
 #' @importFrom rmarkdown render
 #' @export
 #' @examples
@@ -336,7 +350,7 @@ invisible(TRUE)
 #' use_readme_rmd()
 #' }
 #' @family infrastructure
-use_readme_rmd <- function(pkg = ".") {
+use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
   pkg <- as.package(pkg)
 
   if (uses_github(pkg$path)) {
@@ -361,8 +375,10 @@ use_readme_rmd <- function(pkg = ".") {
                  pkg = pkg)
   }
 
-  message("* Rendering README.Rmd to README.md for GitHub.")
-  rmarkdown::render("README.Rmd", output_format = NULL)
+  if (render_readme) {
+    message("* Rendering README.Rmd to README.md for GitHub.")
+    rmarkdown::render("README.Rmd", output_format = NULL)
+  }
 
   message("* Adding code of conduct.")
   use_code_of_conduct(pkg)
@@ -399,11 +415,11 @@ dir.exists <- function(x) {
 
 use_template <- function(template, save_as = template, data = list(),
                          ignore = FALSE, open = FALSE, pkg = ".",
-                         out_path) {
+                         out_path, ask = TRUE) {
   pkg <- as.package(pkg)
 
   path <- file.path(pkg$path, out_path, save_as)
-  if (!can_overwrite(path)) {
+  if (!can_overwrite(path, ask = ask)) {
     stop("`", save_as, "` already exists.", call. = FALSE)
   }
 
@@ -462,21 +478,21 @@ create_directories <- function(location, pkg){
   use_directory(paste0(location, "/data/derived_data"), pkg = pkg)
 
   # create a file that inform of best practices
-  invisible(file.create(paste0(location, "/data/DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND")))
+  invisible(file.create(paste0(pkg$path, "/", location, "/data/DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND")))
 
   # move templates for MS Word output
   invisible(file.copy(from = list.files(system.file("templates/word_templates/",
                                                     package = "rrtools",
                                                     mustWork = TRUE),
                                         full.names = TRUE),
-                      to = paste0(location, "/templates"),
+                      to = paste0(pkg$path, "/", location, "/templates"),
                       recursive = TRUE))
 
   # move csl file
   invisible(file.copy(from = system.file("templates/journal-of-archaeological-science.csl",
                                          package = "rrtools",
                                          mustWork = TRUE),
-                      to = paste0(location, "/templates"),
+                      to = paste0(pkg$path, "/", location, "/templates"),
                       recursive = TRUE))
 
 
