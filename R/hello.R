@@ -377,7 +377,8 @@ use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
 
   if (render_readme) {
     message("* Rendering README.Rmd to README.md for GitHub.")
-    rmarkdown::render("README.Rmd", output_format = NULL)
+    rmarkdown::render("README.Rmd")
+    unlink("README.html")
   }
 
   message("* Adding code of conduct.")
