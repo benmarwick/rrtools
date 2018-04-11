@@ -98,7 +98,7 @@ analysis/
 - you can replace the supplied `csl` file with a different citation style from <https://github.com/citation-style-language/>
 - we recommend using the [citr addin](https://github.com/crsh/citr) and [Zotero](https://www.zotero.org/) to efficiently insert citations while writing in an Rmd file
 - remember that the `Imports:` field in the `DESCRIPTION` file must include the names of all packages used in analysis documents (e.g. `paper.Rmd`). We have a helper function `rrtools::add_dependencies_to_description()` that will scan the Rmd file, identify libraries used in there, and add them to the `DESCRIPTION` file.
-- this function has an `data_in_git =` argument, which is `TRUE` by defail. If set to `FALSE` you will exclude files in the `data/` directory from being tracked by git and prevent them from appearing on GitHub. You should set `data_in_git = FALSE` if your data files are large (>100 mb is the limit for GitHub) or you do not want to make the data files publicly accessible on GitHub.
+- this function has an `data_in_git =` argument, which is `TRUE` by default. If set to `FALSE` you will exclude files in the `data/` directory from being tracked by git and prevent them from appearing on GitHub. You should set `data_in_git = FALSE` if your data files are large (>100 mb is the limit for GitHub) or you do not want to make the data files publicly accessible on GitHub.
   - if you're writing a PhD thesis, replace `rrtools::use_analysis()` with `rmarkdown::draft('index.Rmd', template = 'thesis', package = 'huskydown', create_dir = TRUE)` to create a thesis template from the [huskydown package](https://github.com/benmarwick/huskydown)
   -   To load your custom code in the `paper.Rmd`, you have a few options. You can write all your R code in chunks in the Rmd, that's the simplest method. Or you can write R code in script files in `/R`, and include `devtools::load_all(".")` at the top of your `paper.Rmd`. Or you can write functions in `/R` and use `library(pkgname)` at the top of your `paper.Rmd`, or omit `library` and preface each function call with `pkgname::`. Up to you to choose whatever seems most natural to you. 
 
@@ -110,7 +110,7 @@ analysis/
 - we need to:
     + edit the Dockerfile to add linux dependencies (for R packages that require additional libraries outside of R). You can find out what these are by browsing the [DESCRIPTION](DESCRIPTION) files of the other packages you're using, and looking in the SystemRequirements field for each package. If you are getting build errors on travis, check the logs. Often, the error messages will include the names of missing libraries. 
     + modify which Rmd files are rendered when the container is made
-    + have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this funciton generates. Or we can use `rrtools::use_circleci()` to build our Docker container privately at <https://circleci.com>, from a private GitHub repo.
+    + have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this function generates. Or we can use `rrtools::use_circleci()` to build our Docker container privately at <https://circleci.com>, from a private GitHub repo.
 - If we want to use Travis on our project, we need to make an account at <https://hub.docker.com/> to receive our Docker container after a successful build on travis
 
 #### 7. `rrtools::use_travis()`
@@ -125,7 +125,7 @@ analysis/
 #### 8. `usethis::use_testthat()`
 
 - if you add functions in `R/`, include tests to ensure they function as intended
-- create tests.R in `tests/testhat/` and check <http://r-pkgs.had.co.nz/tests.html> for template
+- create tests.R in `tests/testthat/` and check <http://r-pkgs.had.co.nz/tests.html> for template
 
 You should be able to follow these steps to get a new research compendium repository connected to travis and ready to write in just a few minutes.
 
