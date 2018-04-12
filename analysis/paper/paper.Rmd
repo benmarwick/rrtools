@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
   fig.path = "../figures/"
 )
 
-library(rrtools) # Or use devtools::load_all('.', quiet = T) if your code is in script files, rather than as functions in the `/R` diretory
+library(rrtools) # Or use devtools::load_all('.', quiet = T) if your code is in script files, rather than as functions in the `/R` directory
 ```
 
 # Introduction
