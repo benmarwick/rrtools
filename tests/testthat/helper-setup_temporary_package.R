@@ -12,10 +12,10 @@ package_path <- paste0(
   tempfile(pattern = "testpackage.", tmpdir = "", fileext = "")
 )
 
-devtools::create(
+rrtools::use_compendium(
   path = package_path,
-  check = FALSE,
+  fields = getOption("devtools.desc"),
   rstudio = FALSE,
+  open = FALSE,
   quiet = TRUE
 )
-

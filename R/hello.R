@@ -4,44 +4,56 @@ globalVariables(c("gh", "opts", "getProjectDir", "libDir", ".packrat_mutables", 
 #' @title Creates an R package suitable to use as a research compendium, and
 #' switches to the working directory of this new package, ready to work
 #'
-#' @description This is devtools::create() with an additional step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio
+#' @description This is usethis::create_package() with some additional messages to simplify the transition into the new project setting
 #'
 #' @param path location to create new package. The last component of the path will be used as the package name
-#' @param description list of description values to override default values or add additional values
-#' @param check if TRUE, will automatically run \code{devtools::check}
+#' @param fields list of description values to override default values or add additional values
 #' @param rstudio create an RStudio project file? (with \code{devtools::use_rstudio})
+#' @param open if TRUE and in RStudio, the new project is opened in a new instance. If TRUE and not in RStudio, the working directory is set to the new project
 #' @param quiet if FALSE, the default, prints informative messages
 #'
-#' @importFrom devtools create
+#' @importFrom usethis create_package
 #' @importFrom rstudioapi isAvailable
 #' @export
-use_compendium <- function(path, description = getOption("devtools.desc"),
-                           check = FALSE, rstudio = TRUE, quiet = FALSE){
+use_compendium <- function(
+  path,
+  fields = getOption("devtools.desc"),
+  rstudio = rstudioapi::isAvailable(),
+  open = interactive(),
+  quiet = FALSE
+){
 
-  devtools::create(path,
-                   description = getOption("devtools.desc"),
-                   check,
-                   rstudio,
-                   quiet)
+  # everything in an unevaluated expression to suppress cat() output and messages
+  create_the_package <- expression({
 
-  message("The package ", path, " has been created \n",
-          "Next: \n\n",
-          " * Edit the DESCRIPTION file \n",
-          " * Use other rrtools functions to add components to the compendium \n",
-          " Please wait a moment...  \n")
+    usethis::create_package(
+      path = path,
+      fields = fields,
+      rstudio = rstudio,
+      open = open
+    )
 
-  Sys.sleep(3) # give the user a chance to read the console output
+    message("The package ", path, " has been created \n",
+            "Next: \n\n",
+            " * Edit the DESCRIPTION file \n",
+            " * Use other rrtools functions to add components to the compendium \n",
+            " Please wait a moment...  \n")
 
-  # if we're using RStudio, open the Rproj, otherwise setwd()
-  # when the release includes openProject", use this
-  # rstudioapi::callFun("openProject", paste0("./", path))
-  if(rstudioapi::isAvailable()) {
-   message(" Opening the new compendium in a new RStudio session...")
-   browseURL(paste0(path, "/", basename(path), ".Rproj"))
+    if (rstudio & open) {
+      message("Opening the new compendium in a new RStudio session...")
+    } else if (!rstudio & open) {
+      message("Now opening the new compendium...")
+      message("Done. The working directory is currently ", getwd())
+    } else {
+      message("Done. The working directory is currently ", getwd())
+    }
+
+  })
+
+  if (quiet) {
+    suppressMessages(capture.output(eval(create_the_package), file = NULL))
   } else {
-   message("Now opening the new compendium...")
-   setwd(path)
-   message("Done. The working directory is currently ", getwd())
+    eval(create_the_package)
   }
 
 }

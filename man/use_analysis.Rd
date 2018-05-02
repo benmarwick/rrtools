@@ -17,7 +17,7 @@ use_analysis(pkg = ".", location = "top_level", template = "paper.Rmd",
 
 \item{data}{forwarded to \code{whisker::whisker.render}}
 
-\item{open_data}{should git track the files in the data directory?}
+\item{data_in_git}{should git track the files in the data directory?}
 }
 \description{
 This will create \file{paper.Rmd}, \file{references.bib}
