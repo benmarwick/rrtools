@@ -5,20 +5,21 @@
 \title{Creates an R package suitable to use as a research compendium, and
 switches to the working directory of this new package, ready to work}
 \usage{
-use_compendium(path, description = getOption("devtools.desc"),
-  check = FALSE, rstudio = TRUE, quiet = FALSE)
+use_compendium(path, fields = getOption("devtools.desc"),
+  rstudio = rstudioapi::isAvailable(), open = interactive(),
+  quiet = FALSE)
 }
 \arguments{
 \item{path}{location to create new package. The last component of the path will be used as the package name}
 
-\item{description}{list of description values to override default values or add additional values}
-
-\item{check}{if TRUE, will automatically run \code{devtools::check}}
+\item{fields}{list of description values to override default values or add additional values}
 
 \item{rstudio}{create an RStudio project file? (with \code{devtools::use_rstudio})}
+
+\item{open}{if TRUE and in RStudio, the new project is opened in a new instance. If TRUE and not in RStudio, the working directory is set to the new project}
 
 \item{quiet}{if FALSE, the default, prints informative messages}
 }
 \description{
-This is devtools::create() with an additional step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio
+This is usethis::create_package() with some additional messages to simplify the transition into the new project setting
 }
