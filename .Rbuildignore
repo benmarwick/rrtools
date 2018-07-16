@@ -5,7 +5,7 @@
 ^\.travis\.yml$
 ^CONDUCT\.md$
 ^Dockerfile$
-analysis
+^analysis/
 ^circle\.yml$
 ^CONTRIBUTING\.md$
 thesis
