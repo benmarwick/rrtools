@@ -27,6 +27,47 @@ use_compendium <- function(
   # everything in an unevaluated expression to suppress cat() output and messages
   create_the_package <- expression({
 
+    # check case because if this goes to github and travis, it should be all lower case
+
+    # from usethis, modified
+    valid_name <- function(x) {
+      grepl("^[[:alpha:]][[:alnum:].]+$", x) && !grepl("\\.$", x) && !grepl("[[:upper:]]", x)
+    }
+
+    name <- basename(path)
+
+    # from googledrive (!)
+    stop_glue <- function(..., .sep = "", .envir = parent.frame(),
+                          call. = FALSE, .domain = NULL) {
+      stop(
+        glue::glue(..., .sep = .sep, .envir = .envir),
+        call. = call., domain = .domain
+      )
+    }
+
+    # from usethis
+    value <- function(...) {
+      x <- paste0(...)
+      crayon::blue(encodeString(x, quote = "'"))
+    }
+
+    # from usethis, modified
+    check_package_name <- function(name) {
+      if (!valid_name(name)) {
+        stop_glue(
+          "{value(name)} is not a valid package name. It should:\n",
+          "* Contain only ASCII letters, numbers, and '.'\n",
+          "* Have at least two characters\n",
+          "* Start with a letter\n",
+          "* Not end with '.'\n",
+          "* Not contain any upper case characters\n"
+        )
+      }
+
+    }
+
+    check_package_name(name)
+
     usethis::create_package(
       path = path,
       fields = fields,
@@ -34,20 +75,23 @@ use_compendium <- function(
       open = open
     )
 
-    message("The package ", path, " has been created \n",
-            "Next: \n\n",
-            " * Edit the DESCRIPTION file \n",
-            " * Use other rrtools functions to add components to the compendium \n",
-            " Please wait a moment...  \n")
+    usethis:::done("The package ", name, " has been created")
 
     if (rstudio & open) {
-      message("Opening the new compendium in a new RStudio session...")
+      usethis:::done("Opening the new compendium in a new RStudio session...")
     } else if (!rstudio & open) {
-      message("Now opening the new compendium...")
-      message("Done. The working directory is currently ", getwd())
+      usethis:::done("Now opening the new compendium...")
+      setwd(path)
+      usethis:::done("Done. The working directory is currently ", getwd())
     } else {
-      message("Done. The working directory is currently ", getwd())
+      setwd(path)
+      usethis:::done("Done. The working directory is currently ", getwd())
     }
+
+    cat("\nNext, you need to: ", rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
+    usethis:::todo("Edit the DESCRIPTION file")
+    usethis:::todo("Use other 'rrtools' functions to add components to the compendium")
+
 
   })
 
