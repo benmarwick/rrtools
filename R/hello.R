@@ -16,15 +16,55 @@ globalVariables(c("gh", "opts", "getProjectDir", "libDir", ".packrat_mutables", 
 #' @importFrom rstudioapi isAvailable
 #' @export
 use_compendium <- function(path, description = getOption("devtools.desc"),
-                           check = FALSE, rstudio = TRUE, quiet = FALSE){
+                            rstudio = TRUE, open = FALSE){
 
-  devtools::create(path,
-                   description = getOption("devtools.desc"),
-                   check,
+  # check case because if this goes to github and travis, it should be all lower case
+
+  # from usethis, modified
+  valid_name <- function(x) {
+    grepl("^[[:alpha:]][[:alnum:].]+$", x) && !grepl("\\.$", x) && !grepl("[[:upper:]]", x)
+  }
+
+name <- basename(path)
+
+# from googledrive (!)
+stop_glue <- function(..., .sep = "", .envir = parent.frame(),
+                      call. = FALSE, .domain = NULL) {
+  stop(
+    glue::glue(..., .sep = .sep, .envir = .envir),
+    call. = call., domain = .domain
+  )
+}
+
+# from usethis
+value <- function(...) {
+  x <- paste0(...)
+  crayon::blue(encodeString(x, quote = "'"))
+}
+use_ck
+# from usethis, modified
+  check_package_name <- function(name) {
+    if (!valid_name(name)) {
+      stop_glue(
+        "{value(name)} is not a valid package name. It should:\n",
+        "* Contain only ASCII letters, numbers, and '.'\n",
+        "* Have at least two characters\n",
+        "* Start with a letter\n",
+        "* Not end with '.'\n",
+        "* Not contain any upper case characters\n"
+      )
+    }
+
+  }
+
+  check_package_name(name)
+
+  usethis::create_package(path,
+                   fields = getOption("devtools.desc"),
                    rstudio,
-                   quiet)
+                   open)
 
-  message("The package ", path, " has been created \n",
+  message("The package ", name, " has been created \n",
           "Next: \n\n",
           " * Edit the DESCRIPTION file \n",
           " * Use other rrtools functions to add components to the compendium \n",
