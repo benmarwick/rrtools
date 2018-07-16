@@ -1,3 +1,4 @@
+
 # This code runs before the tests. It creates a testpackage in
 # the temporary directory where all the functions of rrtools
 # can be applied safely and subsequently tested.
@@ -12,10 +13,10 @@ package_path <- paste0(
   tempfile(pattern = "testpackage.", tmpdir = "", fileext = "")
 )
 
-devtools::create(
+rrtools::use_compendium(
   path = package_path,
-  check = FALSE,
+  fields = getOption("devtools.desc"),
   rstudio = FALSE,
+  open = FALSE,
   quiet = TRUE
 )
-

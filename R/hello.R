@@ -4,84 +4,57 @@ globalVariables(c("gh", "opts", "getProjectDir", "libDir", ".packrat_mutables", 
 #' @title Creates an R package suitable to use as a research compendium, and
 #' switches to the working directory of this new package, ready to work
 #'
-#' @description This is devtools::create() with an additional step to either start the project in RStudio, or set the working directory to the pkg location, if not using RStudio
+#' @description This is usethis::create_package() with some additional messages to simplify the transition into the new project setting
 #'
 #' @param path location to create new package. The last component of the path will be used as the package name
-#' @param description list of description values to override default values or add additional values
-#' @param check if TRUE, will automatically run \code{devtools::check}
+#' @param fields list of description values to override default values or add additional values
 #' @param rstudio create an RStudio project file? (with \code{devtools::use_rstudio})
+#' @param open if TRUE and in RStudio, the new project is opened in a new instance. If TRUE and not in RStudio, the working directory is set to the new project
 #' @param quiet if FALSE, the default, prints informative messages
 #'
-#' @importFrom devtools create
+#' @importFrom usethis create_package
 #' @importFrom rstudioapi isAvailable
 #' @export
-use_compendium <- function(path, description = getOption("devtools.desc"),
-                            rstudio = TRUE, open = FALSE){
 
-  # check case because if this goes to github and travis, it should be all lower case
+use_compendium <- function(
+  path,
+  fields = getOption("devtools.desc"),
+  rstudio = rstudioapi::isAvailable(),
+  open = interactive(),
+  quiet = FALSE
+){
 
-  # from usethis, modified
-  valid_name <- function(x) {
-    grepl("^[[:alpha:]][[:alnum:].]+$", x) && !grepl("\\.$", x) && !grepl("[[:upper:]]", x)
-  }
+  # everything in an unevaluated expression to suppress cat() output and messages
+  create_the_package <- expression({
 
-name <- basename(path)
+    usethis::create_package(
+      path = path,
+      fields = fields,
+      rstudio = rstudio,
+      open = open
+    )
 
-# from googledrive (!)
-stop_glue <- function(..., .sep = "", .envir = parent.frame(),
-                      call. = FALSE, .domain = NULL) {
-  stop(
-    glue::glue(..., .sep = .sep, .envir = .envir),
-    call. = call., domain = .domain
-  )
-}
+    message("The package ", path, " has been created \n",
+            "Next: \n\n",
+            " * Edit the DESCRIPTION file \n",
+            " * Use other rrtools functions to add components to the compendium \n",
+            " Please wait a moment...  \n")
 
-# from usethis
-value <- function(...) {
-  x <- paste0(...)
-  crayon::blue(encodeString(x, quote = "'"))
-}
-use_ck
-# from usethis, modified
-  check_package_name <- function(name) {
-    if (!valid_name(name)) {
-      stop_glue(
-        "{value(name)} is not a valid package name. It should:\n",
-        "* Contain only ASCII letters, numbers, and '.'\n",
-        "* Have at least two characters\n",
-        "* Start with a letter\n",
-        "* Not end with '.'\n",
-        "* Not contain any upper case characters\n"
-      )
+    if (rstudio & open) {
+      message("Opening the new compendium in a new RStudio session...")
+    } else if (!rstudio & open) {
+      message("Now opening the new compendium...")
+      message("Done. The working directory is currently ", getwd())
+    } else {
+      message("Done. The working directory is currently ", getwd())
     }
 
-  }
+  })
 
-  check_package_name(name)
-
-  usethis::create_package(path,
-                   fields = getOption("devtools.desc"),
-                   rstudio,
-                   open)
-
-  message("The package ", name, " has been created \n",
-          "Next: \n\n",
-          " * Edit the DESCRIPTION file \n",
-          " * Use other rrtools functions to add components to the compendium \n",
-          " Please wait a moment...  \n")
-
-  Sys.sleep(3) # give the user a chance to read the console output
-
-  # if we're using RStudio, open the Rproj, otherwise setwd()
-  # when the release includes openProject", use this
-  # rstudioapi::callFun("openProject", paste0("./", path))
-  if(rstudioapi::isAvailable()) {
-   message(" Opening the new compendium in a new RStudio session...")
-   browseURL(paste0(path, "/", basename(path), ".Rproj"))
+  if (quiet) {
+    suppressMessages(capture.output(eval(create_the_package), file = NULL))
   } else {
-   message("Now opening the new compendium...")
-   setwd(path)
-   message("Done. The working directory is currently ", getwd())
+    eval(create_the_package)
   }
 
 }
@@ -253,7 +226,7 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
 #' @param template the template file to use to create the main analysis document. Defaults to 'paper.Rmd', ready to write R Markdown and knit to MS Word using bookdown
 #' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst' (for the inst/ directory, so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
 #' @param data forwarded to \code{whisker::whisker.render}
-#' @param open_data should git track the files in the data directory?
+#' @param data_in_git should git track the files in the data directory?
 #' @export
 use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rmd', data = list(), data_in_git = TRUE) {
   pkg <- as.package(pkg)
