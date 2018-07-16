@@ -96,23 +96,27 @@ your project: they are meant to be once-off setup functions.
     instructions for other
 licenses
 
-#### 3\. `devtools::use_github(".", auth_token = "xxxx", protocol = "https", private = FALSE)`
+#### 3\. `usethis::use_git()` then `usethis::use_github(auth_token = "xxxx", protocol = "https", private = FALSE)`
 
   - if you are connected to the internet, this initializes a local git
-    repository, connects to [GitHub](https://github.com), and creates a
-    remote repository
-  - if you are not connected to the internet, use
-    `devtools::use_git(".")` to initialise a local git repository for
-    your project. Reopen your project in RStudio to see the git buttons
-    on the toolbar.
+    repository (`use_git()`), then `use_github()` connects to
+    [GitHub](https://github.com), and creates a remote repository
+  - if you are not connected to the internet, use `usegthis::use_git()`
+    to initialise a local git repository for your project, and save the
+    `use_github` step for when you are online. Reopen your project in
+    RStudio to see the git buttons on the toolbar.
   - we need to:
       - install and configure git *before* running this line. See [Happy
-        Git With R](http://happygitwithr.com) for details.
+        Git With R](http://happygitwithr.com) for details on how to do
+        this.
       - get a [personal access
         token](https://github.com/settings/tokens), and replace “xxxx”
         with that token. When you do so (click “Generate new token”),
         make sure the “repo” scope is included by checking the “repo”
         box. Don’t save this token in your project, keep it elsewhere.
+      - solve any errors that might occur during this step by using the
+        development version of the git2r package, which can be installed
+        with `devtools::install_github("ropensci/git2r")`
 
 #### 4\. `rrtools::use_readme_rmd()`
 
