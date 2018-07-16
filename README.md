@@ -8,6 +8,8 @@ Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://tra
 [![Circle-CI Build
 Status](https://circleci.com/gh/benmarwick/rrtools.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/benmarwick/rrtools)
 
+## Motivation
+
 The goal of rrtools is to provide instructions, templates, and functions
 for making a basic compendium suitable for doing reproducible research
 with [R](https://www.r-project.org). This package documents the key
@@ -48,7 +50,7 @@ Wickham’s [`devtools`](https://github.com/hadley/devtools) and
 
 ## Installation
 
-You can install rrtools from github with:
+You can install rrtools from GitHub with:
 
 ``` r
 # install.packages("devtools")
@@ -57,8 +59,23 @@ devtools::install_github("benmarwick/rrtools")
 
 ## How to use
 
-To create a reproducible research compendium using the rrtools approach,
-follow these steps. We use
+### Quick start
+
+This function will create a basic compendium that is instantly ready to
+work with:
+
+``` r
+quick_compendium("pkgname", "Your Name")
+```
+
+This function combines the first five steps described below, using
+sensible, widely-used defaults. It gives detailed console output to
+guide you on the next steps to take with your compendium.
+
+### Step-by-step creation of a research compendium
+
+To create a reproducible research compendium step-by-step using the
+rrtools approach, follow these detailed instructions. We use
 [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), and
 recommend it, but is not required for these steps to work. We recommend
 copy-pasting these directly into your console, and editing the options
@@ -83,7 +100,7 @@ your project: they are meant to be once-off setup functions.
         directory) to include accurate metadata
       - periodically update the `Imports:` section of the `DESCRIPTION`
         file with the names of packages used in the code we write in the
-        Rmd document(s) (e.g., `devtools::use_package("dplyr",
+        Rmd document(s) (e.g., `usethis::use_package("dplyr",
         "imports")`)
 
 #### 2\. `usethis::use_mit_license(name = "My Name")`
@@ -101,8 +118,8 @@ licenses
   - if you are connected to the internet, this initializes a local git
     repository (`use_git()`), then `use_github()` connects to
     [GitHub](https://github.com), and creates a remote repository
-  - if you are not connected to the internet, use `usegthis::use_git()`
-    to initialise a local git repository for your project, and save the
+  - if you are not connected to the internet, use `use_git()` to
+    initialise a local git repository for your project, and save the
     `use_github` step for when you are online. Reopen your project in
     RStudio to see the git buttons on the toolbar.
   - we need to:
@@ -212,7 +229,7 @@ licenses
     [`rocker/verse`](https://github.com/rocker-org/rocker) as the base
     image
   - the version of R in your rocker container will match the version
-    used when you run this function (e.g., `rocker/verse:3.4.0`)
+    used when you run this function (e.g., `rocker/verse:3.5.0`)
   - [`rocker/verse`](https://github.com/rocker-org/rocker) includes R,
     the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX,
     so compendium build times are very fast on travis

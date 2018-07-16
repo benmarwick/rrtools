@@ -1,5 +1,30 @@
 globalVariables(c("gh", "opts", "getProjectDir", "libDir", ".packrat_mutables", "pkgDescriptionDependencies", "union_write", "yesno", "github_POST", "github_GET", "dropSystemPackages", "readDcf", "recursivePackageDependencies", "silent", "sort_c")) # suppress some warnings
 
+
+#' @name quick_compendium
+#' @title Quickly create a basic research compendium by combining several rrtools functions into one.
+#'
+#' @description In one step, this will create an R package, attach the MIT license to it, add the rrtools' README to it, initiate a Git repository and make an initial commit to track files in the package, and create the 'analysis' directory structure, and populate it with an R Markdown file and bib file. This function will not create a GitHub repository for the compendium, a Dockerfile, a Travis config file, or any package tests. Those require some interaction outside of R and are left to the user.
+#'
+#' @param pkgname location to create new package. The last component of the path will be used as the package name
+#' @param my_name name of the author of the compendium
+#' @param data_in_git should git track the files in the data directory? Default is TRUE
+#'
+#' @importFrom usethis use_mit_license use_git
+#' @export
+
+quick_compendium <- function(pkgname, my_name, data_in_git = TRUE){
+  rrtools::use_compendium(pkgname)
+  # move us into the new project
+  setwd(pkgname)
+  usethis::use_mit_license(name = my_name)
+  usethis::use_git()
+  rrtools::use_readme_rmd()
+  rrtools::use_analysis(data_in_git = data_in_git)
+}
+
+
+
 #' @name use_compendium
 #' @title Creates an R package suitable to use as a research compendium, and
 #' switches to the working directory of this new package, ready to work
@@ -257,7 +282,7 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
 }
 
 
-
+warning_bullet <- function() crayon::yellow(clisymbols::symbol$warning)
 
 #' @name use_analysis
 #' @aliases add_analysis
@@ -277,7 +302,7 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
   pkg$Rmd <- TRUE
   gh <- github_info(pkg$path)
 
-  message("* Adding bookdown to Imports")
+  usethis:::done("Adding bookdown to Imports")
   add_desc_package(pkg, "Imports", "bookdown")
 
   location <- ifelse(location == "top_level", "analysis",
@@ -311,15 +336,19 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
 
  if (!data_in_git) use_git_ignore("*/data/*")
 
-  message("Next: \n",
-          " * Write your article/paper/thesis in Rmd file(s)", "\n",
-          " * Add the citation style libray file (csl) to replace the default provided here", "\n",
-          " * Add reference details to the references.bib", "\n",
-          " * For adding captions & cross-referenceing in an Rmd, see https://bookdown.org/yihui/bookdown/ ", "\n",
-          " * For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html ", "\n",
-          ifelse(!data_in_git,
-          " * Your data files are NOT tracked by Git and will not be pushed to GitHub", ""))
+ cat("\nNext, you need to: ", rep(crayon::green(clisymbols::symbol$arrow_down),4), "\n")
+  usethis:::todo("Write your article/report/thesis, start at the paper.Rmd file")
+  usethis:::todo("Add the citation style libray file (csl) to replace the default provided here, see https://github.com/citation-style-language/")
+  usethis:::todo("Add bibliographic details of cited items to the ", usethis:::value('references.bib'), " file")
+  usethis:::todo("For adding captions & cross-referencing in an Rmd, see https://bookdown.org/yihui/bookdown/")
+  usethis:::todo("For adding citations & reference lists in an Rmd, see http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html")
 
+  # message about whether data files are tracked by Git:
+  cat("\nNote that:\n")
+  if(!data_in_git) {cat(paste0(warning_bullet(), " Your data files ", crayon::red("are not"), " tracked by Git and ", crayon::red("will not"), " be pushed to GitHub"))
+    } else {
+  cat(paste0(warning_bullet(), " Your data files ", crayon::green("are"), " tracked by Git and ", crayon::green("will"), " be pushed to GitHub"))
+    }
 
 
 invisible(TRUE)
@@ -433,15 +462,15 @@ use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
   }
 
   if (render_readme) {
-    message("* Rendering README.Rmd to README.md for GitHub.")
-    rmarkdown::render("README.Rmd")
+    usethis:::done("Rendering README.Rmd to README.md for GitHub.")
+    rmarkdown::render("README.Rmd", quiet = TRUE)
     unlink("README.html")
   }
 
-  message("* Adding code of conduct.")
+  usethis:::done("Adding code of conduct.")
   use_code_of_conduct(pkg)
 
-  message("* Adding instructions to contributors.")
+  usethis:::done("Adding instructions to contributors.")
   use_contributing(pkg)
 
   invisible(TRUE)
@@ -485,16 +514,16 @@ use_template <- function(template, save_as = template, data = list(),
 
   template_out <- whisker::whisker.render(readLines(template_path), data)
 
-  message("* Creating `", save_as, "` from template.")
+  usethis:::done("Creating ", usethis:::value(save_as), " from template.")
   writeLines(template_out, path)
 
   if (ignore) {
-    message("* Adding `", save_as, "` to `.Rbuildignore`.")
+    usethis:::done("Adding ", usethis:::value(save_as), " to `.Rbuildignore`.")
     use_build_ignore(save_as, pkg = pkg)
   }
 
   if (open) {
-    message("* Modify `", save_as, "`.")
+    usethis:::todo("Modify ", usethis:::value(save_as))
     open_in_rstudio(path)
   }
 
@@ -510,12 +539,12 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
       stop("`", path, "` exists but is not a directory.", call. = FALSE)
     }
   } else {
-    message("* Creating `", path, "`.")
+    usethis:::done("Creating ", usethis:::value(path))
     dir.create(pkg_path, showWarnings = FALSE, recursive = TRUE,  mode = "0777")
   }
 
   if (ignore) {
-    message("* Adding `", path, "` to `.Rbuildignore`.")
+    usethis:::done("Adding ", usethis:::value(path), " to `.Rbuildignore`")
     use_build_ignore(path, pkg = pkg)
   }
 
@@ -526,7 +555,7 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
 create_directories <- function(location, pkg){
 
   if (location %in% c("analysis", "vignettes", "inst")) {
-  message("* Creating ", location, "/ directory and contents")
+  usethis:::done("Creating ", usethis:::value(location), " directory and contents")
   use_directory(location, pkg = pkg)
   use_directory(paste0(location, "/paper"), pkg = pkg)
   use_directory(paste0(location, "/figures"), pkg = pkg)
