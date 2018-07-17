@@ -1,7 +1,7 @@
 globalVariables(c("gh", "opts", "getProjectDir", "libDir", ".packrat_mutables", "pkgDescriptionDependencies", "union_write", "yesno", "github_POST", "github_GET", "dropSystemPackages", "readDcf", "recursivePackageDependencies", "silent", "sort_c")) # suppress some warnings
 
 
-#' @name quick_compendium
+#' @name create_compendium
 #' @title Quickly create a basic research compendium by combining several rrtools functions into one.
 #'
 #' @description In one step, this will create an R package, attach the MIT license to it, add the rrtools' README to it, initiate a Git repository and make an initial commit to track files in the package, and create the 'analysis' directory structure, and populate it with an R Markdown file and bib file. This function will not create a GitHub repository for the compendium, a Dockerfile, a Travis config file, or any package tests. Those require some interaction outside of R and are left to the user.
@@ -13,7 +13,7 @@ globalVariables(c("gh", "opts", "getProjectDir", "libDir", ".packrat_mutables", 
 #' @importFrom usethis use_mit_license use_git
 #' @export
 
-quick_compendium <- function(pkgname, my_name, data_in_git = TRUE){
+create_compendium <- function(pkgname, my_name, data_in_git = TRUE){
   rrtools::use_compendium(pkgname)
   # move us into the new project
   setwd(pkgname)
@@ -33,7 +33,7 @@ quick_compendium <- function(pkgname, my_name, data_in_git = TRUE){
 #'
 #' @param path location to create new package. The last component of the path will be used as the package name
 #' @param fields list of description values to override default values or add additional values
-#' @param rstudio create an RStudio project file? (with \code{devtools::use_rstudio})
+#' @param rstudio create an RStudio project file? (with \code{usethis::use_rstudio})
 #' @param open if TRUE and in RStudio, the new project is opened in a new instance. If TRUE and not in RStudio, the working directory is set to the new project
 #' @param quiet if FALSE, the default, prints informative messages
 #'
@@ -134,7 +134,7 @@ use_compendium <- function(
 #' @aliases add_travis
 #' @title Add a travis config file
 #'
-#' @description This has two options. One is the same as `devtools::use_travis`, a vanilla travis config that builds, installs and runs the custom package on travis. The other type of configuration directs travis to build the Docker container (according to the instructions in your Dockerfile) and push the successful result to Docker Hub. Using a Dockerfile is recommended because it gives greater isolation of the computational enviroment, and will result in much faster build times on travis.
+#' @description This has two options. One is the same as `usethis::use_travis`, a vanilla travis config that builds, installs and runs the custom package on travis. The other type of configuration directs travis to build the Docker container (according to the instructions in your Dockerfile) and push the successful result to Docker Hub. Using a Dockerfile is recommended because it gives greater isolation of the computational enviroment, and will result in much faster build times on travis.
 #'
 #' @param pkg defaults to the package in the current working directory
 #' @param browse open a browser window to enable Travis builds for the package automatically
@@ -283,6 +283,9 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
 
 
 warning_bullet <- function() crayon::yellow(clisymbols::symbol$warning)
+red_cross <- function() crayon::red(clisymbols::symbol$cross)
+green_tick  <- function() crayon::green(clisymbols::symbol$tick)
+
 
 #' @name use_analysis
 #' @aliases add_analysis
@@ -369,7 +372,7 @@ invisible(TRUE)
 #' file name for the Rmd file, you can specify that file path and name here so
 #' Docker can find the file to render in the container.B
 #'
-#' @import utils devtools
+#' @import utils
 #' @export
 
   use_dockerfile <- function(pkg = ".", rocker = "verse", rmd_to_knit = "path_to_rmd") {

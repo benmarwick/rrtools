@@ -14,7 +14,7 @@ use_compendium(path, fields = getOption("devtools.desc"),
 
 \item{fields}{list of description values to override default values or add additional values}
 
-\item{rstudio}{create an RStudio project file? (with \code{devtools::use_rstudio})}
+\item{rstudio}{create an RStudio project file? (with \code{usethis::use_rstudio})}
 
 \item{open}{if TRUE and in RStudio, the new project is opened in a new instance. If TRUE and not in RStudio, the working directory is set to the new project}
 

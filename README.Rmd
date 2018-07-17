@@ -42,7 +42,7 @@ devtools::install_github("benmarwick/rrtools")
 This function will create a basic compendium that is instantly ready to work with:
 
 ```{r eval = FALSE}
-quick_compendium("pkgname", "Your Name")
+create_compendium("pkgname", "Your Name")
 ```
 
 This function combines the first five steps described below, using sensible, widely-used defaults. It gives detailed console output to guide you on the next steps to take with your compendium.

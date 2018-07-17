@@ -38,7 +38,7 @@ use_git_with_config <- function(message, pkg, add_user_config = FALSE, quiet = F
   use_git_ignore(c(".Rproj.user", ".Rhistory", ".RData"), pkg = pkg, quiet = quiet)
 
   if (!quiet) {
-    usethis::done("Adding files and committing")
+    usethis:::done("Adding files and committing")
   }
   paths <- unlist(git2r::status(r))
   git2r::add(r, paths)

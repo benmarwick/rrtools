@@ -20,5 +20,5 @@ use_travis(pkg = ".", browse = interactive(), docker = TRUE,
 \item{ask}{should the function ask with \code{yesno()} if an old .travis.yml should be overwritten with a new one? default: TRUE}
 }
 \description{
-This has two options. One is the same as `devtools::use_travis`, a vanilla travis config that builds, installs and runs the custom package on travis. The other type of configuration directs travis to build the Docker container (according to the instructions in your Dockerfile) and push the successful result to Docker Hub. Using a Dockerfile is recommended because it gives greater isolation of the computational enviroment, and will result in much faster build times on travis.
+This has two options. One is the same as `usethis::use_travis`, a vanilla travis config that builds, installs and runs the custom package on travis. The other type of configuration directs travis to build the Docker container (according to the instructions in your Dockerfile) and push the successful result to Docker Hub. Using a Dockerfile is recommended because it gives greater isolation of the computational enviroment, and will result in much faster build times on travis.
 }
