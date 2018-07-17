@@ -1,4 +1,17 @@
 
+warning_bullet <- function() crayon::yellow(clisymbols::symbol$warning)
+red_cross <- function() crayon::red(clisymbols::symbol$cross)
+green_tick  <- function() crayon::green(clisymbols::symbol$tick)
+
+
+
+# capture the cat & message output
+# from http://r.789695.n4.nabble.com/Suppressing-output-e-g-from-cat-tp859876p859882.html
+quietly <- function(x) {
+  sink(tempfile())
+  on.exit(sink())
+  invisible(force(suppressMessages(x)))
+}
 
 # unexported fns from devtools, we include them here so
 # we don't have to use :::

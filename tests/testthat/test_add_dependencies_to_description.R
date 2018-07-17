@@ -5,7 +5,7 @@ context("add_dependencies_to_description()")
 # create artificial files with some dependencies
 testfile_1 <- file.path(package_path, "/R/testfile_1.R")
 writeLines(
-  c("library(devtools)", "require(git2r)", "rmarkdown::draft()"),
+  c("library(bookdown)", "require(git2r)", "rmarkdown::draft()"),
   con = testfile_1
 )
 
@@ -14,7 +14,7 @@ if (!dir.exists(file.path(package_path, "/playground"))) {
 }
 testfile_2 <- file.path(package_path, "/playground/testfile_2.R")
 writeLines(
-  c("library(devtools)", "require(git2r)", "usethis::use_template()"),
+  c("library(bookdown)", "require(git2r)", "usethis::use_template()"),
   con = testfile_2
 )
 
@@ -44,7 +44,7 @@ test_that("the DESCRIPTION file has changed exactly as expected", {
 
 test_that("the DESCRIPTION file now actually contains the package dependencies", {
   expect_equal(
-    grep("devtools | git2r | rmarkdown | usethis", description_changed),
+    grep("bookdown | git2r | rmarkdown | usethis", description_changed),
     c(11, 12, 13, 14)
   )
 })
@@ -58,6 +58,6 @@ test_that("add_dependencies_to_description provides correct packages vector if j
       description_path,
       just_packages = TRUE
     ),
-    c("devtools", "git2r", "rmarkdown", "usethis")
+    c("bookdown", "git2r", "rmarkdown", "usethis")
   )
 })
