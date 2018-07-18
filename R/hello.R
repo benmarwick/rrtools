@@ -53,7 +53,6 @@ use_compendium <- function(
   # seems that use_description creates a different description for OSX and Linux, so we force all to have ByteCompile
   options(
     usethis.description = list(
-      Package =  "pkgname",
       Version = "0.0.0.9000",
       Title =  "What the Package Does (One Line, Title Case)",
       Description = "What the package does (one paragraph)",
