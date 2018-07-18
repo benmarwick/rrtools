@@ -24,20 +24,7 @@ create_compendium <- function(pkgname, data_in_git = TRUE){
 
 }
 
-# seems that use_description creates a different description for OSX and Linux, so we force all to have ByteCompile
-options(
-  usethis.description = list(
-    Package =  "pkgname",
-    Version = "0.0.0.9000",
-    Title =  "What the Package Does (One Line, Title Case)",
-    Description = "What the package does (one paragraph)",
-    `Authors@R` = 'person("First", "Last", , "first.last@example.com", c("aut", "cre"))',
-    License =  "What license it uses",
-    Encoding = "UTF-8",
-    LazyData = "true",
-    ByteCompile = "true"
-  )
-)
+
 
 #' @name use_compendium
 #' @title Creates an R package suitable to use as a research compendium, and
@@ -62,6 +49,21 @@ use_compendium <- function(
   open = interactive(),
   quiet = FALSE
 ){
+
+  # seems that use_description creates a different description for OSX and Linux, so we force all to have ByteCompile
+  options(
+    usethis.description = list(
+      Package =  "pkgname",
+      Version = "0.0.0.9000",
+      Title =  "What the Package Does (One Line, Title Case)",
+      Description = "What the package does (one paragraph)",
+      `Authors@R` = 'person("First", "Last", , "first.last@example.com", c("aut", "cre"))',
+      License =  "What license it uses",
+      Encoding = "UTF-8",
+      LazyData = "true",
+      ByteCompile = "true"
+    )
+  )
 
   # everything in an unevaluated expression to suppress cat() output and messages
   create_the_package <- expression({
