@@ -38,14 +38,14 @@ test_that("the DESCRIPTION file has changed exactly as expected", {
     all.equal(
       description_unchanged, description_changed
     ),
-    "Lengths (8, 15) differ (string compare on first 8)"
+    "Lengths (9, 16) differ (string compare on first 9)"
   )
 })
 
 test_that("the DESCRIPTION file now actually contains the package dependencies", {
   expect_equal(
     grep("bookdown | git2r | glue | knitr | rmarkdown | usethis", description_changed),
-    c(10:15)
+    c(11:16)
   )
 })
 

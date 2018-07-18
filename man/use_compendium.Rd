@@ -5,7 +5,7 @@
 \title{Creates an R package suitable to use as a research compendium, and
 switches to the working directory of this new package, ready to work}
 \usage{
-use_compendium(path, fields = getOption("devtools.desc"),
+use_compendium(path, fields = getOption("usethis.description"),
   rstudio = rstudioapi::isAvailable(), open = interactive(),
   quiet = FALSE)
 }
