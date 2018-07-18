@@ -5,7 +5,7 @@ context("add_dependencies_to_description()")
 # create artificial files with some dependencies
 testfile_1 <- file.path(package_path, "/R/testfile_1.R")
 writeLines(
-  c("library(bookdown)", "require(git2r)", "rmarkdown::draft()"),
+  c("library(knitr)", "require(glue)", "rmarkdown::draft()"),
   con = testfile_1
 )
 
@@ -38,14 +38,14 @@ test_that("the DESCRIPTION file has changed exactly as expected", {
     all.equal(
       description_unchanged, description_changed
     ),
-    "Lengths (8, 13) differ (string compare on first 8)"
+    "Lengths (8, 15) differ (string compare on first 8)"
   )
 })
 
 test_that("the DESCRIPTION file now actually contains the package dependencies", {
   expect_equal(
-    grep("bookdown | git2r | rmarkdown | usethis", description_changed),
-    c(10, 11, 12, 13)
+    grep("bookdown | git2r | glue | knitr | rmarkdown | usethis", description_changed),
+    c(10:15)
   )
 })
 
@@ -58,6 +58,6 @@ test_that("add_dependencies_to_description provides correct packages vector if j
       description_path,
       just_packages = TRUE
     ),
-    c("bookdown", "git2r", "rmarkdown", "usethis")
+    c("bookdown", "git2r", "glue", "knitr", "rmarkdown", "usethis")
   )
 })
