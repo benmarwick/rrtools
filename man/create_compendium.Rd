@@ -4,12 +4,10 @@
 \alias{create_compendium}
 \title{Quickly create a basic research compendium by combining several rrtools functions into one.}
 \usage{
-create_compendium(pkgname, my_name, data_in_git = TRUE)
+create_compendium(pkgname, data_in_git = TRUE)
 }
 \arguments{
 \item{pkgname}{location to create new package. The last component of the path will be used as the package name}
-
-\item{my_name}{name of the author of the compendium}
 
 \item{data_in_git}{should git track the files in the data directory? Default is TRUE}
 }

@@ -1,3 +1,43 @@
+# From usethis, modified to be non-interactive
+
+#' Initialise a git repository without asking questions
+#'
+#' `use_git_quietly()` initialises a Git repository and adds important files to
+#' `.gitignore`. If user consents, it also makes an initial commit.
+#'
+#' @param message Message to use for first commit.
+#' @family git helpers
+#' @export
+#' @examples
+#' \dontrun{
+#' use_git_quietly()
+#' }
+use_git_quietly <- function(message = "Initial commit") {
+  if (uses_git()) {
+    return(invisible())
+  }
+
+  usethis:::done("Initialising Git repo")
+  r <- git2r::init(usethis::proj_get())
+
+  usethis::use_git_ignore(c(".Rhistory", ".RData", ".Rproj.user"))
+
+  if ( usethis:::git_uncommitted()) {
+    paths <- unlist(git2r::status(r))
+    usethis:::done("Adding files and committing")
+      git2r::add(r, paths)
+      git2r::commit(r, message)
+
+  }
+
+usethis:::todo(
+    "A restart of RStudio is required to activate the Git pane"
+  )
+  invisible(TRUE)
+
+}
+
+
 # unexported fns from devtools, we include them here so
 # we don't have to use :::
 # from https://github.com/hadley/devtools/blob/master/R/git.R
@@ -13,7 +53,7 @@ git_repo_sha1 <- function(r) {
   if (is.null(rev)) {
     return(NULL)
   }
-  
+
   if (git2r::is_commit(rev)) {
     rev@sha
   } else {
@@ -35,28 +75,28 @@ git_uncommitted <- function(path = ".") {
 
 git_sync_status <- function(path = ".", check_ahead = TRUE, check_behind = TRUE) {
   r <- git2r::repository(path, discover = TRUE)
-  
+
   r_head <- git2r::head(r)
   if (!methods::is(r_head, "git_branch")) {
     stop("HEAD is not a branch", call. = FALSE)
   }
-  
+
   upstream <- git2r::branch_get_upstream(r_head)
   if (is.null(upstream)) {
     stop("No upstream branch", call. = FALSE)
   }
-  
+
   git2r::fetch(r, git2r::branch_remote_name(upstream))
-  
+
   c1 <- git2r::lookup(r, git2r::branch_target(r_head))
   c2 <- git2r::lookup(r, git2r::branch_target(upstream))
   ab <- git2r::ahead_behind(c1, c2)
-  
+
   #   if (ab[1] > 0)
   #     message(ab[1], " ahead of remote")
   #   if (ab[2] > 0)
   #     message(ab[2], " behind remote")
-  
+
   is_ahead <- ab[[1]] != 0
   is_behind <- ab[[2]] != 0
   check <- (check_ahead && is_ahead) || (check_behind && is_behind)
@@ -73,11 +113,11 @@ git_path <- function(git_binary_name = NULL) {
     }
     return(git_binary_name)
   }
-  
+
   # Look on path
   git_path <- Sys.which("git")[[1]]
   if (git_path != "") return(git_path)
-  
+
   # On Windows, look in common locations
   if (.Platform$OS.type == "windows") {
     look_in <- c(
@@ -87,17 +127,17 @@ git_path <- function(git_binary_name = NULL) {
     found <- file.exists(look_in)
     if (any(found)) return(look_in[found][1])
   }
-  
+
   stop("Git does not seem to be installed on your system.", call. = FALSE)
 }
 
 git_branch <- function(path = ".") {
   r <- git2r::repository(path, discover = TRUE)
-  
+
   if (git2r::is_detached(r)) {
     return(NULL)
   }
-  
+
   git2r::head(r)@name
 }
 
@@ -106,27 +146,27 @@ git_branch <- function(path = ".") {
 uses_github <- function(path = ".") {
   if (!uses_git(path))
     return(FALSE)
-  
+
   r <- git2r::repository(path, discover = TRUE)
   r_remote_urls <- git2r::remote_url(r)
-  
+
   any(grepl("github", r_remote_urls))
 }
 
 github_info <- function(path = ".", remote_name = NULL) {
   if (!uses_github(path))
     return(github_dummy)
-  
+
   r <- git2r::repository(path, discover = TRUE)
   r_remote_urls <- grep("github", remote_urls(r), value = TRUE)
-  
+
   if (!is.null(remote_name) && !remote_name %in% names(r_remote_urls))
     stop("no github-related remote named ", remote_name, " found")
-  
+
   remote_name <- c(remote_name, "origin", names(r_remote_urls))
   x <- r_remote_urls[remote_name]
   x <- x[!is.na(x)][1]
-  
+
   github_remote_parse(x)
 }
 
@@ -140,7 +180,7 @@ remote_urls <- function(r) {
 github_remote_parse <- function(x) {
   if (length(x) == 0) return(github_dummy)
   if (!grepl("github", x)) return(github_dummy)
-  
+
   if (grepl("^(https|git)", x)) {
     # https://github.com/hadley/devtools.git
     # https://github.com/hadley/devtools
@@ -149,7 +189,7 @@ github_remote_parse <- function(x) {
   } else {
     stop("Unknown GitHub repo format", call. = FALSE)
   }
-  
+
   m <- regexec(re, x)
   match <- regmatches(x, m)[[1]]
   list(
@@ -165,14 +205,14 @@ github_remote_parse <- function(x) {
 # Since we know it's 40 characters long we seek that many bytes minus 2
 # (to confirm the comment is exactly 40 bytes long)
 git_extract_sha1 <- function(bundle) {
-  
+
   # open the bundle for reading
   conn <- file(bundle, open = "rb", raw = TRUE)
   on.exit(close(conn))
-  
+
   # seek to where the comment length field should be recorded
   seek(conn, where = -0x2a, origin = "end")
-  
+
   # verify the comment is length 0x28
   len <- readBin(conn, "raw", n = 2)
   if (len[1] == 0x28 && len[2] == 0x00) {

@@ -13,7 +13,7 @@ package_path <- paste0(
   tempfile(pattern = "testpackage.", tmpdir = "", fileext = "")
 )
 
-quietly(
+rrtools:::quietly(
 rrtools::use_compendium(
   path = package_path,
   fields = getOption("devtools.desc"),

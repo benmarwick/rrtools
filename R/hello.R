@@ -18,9 +18,10 @@ create_compendium <- function(pkgname, data_in_git = TRUE){
   setwd(pkgname)
   my_name <-  usethis::use_git_config()$`user.name`
   usethis::use_mit_license(name = my_name)
-  usethis::use_git()
   rrtools::use_readme_rmd()
+  rrtools::use_git_quietly()
   rrtools::use_analysis(data_in_git = data_in_git)
+
 }
 
 
