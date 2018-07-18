@@ -14,7 +14,7 @@ Maintainer: Ben Marwick <benmarwick@gmail.com>
 Description: Instructions, templates, and functions for making a basic 
     compendium suitable for doing reproducible research with R.
 License: MIT + file LICENSE
-Imports: git2r, whisker, rstudioapi, rmarkdown, knitr,
+Imports: devtools, git2r, whisker, rstudioapi, rmarkdown, knitr,
     bookdown, curl, RCurl, jsonlite, methods, httr, usethis, clisymbols,
     crayon, glue, readr (>= 1.1.1)
 Encoding: UTF-8
