@@ -43,18 +43,7 @@ Frampton
 [Stodden & Miguez (2014)](http://doi.org/10.5334/jors.ay) and rOpenSci
 (2017[a](http://ropensci.github.io/reproducibility-guide/),
 [b](https://github.com/ropensci/rrrpkg)) are important sources that have
-influenced our approach to this package. Please read those before using
-this package.
-
-This project was developed during the 2017 Summer School on Reproducible
-Research in Landscape Archaeology at the Freie Universität Berlin (17-21
-July), funded and jointly organized by [Exc264
-Topoi](https://www.topoi.org/),
-[CRC1266](http://www.sfb1266.uni-kiel.de/en), and
-[ISAAKiel](https://isaakiel.github.io/). Special thanks to [Sophie C.
-Schmidt](https://github.com/SCSchmidt) for help. The convenience
-functions in this package are inspired by similar functions in the
-[`usethis`](https://github.com/r-lib/usethis) package.
+influenced our approach to this package.
 
 ## Installation
 
@@ -71,9 +60,11 @@ devtools::install_github("benmarwick/rrtools")
 
 To make a quick start on creating a compendium, use the
 `create_compendium()` function. This function will create a compendium
-that is instantly ready to work with:
+that is instantly ready to work
+with:
 
 ``` r
+library(rrtools) # will confirm that you have Git installed and configured
 create_compendium("pkgname")
 ```
 
@@ -348,3 +339,15 @@ If you would like to contribute to this project, please start by reading
 our [Guide to Contributing](CONTRIBUTING.md). Please note that this
 project is released with a [Contributor Code of Conduct](CONDUCT.md). By
 participating in this project you agree to abide by its terms.
+
+## Acknowledgements
+
+This project was developed during the 2017 Summer School on Reproducible
+Research in Landscape Archaeology at the Freie Universität Berlin (17-21
+July), funded and jointly organized by [Exc264
+Topoi](https://www.topoi.org/),
+[CRC1266](http://www.sfb1266.uni-kiel.de/en), and
+[ISAAKiel](https://isaakiel.github.io/). Special thanks to [Sophie C.
+Schmidt](https://github.com/SCSchmidt) for help. The convenience
+functions in this package are inspired by similar functions in the
+[`usethis`](https://github.com/r-lib/usethis) package.
