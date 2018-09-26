@@ -121,12 +121,9 @@ use_compendium <- function(
     if (rstudio & open) {
       usethis:::done("Opening the new compendium in a new RStudio session...")
     } else if (!rstudio & open) {
-      usethis:::done("Now opening the new compendium...")
-      setwd(path)
-      usethis:::done("Done. The working directory is currently ", getwd())
+      usethis:::done("The working directory is currently ", getwd())
     } else {
-      setwd(path)
-      usethis:::done("Done. The working directory is currently ", getwd())
+      usethis:::done("The working directory is currently ", getwd())
     }
 
     cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
