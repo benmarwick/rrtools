@@ -28,4 +28,5 @@ path. Repeated entries will be silently removed.
 \seealso{
 Other infrastructure: \code{\link{use_readme_rmd}}
 }
+\concept{infrastructure}
 \keyword{internal}

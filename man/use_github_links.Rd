@@ -29,4 +29,5 @@ those fields already exist.
 Other git infrastructure: \code{\link{use_git_hook}},
   \code{\link{use_github}}, \code{\link{use_git}}
 }
+\concept{git infrastructure}
 \keyword{internal}
