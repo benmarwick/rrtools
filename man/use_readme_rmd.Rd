@@ -32,3 +32,4 @@ use_readme_rmd()
 \seealso{
 Other infrastructure: \code{\link{use_build_ignore}}
 }
+\concept{infrastructure}

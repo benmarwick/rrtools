@@ -22,3 +22,4 @@ Initialise a git repository.
 Other git infrastructure: \code{\link{use_git_hook}},
   \code{\link{use_github_links}}, \code{\link{use_github}}
 }
+\concept{git infrastructure}
