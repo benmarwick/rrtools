@@ -109,6 +109,28 @@ use_compendium <- function(
 
     check_package_name(name)
 
+    # welcome message in new repo at first start
+    if (rstudio & open & !quiet) {
+      dir.create(path)
+      fileConn <- file(file.path(path, ".Rprofile"))
+      writeLines(
+        c(
+          "cat(crayon::bold('\nThis project was set up by rrtools.'))",
+          "cat('\nYou can start working now or apply some more basic configuration.\n')",
+          "cat('Check out ')",
+          "cat(crayon::underline('https://github.com/benmarwick/rrtools'))",
+          "cat(' for an explanation of all the project configuration functions of rrtools.\n')",
+          "cat('Or run the rrtools configuration addin: ')",
+          "cat(crayon::cyan('rrtools.addin::rrtools_assistant() '))",
+          "cat(crayon::underline('https://github.com/nevrome/rrtools.addin\n\n'))",
+          "invisible(file.remove('.Rprofile'))"
+        ),
+        fileConn
+      )
+      close(fileConn)
+    }
+
+    # create new package
     usethis::create_package(
       path = path,
       fields = fields,
@@ -354,7 +376,7 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
 
  cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),4), "\n")
   usethis:::todo("Write your article/report/thesis, start at the paper.Rmd file")
-  usethis:::todo("Add the citation style libray file (csl) to replace the default provided here, see ",  crayon::bgBlue("https://github.com/citation-style-language/"))
+  usethis:::todo("Add the citation style library file (csl) to replace the default provided here, see ",  crayon::bgBlue("https://github.com/citation-style-language/"))
   usethis:::todo("Add bibliographic details of cited items to the ", usethis:::value('references.bib'), " file")
   usethis:::todo("For adding captions & cross-referencing in an Rmd, see ", crayon::bgBlue("https://bookdown.org/yihui/bookdown/"))
   usethis:::todo("For adding citations & reference lists in an Rmd, see ",  crayon::bgBlue("http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html"))
