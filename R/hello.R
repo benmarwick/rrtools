@@ -383,9 +383,9 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
 
   # message about whether data files are tracked by Git:
   cat(crayon::bold("\nNote that:\n"))
-  if(!data_in_git) {cat(paste0(warning_bullet(), " Your data files ", crayon::red("are not"), " tracked by Git and ", crayon::red("will not"), " be pushed to GitHub"))
+  if(!data_in_git) {cat(paste0(warning_bullet(), " Your data files ", crayon::red("are not"), " tracked by Git and ", crayon::red("will not"), " be pushed to GitHub \n"))
     } else {
-  cat(paste0(warning_bullet(), " Your data files ", crayon::green("are"), " tracked by Git and ", crayon::green("will"), " be pushed to GitHub"))
+  cat(paste0(warning_bullet(), " Your data files ", crayon::green("are"), " tracked by Git and ", crayon::green("will"), " be pushed to GitHub \n"))
     }
 
 
