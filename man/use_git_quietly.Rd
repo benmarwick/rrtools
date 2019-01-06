@@ -18,3 +18,4 @@ use_git_quietly(message = "Initial commit")
 use_git_quietly()
 }
 }
+\concept{git helpers}
