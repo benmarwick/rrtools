@@ -23,10 +23,7 @@ LazyData: true
 URL: https://github.com/benmarwick/rrtools
 BugReports: https://github.com/benmarwick/rrtools/issues
 Suggests: testthat
-<<<<<<< HEAD
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
-=======
-RoxygenNote: 6.1.0
 Date: 2018-10-23
->>>>>>> d1ea2cfa0bfd2b8f63eddec1ab870c37ebd5b1ff
+
