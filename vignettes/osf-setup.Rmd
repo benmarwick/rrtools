@@ -1,0 +1,14 @@
+---
+title: "How to use osf.io for release management and long term data storage?"
+author: "Ben Marwick & Clemens Schmid"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, out.width = "400px"}
+knitr::include_graphics(list.files("osf-setup-images", full.names = TRUE))
+```
