@@ -1,6 +1,6 @@
 Package: rrtools
 Type: Package
-Title: Creates a reproducible research compendium
+Title: Creates a Reproducible Research Compendium
 Version: 0.1.0
 Authors@R: c(person("Ben", "Marwick", role = c("aut", "cre"), email = "benmarwick@gmail.com"),
              person("Daniel", "Knitter", role = "ctb"),
@@ -25,5 +25,5 @@ BugReports: https://github.com/benmarwick/rrtools/issues
 Suggests: testthat
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
-Date: 2018-10-23
+Date: 2019-01-15
 
