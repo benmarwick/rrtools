@@ -11,6 +11,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "README-"
 )
+# Please put your title here to include it in the file below. 
+Title <- "Title of your paper goes here"
 ```
 
 {{/Rmd}}
@@ -19,18 +21,18 @@ knitr::opts_chunk$set(
 
 This repository contains the data and code for our paper:
 
-> Authors, (YYYY). _Title of paper_. Name of journal/book <https://doi.org/xxx/xxx>
+> Authors, (YYYY). _`r Title`_. Name of journal/book <https://doi.org/xxx/xxx>
 
 Our pre-print is online here:
 
-> Authors, (YYYY). _Title of paper_. Name of journal/book, Accessed `r format(Sys.Date(), "%d %b %Y")`. Online at <https://doi.org/xxx/xxx>
+> Authors, (YYYY). _`r Title`_. Name of journal/book, Accessed `r format(Sys.Date(), "%d %b %Y")`. Online at <https://doi.org/xxx/xxx>
 
 
 ### How to cite
 
 Please cite this compendium as:
 
-> Authors, (`r format(Sys.Date(), "%Y")`). _Compendium of R code and data for 'Title of paper'_. Accessed `r format(Sys.Date(), "%d %b %Y")`. Online at <https://doi.org/xxx/xxx>
+> Authors, (`r format(Sys.Date(), "%Y")`). _Compendium of R code and data for `r Title`_. Accessed `r format(Sys.Date(), "%d %b %Y")`. Online at <https://doi.org/xxx/xxx>
 
 ### How to download or install
 
