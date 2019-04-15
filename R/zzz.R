@@ -19,7 +19,7 @@ if(!grepl("git", which_git[1])) { packageStartupMessage(red_cross(), " Git is no
 
   if(!is.null(git_user_name)){
   packageStartupMessage(green_tick(), " Git is installed on this computer, your username is ",
-                 usethis:::field(git_user_name))
+                 usethis::ui_field(git_user_name))
   } else {
     packageStartupMessage(red_cross(), " Git is installed on this computer, but not configured for use. For more information on configuring and using Git, see ", crayon::bgBlue("http://happygitwithr.com/"))
   }

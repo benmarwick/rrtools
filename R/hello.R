@@ -138,17 +138,17 @@ use_compendium <- function(
       open = open
     )
 
-    usethis:::done("The package ", name, " has been created")
+    usethis::ui_done("The package {name} has been created")
 
     if (rstudio & open) {
-      usethis:::done("Opening the new compendium in a new RStudio session...")
+      usethis::ui_done("Opening the new compendium in a new RStudio session...")
     } else if (!rstudio & open) {
-      usethis:::done("Now opening the new compendium...")
+      usethis::ui_done("Now opening the new compendium...")
       setwd(path)
-      usethis:::done("Done. The working directory is currently ", getwd())
+      usethis::ui_done("Done. The working directory is currently {getwd()}")
     } else {
       setwd(path)
-      usethis:::done("Done. The working directory is currently ", getwd())
+      usethis::ui_done("Done. The working directory is currently {getwd()}")
     }
 
     cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
@@ -340,7 +340,7 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
   pkg$Rmd <- TRUE
   gh <- github_info(pkg$path)
 
-  usethis:::done("Adding bookdown to Imports\n")
+  usethis::ui_done("Adding bookdown to Imports\n")
   add_desc_package(pkg, "Imports", "bookdown")
 
   location <- ifelse(location == "top_level", "analysis",
@@ -500,15 +500,15 @@ use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
   }
 
   if (render_readme) {
-    usethis:::done("\nRendering README.Rmd to README.md for GitHub.")
+    usethis::ui_done("\nRendering README.Rmd to README.md for GitHub.")
     rmarkdown::render("README.Rmd", quiet = TRUE)
     unlink("README.html")
   }
 
-  usethis:::done("Adding code of conduct.")
+  usethis::ui_done("Adding code of conduct.")
   use_code_of_conduct(pkg)
 
-  usethis:::done("Adding instructions to contributors.")
+  usethis::ui_done("Adding instructions to contributors.")
   use_contributing(pkg)
 
   invisible(TRUE)
@@ -552,11 +552,11 @@ use_template <- function(template, save_as = template, data = list(),
 
   template_out <- whisker::whisker.render(readLines(template_path), data)
 
-  usethis:::done("Creating ", usethis:::value(save_as), " from template.")
+  usethis::ui_done("Creating ", usethis:::value(save_as), " from template.")
   writeLines(template_out, path)
 
   if (ignore) {
-    usethis:::done("Adding ", usethis:::value(save_as), " to `.Rbuildignore`.")
+    usethis::ui_done("Adding ", usethis:::value(save_as), " to `.Rbuildignore`.")
     use_build_ignore(save_as, pkg = pkg)
   }
 
@@ -577,12 +577,12 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
       stop("`", path, "` exists but is not a directory.", call. = FALSE)
     }
   } else {
-    usethis:::done("Creating ", usethis:::value(path))
+    usethis::ui_done("Creating ", usethis:::value(path))
     dir.create(pkg_path, showWarnings = FALSE, recursive = TRUE,  mode = "0777")
   }
 
   if (ignore) {
-    usethis:::done("Adding ", usethis:::value(path), " to `.Rbuildignore`")
+    usethis::ui_done("Adding ", usethis:::value(path), " to `.Rbuildignore`")
     use_build_ignore(path, pkg = pkg)
   }
 
@@ -593,7 +593,7 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
 create_directories <- function(location, pkg){
 
   if (location %in% c("analysis", "vignettes", "inst")) {
-  usethis:::done("Creating ", usethis:::value(location), " directory and contents")
+  usethis::ui_done("Creating {usethis:::value(location)} directory and contents")
   use_directory(location, pkg = pkg)
   use_directory(paste0(location, "/paper"), pkg = pkg)
   use_directory(paste0(location, "/figures"), pkg = pkg)

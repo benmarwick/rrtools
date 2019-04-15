@@ -17,14 +17,14 @@ use_git_quietly <- function(message = "Initial commit") {
     return(invisible())
   }
 
-  usethis:::done("Initialising Git repo")
+  usethis::ui_done("Initialising Git repo")
   r <- git2r::init(usethis::proj_get())
 
   usethis::use_git_ignore(c(".Rhistory", ".RData", ".Rproj.user"))
 
   if ( usethis:::git_uncommitted()) {
     paths <- unlist(git2r::status(r))
-    usethis:::done("Adding files and committing")
+    usethis::ui_done("Adding files and committing")
       git2r::add(r, paths)
       git2r::commit(r, message)
 
