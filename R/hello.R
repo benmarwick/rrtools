@@ -552,11 +552,11 @@ use_template <- function(template, save_as = template, data = list(),
 
   template_out <- whisker::whisker.render(readLines(template_path), data)
 
-  usethis::ui_done("Creating ", usethis:::value(save_as), " from template.")
+  usethis::ui_done("Creating {usethis:::value(save_as)} from template.")
   writeLines(template_out, path)
 
   if (ignore) {
-    usethis::ui_done("Adding ", usethis:::value(save_as), " to `.Rbuildignore`.")
+    usethis::ui_done("Adding {usethis:::value(save_as)} to `.Rbuildignore`.")
     use_build_ignore(save_as, pkg = pkg)
   }
 
@@ -577,12 +577,12 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
       stop("`", path, "` exists but is not a directory.", call. = FALSE)
     }
   } else {
-    usethis::ui_done("Creating ", usethis:::value(path))
+    usethis::ui_done("Creating {usethis:::value(path)}")
     dir.create(pkg_path, showWarnings = FALSE, recursive = TRUE,  mode = "0777")
   }
 
   if (ignore) {
-    usethis::ui_done("Adding ", usethis:::value(path), " to `.Rbuildignore`")
+    usethis::ui_done("Adding {usethis:::value(path)} to `.Rbuildignore`")
     use_build_ignore(path, pkg = pkg)
   }
 
