@@ -144,9 +144,6 @@ use_compendium <- function(
       usethis::ui_done("Now opening the new compendium...")
       setwd(path)
       usethis::ui_done("Done. The working directory is currently {getwd()}")
-    } else {
-      setwd(path)
-      usethis::ui_done("Done. The working directory is currently {getwd()}")
     }
 
     cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
