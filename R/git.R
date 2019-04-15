@@ -30,7 +30,7 @@ use_git_quietly <- function(message = "Initial commit") {
 
   }
 
-usethis:::todo(
+usethis::ui_todo(
     "A restart of RStudio is required to activate the Git pane"
   )
   invisible(TRUE)
