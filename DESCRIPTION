@@ -1,6 +1,6 @@
 Package: rrtools
 Type: Package
-Title: Creates a reproducible research compendium
+Title: Creates a Reproducible Research Compendium
 Version: 0.1.0
 Authors@R: c(person("Ben", "Marwick", role = c("aut", "cre"), email = "benmarwick@gmail.com"),
              person("Daniel", "Knitter", role = "ctb"),
@@ -9,17 +9,20 @@ Authors@R: c(person("Ben", "Marwick", role = c("aut", "cre"), email = "benmarwic
              person("Martin", "Hinz", role = "ctb"),
              person("Clemens", "Schmid", role = "ctb"),
              person("Ricarda", "Braun", role = "ctb"),
-             person("Wojciech", "Francuzik", role = "ctb"))
+             person("Wojciech", "Francuzik", role = "ctb"),
+             person("Charles", "Gray", role = "ctb"))
 Maintainer: Ben Marwick <benmarwick@gmail.com>
 Description: Instructions, templates, and functions for making a basic 
     compendium suitable for doing reproducible research with R.
 License: MIT + file LICENSE
-Imports: devtools, git2r, whisker, rstudioapi, rmarkdown, knitr,
-    bookdown, curl, RCurl, jsonlite, methods, httr, usethis, clisymbols,
-    crayon, glue, readr (>= 1.1.1)
+Imports: devtools, git2r, whisker, rstudioapi, rmarkdown, curl, RCurl, jsonlite, methods, httr, usethis, clisymbols,
+    crayon, glue, bookdown, here
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/benmarwick/rrtools
 BugReports: https://github.com/benmarwick/rrtools/issues
-Suggests: testthat
-RoxygenNote: 6.0.1
+Suggests: testthat, knitr
+RoxygenNote: 6.1.1
+VignetteBuilder: knitr
+Date: 2019-01-15
+

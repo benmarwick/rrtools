@@ -24,4 +24,5 @@ Add a git hook.
 Other git infrastructure: \code{\link{use_github_links}},
   \code{\link{use_github}}, \code{\link{use_git}}
 }
+\concept{git infrastructure}
 \keyword{internal}

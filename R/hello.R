@@ -1,5 +1,3 @@
-globalVariables(c("gh", "opts", "getProjectDir", "libDir", ".packrat_mutables", "pkgDescriptionDependencies", "union_write", "yesno", "github_POST", "github_GET", "dropSystemPackages", "readDcf", "recursivePackageDependencies", "silent", "sort_c", "setup")) # suppress some warnings
-
 
 #' @name create_compendium
 #' @title Quickly create a basic research compendium by combining several rrtools functions into one.
@@ -109,6 +107,28 @@ use_compendium <- function(
 
     check_package_name(name)
 
+    # welcome message in new repo at first start
+    if (rstudio & open & !quiet) {
+      dir.create(path)
+      fileConn <- file(file.path(path, ".Rprofile"))
+      writeLines(
+        c(
+          "cat(crayon::bold('\nThis project was set up by rrtools.'))",
+          "cat('\nYou can start working now or apply some more basic configuration.\n')",
+          "cat('Check out ')",
+          "cat(crayon::underline('https://github.com/benmarwick/rrtools'))",
+          "cat(' for an explanation of all the project configuration functions of rrtools.\n')",
+          "cat('Or run the rrtools configuration addin: ')",
+          "cat(crayon::cyan('rrtools.addin::rrtools_assistant() '))",
+          "cat(crayon::underline('https://github.com/nevrome/rrtools.addin\n\n'))",
+          "invisible(file.remove('.Rprofile'))"
+        ),
+        fileConn
+      )
+      close(fileConn)
+    }
+
+    # create new package
     usethis::create_package(
       path = path,
       fields = fields,
@@ -116,19 +136,19 @@ use_compendium <- function(
       open = open
     )
 
-    usethis:::done("The package ", name, " has been created")
+    usethis::ui_done("The package {name} has been created")
 
     if (rstudio & open) {
-      usethis:::done("Opening the new compendium in a new RStudio session...")
+      usethis::ui_done("Opening the new compendium in a new RStudio session...")
     } else if (!rstudio & open) {
-      usethis:::done("The working directory is currently ", getwd())
+      usethis::ui_done("The working directory is currently {getwd()}")
     } else {
-      usethis:::done("The working directory is currently ", getwd())
+      usethis::ui_done("The working directory is currently {getwd()}")
     }
 
     cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
-    usethis:::todo("Edit the DESCRIPTION file")
-    usethis:::todo("Use other 'rrtools' functions to add components to the compendium\n")
+    usethis::ui_todo("Edit the DESCRIPTION file")
+    usethis::ui_todo("Use other 'rrtools' functions to add components to the compendium\n")
 
 
   })
@@ -315,7 +335,7 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
   pkg$Rmd <- TRUE
   gh <- github_info(pkg$path)
 
-  usethis:::done("Adding bookdown to Imports\n")
+  usethis::ui_done("Adding bookdown to Imports\n")
   add_desc_package(pkg, "Imports", "bookdown")
 
   location <- ifelse(location == "top_level", "analysis",
@@ -350,17 +370,17 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
  if (!data_in_git) use_git_ignore("*/data/*")
 
  cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),4), "\n")
-  usethis:::todo("Write your article/report/thesis, start at the paper.Rmd file")
-  usethis:::todo("Add the citation style libray file (csl) to replace the default provided here, see ",  crayon::bgBlue("https://github.com/citation-style-language/"))
-  usethis:::todo("Add bibliographic details of cited items to the ", usethis:::value('references.bib'), " file")
-  usethis:::todo("For adding captions & cross-referencing in an Rmd, see ", crayon::bgBlue("https://bookdown.org/yihui/bookdown/"))
-  usethis:::todo("For adding citations & reference lists in an Rmd, see ",  crayon::bgBlue("http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html"))
+  usethis::ui_todo("Write your article/report/thesis, start at the paper.Rmd file")
+  usethis::ui_todo("Add the citation style library file (csl) to replace the default provided here, see {crayon::bgBlue('https://github.com/citation-style-language/')}")
+  usethis::ui_todo("Add bibliographic details of cited items to the {usethis::ui_value('references.bib')} file")
+  usethis::ui_todo("For adding captions & cross-referencing in an Rmd, see {crayon::bgBlue('https://bookdown.org/yihui/bookdown/')}")
+  usethis::ui_todo("For adding citations & reference lists in an Rmd, see {crayon::bgBlue('http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html')}")
 
   # message about whether data files are tracked by Git:
   cat(crayon::bold("\nNote that:\n"))
-  if(!data_in_git) {cat(paste0(warning_bullet(), " Your data files ", crayon::red("are not"), " tracked by Git and ", crayon::red("will not"), " be pushed to GitHub"))
+  if(!data_in_git) {cat(paste0(warning_bullet(), " Your data files ", crayon::red("are not"), " tracked by Git and ", crayon::red("will not"), " be pushed to GitHub \n"))
     } else {
-  cat(paste0(warning_bullet(), " Your data files ", crayon::green("are"), " tracked by Git and ", crayon::green("will"), " be pushed to GitHub"))
+  cat(paste0(warning_bullet(), " Your data files ", crayon::green("are"), " tracked by Git and ", crayon::green("will"), " be pushed to GitHub \n"))
     }
 
 
@@ -475,15 +495,15 @@ use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
   }
 
   if (render_readme) {
-    usethis:::done("\nRendering README.Rmd to README.md for GitHub.")
+    usethis::ui_done("\nRendering README.Rmd to README.md for GitHub.")
     rmarkdown::render("README.Rmd", quiet = TRUE)
     unlink("README.html")
   }
 
-  usethis:::done("Adding code of conduct.")
+  usethis::ui_done("Adding code of conduct.")
   use_code_of_conduct(pkg)
 
-  usethis:::done("Adding instructions to contributors.")
+  usethis::ui_done("Adding instructions to contributors.")
   use_contributing(pkg)
 
   invisible(TRUE)
@@ -527,16 +547,16 @@ use_template <- function(template, save_as = template, data = list(),
 
   template_out <- whisker::whisker.render(readLines(template_path), data)
 
-  usethis:::done("Creating ", usethis:::value(save_as), " from template.")
+  usethis::ui_done("Creating {usethis::ui_value(save_as)} from template.")
   writeLines(template_out, path)
 
   if (ignore) {
-    usethis:::done("Adding ", usethis:::value(save_as), " to `.Rbuildignore`.")
+    usethis::ui_done("Adding {usethis::ui_value(save_as)} to `.Rbuildignore`.")
     use_build_ignore(save_as, pkg = pkg)
   }
 
   if (open) {
-    usethis:::todo("Modify ", usethis:::value(save_as))
+    usethis::ui_todo("Modify ", usethis::ui_value(save_as))
     open_in_rstudio(path)
   }
 
@@ -552,12 +572,12 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
       stop("`", path, "` exists but is not a directory.", call. = FALSE)
     }
   } else {
-    usethis:::done("Creating ", usethis:::value(path))
+    usethis::ui_done("Creating {usethis::ui_value(path)}")
     dir.create(pkg_path, showWarnings = FALSE, recursive = TRUE,  mode = "0777")
   }
 
   if (ignore) {
-    usethis:::done("Adding ", usethis:::value(path), " to `.Rbuildignore`")
+    usethis::ui_done("Adding {usethis::ui_value(path)} to `.Rbuildignore`")
     use_build_ignore(path, pkg = pkg)
   }
 
@@ -568,7 +588,7 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
 create_directories <- function(location, pkg){
 
   if (location %in% c("analysis", "vignettes", "inst")) {
-  usethis:::done("Creating ", usethis:::value(location), " directory and contents")
+  usethis::ui_done("Creating {usethis::ui_value(location)} directory and contents")
   use_directory(location, pkg = pkg)
   use_directory(paste0(location, "/paper"), pkg = pkg)
   use_directory(paste0(location, "/figures"), pkg = pkg)

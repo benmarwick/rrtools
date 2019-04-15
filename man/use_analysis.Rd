@@ -5,8 +5,8 @@
 \alias{add_analysis}
 \title{Adds an analysis directory (and sub-directories), and an Rmd file ready to write}
 \usage{
-use_analysis(pkg = ".", location = "top_level", template = "paper.Rmd",
-  data = list(), data_in_git = TRUE)
+use_analysis(pkg = ".", location = "top_level",
+  template = "paper.Rmd", data = list(), data_in_git = TRUE)
 }
 \arguments{
 \item{pkg}{defaults to the package in the current working directory}

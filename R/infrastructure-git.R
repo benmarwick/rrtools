@@ -22,12 +22,12 @@ use_git_with_config <- function(message, pkg, add_user_config = FALSE, quiet = F
   pkg <- as.package(pkg)
 
   if (uses_git(pkg$path)) {
-    usethis:::done("Git is already initialized")
+    usethis::ui_done("Git is already initialized")
     return(invisible())
   }
 
   if (!quiet) {
-    usethis:::done("Initialising repo")
+    usethis::ui_done("Initialising repo")
   }
   r <- git2r::init(pkg$path)
 
@@ -38,7 +38,7 @@ use_git_with_config <- function(message, pkg, add_user_config = FALSE, quiet = F
   use_git_ignore(c(".Rproj.user", ".Rhistory", ".RData"), pkg = pkg, quiet = quiet)
 
   if (!quiet) {
-    usethis:::done("Adding files and committing")
+    usethis::ui_done("Adding files and committing")
   }
   paths <- unlist(git2r::status(r))
   git2r::add(r, paths)
@@ -114,13 +114,13 @@ use_github <- function(auth_token = github_pat(), private = FALSE, pkg = ".",
   use_git(pkg = pkg)
 
   if (uses_github(pkg$path)) {
-    usethis:::done("GitHub is already initialized")
+    usethis::ui_done("GitHub is already initialized")
     return(invisible())
   }
 
-  usethis:::done("Checking title and description")
-  usethis:::done("  Title: ", pkg$title)
-  usethis:::done("  Description: ", pkg$description)
+  usethis::ui_done("Checking title and description")
+  usethis::ui_done("  Title: ", pkg$title)
+  usethis::ui_done("  Description: ", pkg$description)
   if (interactive() && !yesno("Are title and description ok?")) {
     TRUE
   } else {
@@ -141,12 +141,12 @@ use_github <- function(auth_token = github_pat(), private = FALSE, pkg = ".",
       host = host
     )
 
-  usethis:::done("Adding GitHub remote")
+  usethis::ui_done("Adding GitHub remote")
   r <- git2r::repository(pkg$path)
   origin_url <- switch(protocol, https = create$clone_url, ssh = create$ssh_url)
   git2r::remote_add(r, "origin", origin_url)
 
-  usethis:::done("Adding GitHub links to DESCRIPTION")
+  usethis::ui_done("Adding GitHub links to DESCRIPTION")
   use_github_links(pkg$path, auth_token = auth_token, host = host)
   if (git_uncommitted(pkg$path)) {
     git2r::add(r, "DESCRIPTION")
@@ -166,7 +166,7 @@ use_github <- function(auth_token = github_pat(), private = FALSE, pkg = ".",
   }
   git2r::branch_set_upstream(git2r::head(r), "origin/master")
 
-  usethis:::done("View repo at ", create$html_url)
+  usethis::ui_done("View repo at ", create$html_url)
 
   invisible(NULL)
 }
@@ -207,7 +207,7 @@ use_git_ignore <- function(ignores, directory = ".", pkg = ".", quiet = FALSE) {
 
   paths <- paste0("`", ignores, "`", collapse = ", ")
   if (!quiet) {
-    usethis:::done("Adding ", paths, " to ", file.path(directory, ".gitignore"))
+    usethis::ui_done("Adding ", paths, " to ", file.path(directory, ".gitignore"))
   }
 
   path <- file.path(pkg$path, directory, ".gitignore")
