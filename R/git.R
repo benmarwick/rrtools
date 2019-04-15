@@ -22,7 +22,8 @@ use_git_quietly <- function(message = "Initial commit") {
 
   usethis::use_git_ignore(c(".Rhistory", ".RData", ".Rproj.user"))
 
-  if ( usethis:::git_uncommitted()) {
+  # if there is something uncommitted, then commit it
+  if ( git_uncommitted()) {
     paths <- unlist(git2r::status(r))
     usethis::ui_done("Adding files and committing")
       git2r::add(r, paths)
