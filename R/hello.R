@@ -1,5 +1,3 @@
-globalVariables(c("gh", "opts", "getProjectDir", "libDir", ".packrat_mutables", "pkgDescriptionDependencies", "union_write", "yesno", "github_POST", "github_GET", "dropSystemPackages", "readDcf", "recursivePackageDependencies", "silent", "sort_c", "setup")) # suppress some warnings
-
 
 #' @name create_compendium
 #' @title Quickly create a basic research compendium by combining several rrtools functions into one.
