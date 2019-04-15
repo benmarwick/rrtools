@@ -377,7 +377,7 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
  cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),4), "\n")
   usethis:::todo("Write your article/report/thesis, start at the paper.Rmd file")
   usethis:::todo("Add the citation style library file (csl) to replace the default provided here, see ",  crayon::bgBlue("https://github.com/citation-style-language/"))
-  usethis:::todo("Add bibliographic details of cited items to the ", usethis:::value('references.bib'), " file")
+  usethis:::todo("Add bibliographic details of cited items to the ", usethis::ui_value('references.bib'), " file")
   usethis:::todo("For adding captions & cross-referencing in an Rmd, see ", crayon::bgBlue("https://bookdown.org/yihui/bookdown/"))
   usethis:::todo("For adding citations & reference lists in an Rmd, see ",  crayon::bgBlue("http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html"))
 
@@ -552,16 +552,16 @@ use_template <- function(template, save_as = template, data = list(),
 
   template_out <- whisker::whisker.render(readLines(template_path), data)
 
-  usethis::ui_done("Creating {usethis:::value(save_as)} from template.")
+  usethis::ui_done("Creating {usethis::ui_value(save_as)} from template.")
   writeLines(template_out, path)
 
   if (ignore) {
-    usethis::ui_done("Adding {usethis:::value(save_as)} to `.Rbuildignore`.")
+    usethis::ui_done("Adding {usethis::ui_value(save_as)} to `.Rbuildignore`.")
     use_build_ignore(save_as, pkg = pkg)
   }
 
   if (open) {
-    usethis:::todo("Modify ", usethis:::value(save_as))
+    usethis:::todo("Modify ", usethis::ui_value(save_as))
     open_in_rstudio(path)
   }
 
@@ -577,12 +577,12 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
       stop("`", path, "` exists but is not a directory.", call. = FALSE)
     }
   } else {
-    usethis::ui_done("Creating {usethis:::value(path)}")
+    usethis::ui_done("Creating {usethis::ui_value(path)}")
     dir.create(pkg_path, showWarnings = FALSE, recursive = TRUE,  mode = "0777")
   }
 
   if (ignore) {
-    usethis::ui_done("Adding {usethis:::value(path)} to `.Rbuildignore`")
+    usethis::ui_done("Adding {usethis::ui_value(path)} to `.Rbuildignore`")
     use_build_ignore(path, pkg = pkg)
   }
 
@@ -593,7 +593,7 @@ use_directory <- function(path, ignore = FALSE, pkg = ".") {
 create_directories <- function(location, pkg){
 
   if (location %in% c("analysis", "vignettes", "inst")) {
-  usethis::ui_done("Creating {usethis:::value(location)} directory and contents")
+  usethis::ui_done("Creating {usethis::ui_value(location)} directory and contents")
   use_directory(location, pkg = pkg)
   use_directory(paste0(location, "/paper"), pkg = pkg)
   use_directory(paste0(location, "/figures"), pkg = pkg)
