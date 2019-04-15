@@ -140,7 +140,7 @@ use_compendium <- function(
 
     if (rstudio & open) {
       usethis::ui_done("Opening the new compendium in a new RStudio session...")
-    } else if (!rstudio & open) {
+    } else {
       usethis::ui_done("Now opening the new compendium...")
       setwd(path)
       usethis::ui_done("Done. The working directory is currently {getwd()}")
