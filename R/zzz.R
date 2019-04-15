@@ -1,6 +1,7 @@
 globalVariables(c("gh", "opts", "getProjectDir", "libDir", ".packrat_mutables", "pkgDescriptionDependencies", "union_write", "yesno", "github_POST", "github_GET", "dropSystemPackages", "readDcf", "recursivePackageDependencies", "silent", "sort_c", "setup")) # suppress some warnings
 
 
+#' @import bookdown here
 .onAttach <- function(...){
 
 # check to see if git is installed using 'which git'
