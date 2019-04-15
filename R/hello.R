@@ -152,8 +152,8 @@ use_compendium <- function(
     }
 
     cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
-    usethis:::todo("Edit the DESCRIPTION file")
-    usethis:::todo("Use other 'rrtools' functions to add components to the compendium\n")
+    usethis::ui_todo("Edit the DESCRIPTION file")
+    usethis::ui_todo("Use other 'rrtools' functions to add components to the compendium\n")
 
 
   })
@@ -375,11 +375,11 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
  if (!data_in_git) use_git_ignore("*/data/*")
 
  cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),4), "\n")
-  usethis:::todo("Write your article/report/thesis, start at the paper.Rmd file")
-  usethis:::todo("Add the citation style library file (csl) to replace the default provided here, see ",  crayon::bgBlue("https://github.com/citation-style-language/"))
-  usethis:::todo("Add bibliographic details of cited items to the ", usethis::ui_value('references.bib'), " file")
-  usethis:::todo("For adding captions & cross-referencing in an Rmd, see ", crayon::bgBlue("https://bookdown.org/yihui/bookdown/"))
-  usethis:::todo("For adding citations & reference lists in an Rmd, see ",  crayon::bgBlue("http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html"))
+  usethis::ui_todo("Write your article/report/thesis, start at the paper.Rmd file")
+  usethis::ui_todo("Add the citation style library file (csl) to replace the default provided here, see ",  crayon::bgBlue("https://github.com/citation-style-language/"))
+  usethis::ui_todo("Add bibliographic details of cited items to the ", usethis::ui_value('references.bib'), " file")
+  usethis::ui_todo("For adding captions & cross-referencing in an Rmd, see ", crayon::bgBlue("https://bookdown.org/yihui/bookdown/"))
+  usethis::ui_todo("For adding citations & reference lists in an Rmd, see ",  crayon::bgBlue("http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html"))
 
   # message about whether data files are tracked by Git:
   cat(crayon::bold("\nNote that:\n"))
@@ -561,7 +561,7 @@ use_template <- function(template, save_as = template, data = list(),
   }
 
   if (open) {
-    usethis:::todo("Modify ", usethis::ui_value(save_as))
+    usethis::ui_todo("Modify ", usethis::ui_value(save_as))
     open_in_rstudio(path)
   }
 
