@@ -83,16 +83,20 @@ use_compendium <- function(
       crayon::blue(encodeString(x, quote = "'"))
     }
 
+    # from usethis
+    valid_name <- function(x){
+      grepl("^[[:alpha:]][[:alnum:].]+$", x) && !grepl("\\.$", x)
+    }
+
     # from usethis, modified
     check_package_name <- function(name) {
-      if (!usethis:::valid_name(name)) {
+      if (!valid_name(name)) {
         stop_glue(
           "{value(name)} is not a valid package name. It should:\n",
           "* Contain only ASCII letters, numbers, and '.'\n",
           "* Have at least two characters\n",
           "* Start with a letter\n",
-          "* Not end with '.'\n",
-          "* Not contain any upper case characters\n"
+          "* Not end with '.'\n"
         )
       }
 
