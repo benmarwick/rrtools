@@ -66,13 +66,6 @@ use_compendium <- function(
   # everything in an unevaluated expression to suppress cat() output and messages
   create_the_package <- expression({
 
-    # check case because if this goes to github and travis, it should be all lower case
-
-    # from usethis, modified
-    valid_name <- function(x) {
-      grepl("^[[:alpha:]][[:alnum:].]+$", x) && !grepl("\\.$", x) && !grepl("[[:upper:]]", x)
-    }
-
     name <- basename(path)
 
     # from googledrive (!)
@@ -92,7 +85,7 @@ use_compendium <- function(
 
     # from usethis, modified
     check_package_name <- function(name) {
-      if (!valid_name(name)) {
+      if (!usethis:::valid_name(name)) {
         stop_glue(
           "{value(name)} is not a valid package name. It should:\n",
           "* Contain only ASCII letters, numbers, and '.'\n",
