@@ -3,6 +3,10 @@ language: r
 sudo: required
 cache: packages
 
+os:
+  - linux
+  - osx
+
 env:
   global:
   - REPO=$DOCKER_USER/rrtools
