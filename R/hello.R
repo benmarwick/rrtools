@@ -133,13 +133,13 @@ use_compendium <- function(
       open = open
     )
 
+
     usethis::ui_done("The package {name} has been created")
 
     if (rstudio & open) {
       usethis::ui_done("Opening the new compendium in a new RStudio session...")
     } else {
       usethis::ui_done("Now opening the new compendium...")
-      setwd(path)
       usethis::ui_done("Done. The working directory is currently {getwd()}")
     }
 
