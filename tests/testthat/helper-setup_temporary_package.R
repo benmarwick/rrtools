@@ -13,8 +13,9 @@ package_path <- paste0(
   tempfile(pattern = "testpackage.", tmpdir = "", fileext = "")
 )
 
+library(rrtools)
 rrtools:::quietly(
-rrtools::use_compendium(
+use_compendium(
   path = package_path,
   fields = getOption("devtools.desc"),
   rstudio = FALSE,
