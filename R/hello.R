@@ -638,6 +638,9 @@ use_paper_rmd <- function(pkg, location, gh, template){
 
   use_template("paper.Rmd", pkg = pkg, data = list(gh),
                          out_path = location)
+
+  # in case we want to inject some text in the Rmd, we can do that here
+  rmd <- readLines(file.path(pkg$path, location, "paper.Rmd"))
   # use_template doesn't seem to work for this...
   writeLines(rmd, file.path(pkg$path, location, "paper.Rmd"))
   closeAllConnections()
