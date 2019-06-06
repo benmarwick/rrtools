@@ -38,10 +38,6 @@ Here is a citation [@Marwick2017]
 
 # Background
 
-```{r demo, eval = FALSE}
-1 + 1
-```
-
 # Methods
 
 # Results
@@ -50,6 +46,18 @@ Here is a citation [@Marwick2017]
 # Note the path that we need to use to access our data files when rendering this document
 my_data <- read.csv(here::here('analysis/data/raw_data/my_csv_file.csv'))
 ```
+
+```{r demo-plot, fig.cap="A plot of random numbers}
+plot(rnorm(10))
+```
+
+Figure \@ref(fig:demo) shows how we can have a caption and cross-reference for a plot
+
+```{r demo-inline-code}
+x <- round(pi, 2)
+```
+
+Here is an example of inline code `r x` in the middle of a sentence. 
 
 # Discussion
 
