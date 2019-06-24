@@ -10,6 +10,7 @@ use_git_quietly(message = "Initial commit")
 \item{message}{Message to use for first commit.}
 }
 \description{
+From usethis, modified to be non-interactive.
 `use_git_quietly()` initialises a Git repository and adds important files to
 `.gitignore`. If user consents, it also makes an initial commit.
 }
