@@ -10,7 +10,8 @@ Authors@R: c(person("Ben", "Marwick", role = c("aut", "cre"), email = "benmarwic
              person("Clemens", "Schmid", role = "ctb"),
              person("Ricarda", "Braun", role = "ctb"),
              person("Wojciech", "Francuzik", role = "ctb"),
-             person("Charles", "Gray", role = "ctb"))
+             person("Charles", "Gray", role = "ctb"),
+             person("Joseph de la Torre", "Dwyer", role = "ctb"))
 Maintainer: Ben Marwick <benmarwick@gmail.com>
 Description: Instructions, templates, and functions for making a basic 
     compendium suitable for doing reproducible research with R.
