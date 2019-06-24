@@ -67,3 +67,58 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
 
 invisible(TRUE)
 }
+
+
+
+#### directly related helpers ####
+
+create_directories <- function(location, pkg){
+
+  if (location %in% c("analysis", "vignettes", "inst")) {
+  usethis::ui_done("Creating {usethis::ui_value(location)} directory and contents")
+  use_directory(location, pkg = pkg)
+  use_directory(paste0(location, "/paper"), pkg = pkg)
+  use_directory(paste0(location, "/figures"), pkg = pkg)
+  use_directory(paste0(location, "/templates"), pkg = pkg)
+  use_directory(paste0(location, "/data"), pkg = pkg)
+  use_directory(paste0(location, "/data/raw_data"), pkg = pkg)
+  use_directory(paste0(location, "/data/derived_data"), pkg = pkg)
+
+  # create a file that inform of best practices
+  invisible(file.create(paste0(pkg$path, "/", location, "/data/DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND")))
+
+  # move templates for MS Word output
+  invisible(file.copy(from = list.files(system.file("templates/word_templates/",
+                                                    package = "rrtools",
+                                                    mustWork = TRUE),
+                                        full.names = TRUE),
+                      to = paste0(pkg$path, "/", location, "/templates"),
+                      recursive = TRUE))
+
+  # move csl file
+  invisible(file.copy(from = system.file("templates/journal-of-archaeological-science.csl",
+                                         package = "rrtools",
+                                         mustWork = TRUE),
+                      to = paste0(pkg$path, "/", location, "/templates"),
+                      recursive = TRUE))
+
+
+  # move bib file in there also
+  use_template("references.bib", pkg = pkg, data = gh,
+               out_path = file.path(location, "paper"))
+
+  } else # else do this..
+  {
+    # BM: I think we want to let the user have some more control
+    # over this, and leave thesis/book out of here?
+    # message("* Creating ", location, "/ directory and contents")
+    # use_directory(location, pkg = pkg)
+    # invisible(file.copy(from = system.file("templates/thesis_template/.",
+    #                                        package = "rrtools",
+    #                                        mustWork = TRUE),
+    #                     to = paste0(location),
+    #                     recursive = TRUE))
+
+
+  }
+}

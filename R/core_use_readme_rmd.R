@@ -61,3 +61,20 @@ use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
 
   invisible(TRUE)
 }
+
+
+
+#### directly related helpers ####
+
+use_code_of_conduct <- function(pkg){
+  pkg <- as.package(pkg)
+  use_template("CONDUCT.md", ignore = TRUE, pkg = pkg,
+                         out_path = "")
+}
+
+use_contributing <- function(pkg){
+  pkg <- as.package(pkg)
+  gh <-  github_info(pkg$path)
+  use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh,
+                         out_path = "")
+}
