@@ -223,3 +223,52 @@ git_extract_sha1 <- function(bundle) {
     NULL
   }
 }
+
+# unexported fns from devtools, we include them here so
+# we don't have to use :::
+# from
+# https://raw.githubusercontent.com/hadley/devtools/6bb4b5f36cdfaee4d7e2f0a1f7f71ffeaf4aaf2f/R/infrastructure-git.R
+
+#' Add a git hook.
+#'
+#' @param hook Hook name. One of "pre-commit", "prepare-commit-msg",
+#'   "commit-msg", "post-commit", "applypatch-msg", "pre-applypatch",
+#'   "post-applypatch", "pre-rebase", "post-rewrite", "post-checkout",
+#'   "post-merge", "pre-push", "pre-auto-gc".
+#' @param script Text of script to run
+#' @inheritParams use_git
+#' @export
+#' @family git infrastructure
+#' @keywords internal
+use_git_hook <- function(hook, script, pkg = ".") {
+  pkg <- as.package(pkg)
+
+  git_dir <- file.path(pkg$path, ".git")
+  if (!file.exists(git_dir)) {
+    stop("This project doesn't use git", call. = FALSE)
+  }
+
+  hook_dir <- file.path(git_dir, "hooks")
+  if (!file.exists(hook_dir)) {
+    dir.create(hook_dir)
+  }
+
+  hook_path <- file.path(hook_dir, hook)
+  writeLines(script, hook_path)
+  Sys.chmod(hook_path, "0744")
+}
+
+
+use_git_ignore <- function(ignores, directory = ".", pkg = ".", quiet = FALSE) {
+  pkg <- as.package(pkg)
+
+  paths <- paste0("`", ignores, "`", collapse = ", ")
+  if (!quiet) {
+    usethis::ui_done("Adding ", paths, " to ", file.path(directory, ".gitignore"))
+  }
+
+  path <- file.path(pkg$path, directory, ".gitignore")
+  union_write(path, ignores)
+
+  invisible(TRUE)
+}

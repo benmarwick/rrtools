@@ -110,3 +110,56 @@ github_pat <- function(quiet = FALSE) {
 in_ci <- function() {
   nzchar(Sys.getenv("CI"))
 }
+
+#' Add GitHub links to DESCRIPTION.
+#'
+#' Populates the URL and BugReports fields of DESCRIPTION with
+#' \code{https://github.com/<USERNAME>/<REPO>} AND
+#' \code{https://github.com/<USERNAME>/<REPO>/issues}, respectively, unless
+#' those fields already exist.
+#'
+#' @inheritParams use_git
+#' @param auth_token Provide a personal access token (PAT) from
+#'   \url{https://github.com/settings/tokens}. Defaults to the \code{GITHUB_PAT}
+#'   environment variable.
+#' @param host GitHub API host to use. Override with the endpoint-root for your
+#'   GitHub enterprise instance, for example,
+#'   "https://github.hostname.com/api/v3".
+#' @family git infrastructure
+#' @keywords internal
+#' @export
+use_github_links <- function(pkg = ".", auth_token = github_pat(),
+                             host = "https://api.github.com") {
+
+  if (!uses_github(pkg)) {
+    stop("Cannot detect that package already uses GitHub.\n",
+         "You might want to run use_github().")
+  }
+
+  gh_info <- github_info(pkg)
+  pkg <- as.package(pkg)
+
+  desc_path <- file.path(pkg$path, "DESCRIPTION")
+  desc <- new_desc <- read_dcf(desc_path)
+
+  path_to_repo <- paste("repos", gh_info$fullname, sep = "/")
+  res <- github_GET(path = path_to_repo, pat = auth_token, host = host)
+  github_URL <- res$html_url
+
+  fill <- function(d, f, filler) {
+    if (is.null(d[[f]]) || identical(d[[f]], "")) {
+      d[[f]] <- filler
+    } else {
+      message("Existing ", f, " field found and preserved")
+    }
+    d
+  }
+  new_desc <- fill(new_desc, "URL", github_URL)
+  new_desc <- fill(new_desc, "BugReports", file.path(github_URL, "issues"))
+
+  if (!identical(desc, new_desc))
+    write_dcf(desc_path, new_desc)
+
+  new_desc[c("URL", "BugReports")]
+}
+
