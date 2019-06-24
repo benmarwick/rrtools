@@ -645,7 +645,7 @@ use_paper_rmd <- function(pkg, location, gh, template){
   writeLines(rmd, file.path(pkg$path, location, "paper.Rmd"))
   closeAllConnections()
 
-
+  open_in_rstudio(paste0(pkg$path, "/", location, "/paper.Rmd"))
 }
 
 
@@ -666,10 +666,10 @@ use_vignette_rmd <- function(location, pkg, gh, template, vignette_yml = "vignet
   # we inject a bit of vignette yml in our main paper.Rmd template:
   rmd <- c(rmd[1:18], vignette_yml, rmd[19:32], paste0("\nlibrary(", pkg$package, ")"), rmd[33:length(rmd)])
   # use_template doesn't seem to work for this...
-  writeLines(rmd, file(paste0(location, "/paper/paper.Rmd")))
+  writeLines(rmd, file(paste0(pkg$path, "/", location, "/paper/paper.Rmd")))
   closeAllConnections()
 
-  open_in_rstudio(paste0(location, "/paper/paper.Rmd"))
+  open_in_rstudio(paste0(pkg$path, "/", location, "/paper/paper.Rmd"))
 }
 
 

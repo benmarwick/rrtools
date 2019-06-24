@@ -207,7 +207,7 @@ use_git_ignore <- function(ignores, directory = ".", pkg = ".", quiet = FALSE) {
 
   paths <- paste0("`", ignores, "`", collapse = ", ")
   if (!quiet) {
-    usethis::ui_done("Adding ", paths, " to ", file.path(directory, ".gitignore"))
+    usethis::ui_done("Adding {usethis::ui_value(paths)} to {usethis::ui_value(file.path(directory, '.gitignore'))}")
   }
 
   path <- file.path(pkg$path, directory, ".gitignore")
