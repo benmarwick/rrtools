@@ -59,7 +59,7 @@ github_remote_parse <- function(x) {
   )
 }
 
-# from https://raw.githubusercontent.com/hadley/devtools/26c507b128fdaa1911503348fedcf20d2dd30a1d/R/github.R
+# from https://github.com/r-lib/devtools/blob/master/R/github.R
 github_auth <- function(token) {
   if (is.null(token)) {
     NULL
@@ -68,6 +68,7 @@ github_auth <- function(token) {
   }
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/github.R
 github_response <- function(req) {
   text <- httr::content(req, as = "text")
   parsed <- jsonlite::fromJSON(text, simplifyVector = FALSE)
@@ -79,6 +80,7 @@ github_response <- function(req) {
   parsed
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/github.R
 github_error <- function(req) {
   text <- httr::content(req, as = "text", encoding = "UTF-8")
   parsed <- tryCatch(jsonlite::fromJSON(text, simplifyVector = FALSE),
@@ -97,6 +99,7 @@ github_error <- function(req) {
     ), class = c("condition", "error", "github_error"))
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/github.R
 github_GET <- function(path, ..., pat = github_pat(),
                        host = "https://api.github.com") {
 
@@ -109,6 +112,7 @@ github_GET <- function(path, ..., pat = github_pat(),
   github_response(req)
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/github.R
 github_POST <- function(path, body, ..., pat = github_pat(),
                         host = "https://api.github.com") {
 
@@ -121,6 +125,7 @@ github_POST <- function(path, body, ..., pat = github_pat(),
   github_response(req)
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/github.R
 github_rate_limit <- function() {
   req <- github_GET("rate_limit")
   core <- req$resources$core
@@ -130,21 +135,20 @@ github_rate_limit <- function() {
       " (Reset ", strftime(reset, "%H:%M:%S"), ")\n", sep = "")
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/github.R
 github_commit <- function(username, repo, ref = "master") {
   github_GET(file.path("repos", username, repo, "commits", ref))
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/github.R
 github_tag <- function(username, repo, ref = "master") {
   github_GET(file.path("repos", username, repo, "tags", ref))
 }
 
-#' Retrieve Github personal access token.
-#'
-#' A github personal access token
-#' Looks in env var \code{GITHUB_PAT}
-#'
-#' @keywords internal
-#' @export
+# from https://github.com/r-lib/devtools/blob/master/R/github.R
+# Retrieve Github personal access token.
+# A github personal access token
+# Looks in env var \code{GITHUB_PAT}
 github_pat <- function(quiet = FALSE) {
   pat <- Sys.getenv("GITHUB_PAT")
   if (nzchar(pat)) {
@@ -167,59 +171,7 @@ github_pat <- function(quiet = FALSE) {
   return(NULL)
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/github.R
 in_ci <- function() {
   nzchar(Sys.getenv("CI"))
 }
-
-#' Add GitHub links to DESCRIPTION.
-#'
-#' Populates the URL and BugReports fields of DESCRIPTION with
-#' \code{https://github.com/<USERNAME>/<REPO>} AND
-#' \code{https://github.com/<USERNAME>/<REPO>/issues}, respectively, unless
-#' those fields already exist.
-#'
-#' @inheritParams use_git
-#' @param auth_token Provide a personal access token (PAT) from
-#'   \url{https://github.com/settings/tokens}. Defaults to the \code{GITHUB_PAT}
-#'   environment variable.
-#' @param host GitHub API host to use. Override with the endpoint-root for your
-#'   GitHub enterprise instance, for example,
-#'   "https://github.hostname.com/api/v3".
-#' @family git infrastructure
-#' @keywords internal
-#' @export
-use_github_links <- function(pkg = ".", auth_token = github_pat(),
-                             host = "https://api.github.com") {
-
-  if (!uses_github(pkg)) {
-    stop("Cannot detect that package already uses GitHub.\n",
-         "You might want to run use_github().")
-  }
-
-  gh_info <- github_info(pkg)
-  pkg <- as.package(pkg)
-
-  desc_path <- file.path(pkg$path, "DESCRIPTION")
-  desc <- new_desc <- read_dcf(desc_path)
-
-  path_to_repo <- paste("repos", gh_info$fullname, sep = "/")
-  res <- github_GET(path = path_to_repo, pat = auth_token, host = host)
-  github_URL <- res$html_url
-
-  fill <- function(d, f, filler) {
-    if (is.null(d[[f]]) || identical(d[[f]], "")) {
-      d[[f]] <- filler
-    } else {
-      message("Existing ", f, " field found and preserved")
-    }
-    d
-  }
-  new_desc <- fill(new_desc, "URL", github_URL)
-  new_desc <- fill(new_desc, "BugReports", file.path(github_URL, "issues"))
-
-  if (!identical(desc, new_desc))
-    write_dcf(desc_path, new_desc)
-
-  new_desc[c("URL", "BugReports")]
-}
-

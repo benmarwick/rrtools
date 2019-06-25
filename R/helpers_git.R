@@ -1,9 +1,7 @@
 # Initialise a git repository without asking questions
-#
 # From usethis, modified to be non-interactive.
 # `use_git_quietly()` initialises a Git repository and adds important files to
 # `.gitignore`. If user consents, it also makes an initial commit.
-#
 # @param message Message to use for first commit.
 use_git_quietly <- function(message = "Initial commit") {
   if (uses_git()) {
@@ -21,7 +19,6 @@ use_git_quietly <- function(message = "Initial commit") {
     usethis::ui_done("Adding files and committing")
       git2r::add(r, paths)
       git2r::commit(r, message)
-
   }
 
 	usethis::ui_todo(
@@ -158,9 +155,9 @@ git_extract_sha1 <- function(bundle) {
 # from https://github.com/r-lib/devtools/blob/master/R/infrastructure-git.R
 # Add a git hook.
 # @param hook Hook name. One of "pre-commit", "prepare-commit-msg",
-#   "commit-msg", "post-commit", "applypatch-msg", "pre-applypatch",
-#   "post-applypatch", "pre-rebase", "post-rewrite", "post-checkout",
-#   "post-merge", "pre-push", "pre-auto-gc".
+# "commit-msg", "post-commit", "applypatch-msg", "pre-applypatch",
+# "post-applypatch", "pre-rebase", "post-rewrite", "post-checkout",
+# "post-merge", "pre-push", "pre-auto-gc".
 # @param script Text of script to run
 use_git_hook <- function(hook, script, pkg = ".") {
   pkg <- as.package(pkg)
