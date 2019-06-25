@@ -1,16 +1,10 @@
-#' Initialise a git repository without asking questions
-#'
-#' From usethis, modified to be non-interactive.
-#' `use_git_quietly()` initialises a Git repository and adds important files to
-#' `.gitignore`. If user consents, it also makes an initial commit.
-#'
-#' @param message Message to use for first commit.
-#' @family git helpers
-#' @export
-#' @examples
-#' \dontrun{
-#' use_git_quietly()
-#' }
+# Initialise a git repository without asking questions
+#
+# From usethis, modified to be non-interactive.
+# `use_git_quietly()` initialises a Git repository and adds important files to
+# `.gitignore`. If user consents, it also makes an initial commit.
+#
+# @param message Message to use for first commit.
 use_git_quietly <- function(message = "Initial commit") {
   if (uses_git()) {
     return(invisible())
@@ -30,11 +24,10 @@ use_git_quietly <- function(message = "Initial commit") {
 
   }
 
-usethis::ui_todo(
+	usethis::ui_todo(
     "A restart of RStudio is required to activate the Git pane"
   )
   invisible(TRUE)
-
 }
 
 # from https://github.com/hadley/devtools/blob/master/R/git.R
@@ -162,22 +155,13 @@ git_extract_sha1 <- function(bundle) {
   }
 }
 
-# unexported fns from devtools, we include them here so
-# we don't have to use :::
-# from
-# https://raw.githubusercontent.com/hadley/devtools/6bb4b5f36cdfaee4d7e2f0a1f7f71ffeaf4aaf2f/R/infrastructure-git.R
-
-#' Add a git hook.
-#'
-#' @param hook Hook name. One of "pre-commit", "prepare-commit-msg",
-#'   "commit-msg", "post-commit", "applypatch-msg", "pre-applypatch",
-#'   "post-applypatch", "pre-rebase", "post-rewrite", "post-checkout",
-#'   "post-merge", "pre-push", "pre-auto-gc".
-#' @param script Text of script to run
-#' @inheritParams use_git
-#' @export
-#' @family git infrastructure
-#' @keywords internal
+# from https://github.com/r-lib/devtools/blob/master/R/infrastructure-git.R
+# Add a git hook.
+# @param hook Hook name. One of "pre-commit", "prepare-commit-msg",
+#   "commit-msg", "post-commit", "applypatch-msg", "pre-applypatch",
+#   "post-applypatch", "pre-rebase", "post-rewrite", "post-checkout",
+#   "post-merge", "pre-push", "pre-auto-gc".
+# @param script Text of script to run
 use_git_hook <- function(hook, script, pkg = ".") {
   pkg <- as.package(pkg)
 
@@ -196,7 +180,7 @@ use_git_hook <- function(hook, script, pkg = ".") {
   Sys.chmod(hook_path, "0744")
 }
 
-
+# from https://github.com/r-lib/devtools/blob/master/R/infrastructure-git.R
 use_git_ignore <- function(ignores, directory = ".", pkg = ".", quiet = FALSE) {
   pkg <- as.package(pkg)
 
