@@ -71,3 +71,40 @@ use_vignette_rmd <- function(location, pkg, gh, template, vignette_yml = "vignet
 
   open_in_rstudio(paste0(location, "/paper/paper.Rmd"))
 }
+
+# from https://github.com/r-lib/devtools/blob/master/R/utils.R
+render_template <- function(name, data = list()) {
+  path <- system.file("templates", name, package = "devtools")
+  template <- readLines(path)
+  whisker::whisker.render(template, data)
+}
+
+# from https://github.com/r-lib/devtools/blob/master/R/utils.R
+read_dcf <- function(path) {
+  fields <- colnames(read.dcf(path))
+  as.list(read.dcf(path, keep.white = fields)[1, ])
+}
+
+# from https://github.com/r-lib/devtools/blob/master/R/utils.R
+write_dcf <- function(path, desc) {
+  desc <- unlist(desc)
+  # Add back in continuation characters
+  desc <- gsub("\n[ \t]*\n", "\n .\n ", desc, perl = TRUE, useBytes = TRUE)
+  desc <- gsub("\n \\.([^\n])", "\n  .\\1", desc, perl = TRUE, useBytes = TRUE)
+
+  starts_with_whitespace <- grepl("^\\s", desc, perl = TRUE, useBytes = TRUE)
+  delimiters <- ifelse(starts_with_whitespace, ":", ": ")
+  text <- paste0(names(desc), delimiters, desc, collapse = "\n")
+
+  # If the description file has a declared encoding, set it so nchar() works
+  # properly.
+  if ("Encoding" %in% names(desc)) {
+    Encoding(text) <- desc[["Encoding"]]
+  }
+
+  if (substr(text, nchar(text), 1) != "\n") {
+    text <- paste0(text, "\n")
+  }
+
+  cat(text, file = path)
+}

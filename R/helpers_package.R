@@ -1,23 +1,116 @@
-# unexported fns from devtools, we include them here so
-# we don't have to use :::
-# from https://raw.githubusercontent.com/hadley/devtools/26c507b128fdaa1911503348fedcf20d2dd30a1d/R/package.r 
+# from https://github.com/r-lib/usethis/blob/master/R/ignore.R
+# Add a file to \code{.Rbuildignore}
+# \code{.Rbuildignore} has a regular expression on each line, but it's
+# usually easier to work with specific file names. By default, will (crudely)
+# turn a filename into a regular expression that will only match that
+# path. Repeated entries will be silently removed.
+# @param pkg package description, can be path or package name.  See
+# \code{\link{as.package}} for more information
+# @param files Name of file.
+# @param escape If \code{TRUE}, the default, will escape \code{.} to
+# \code{\\.} and surround with \code{^} and \code{$}.
+use_build_ignore <- function(files, escape = TRUE, pkg = ".") {
+  pkg <- as.package(pkg)
 
+  if (escape) {
+    files <- paste0("^", gsub("\\.", "\\\\.", files), "$")
+  }
 
+  path <- file.path(pkg$path, ".Rbuildignore")
+  union_write(path, files)
 
+  invisible(TRUE)
+}
 
-#' Coerce input to a package.
-#'
-#' Possible specifications of package:
-#' \itemize{
-#'   \item path
-#'   \item package object
-#' }
-#' @param x object to coerce to a package
-#' @param create only relevant if a package structure does not exist yet: if
-#'   \code{TRUE}, create a package structure; if \code{NA}, ask the user
-#'   (in interactive mode only)
-#' @export
-#' @keywords internal
+# from https://github.com/r-lib/devtools/blob/master/R/infrastructure.R
+add_desc_package <- function(pkg = ".", field, name) {
+  pkg <- as.package(pkg)
+  desc_path <- file.path(pkg$path, "DESCRIPTION")
+
+  desc <- read_dcf(desc_path)
+  old <- desc[[field]]
+  if (is.null(old)) {
+    new <- name
+    changed <- TRUE
+  } else {
+    if (!grepl(paste0('\\b', name, '\\b'), old)) {
+      new <- paste0(old, ",\n    ", name)
+      changed <- TRUE
+    } else {
+      changed <- FALSE
+    }
+  }
+  if (changed) {
+    desc[[field]] <- new
+    write_dcf(desc_path, desc)
+  }
+  invisible(changed)
+}
+
+# from https://github.com/r-lib/devtools/blob/master/R/utils.R
+suggests_dep <- function(pkg) {
+
+  suggests <- read_dcf(system.file("DESCRIPTION", package = "devtools"))$Suggests
+  deps <- parse_deps(suggests)
+
+  found <- which(deps$name == pkg)[1L]
+
+  if (!length(found)) {
+    stop(sQuote(pkg), " is not in Suggests: for devtools!", call. = FALSE)
+  }
+  deps[found, ]
+}
+
+# from https://github.com/r-lib/devtools/blob/master/R/utils.R
+is_installed <- function(pkg, version = 0) {
+  installed_version <- tryCatch(utils::packageVersion(pkg), error = function(e) NA)
+  !is.na(installed_version) && installed_version >= version
+}
+
+# from https://github.com/r-lib/devtools/blob/master/R/pkgload.R
+check_suggested <- function(pkg, version = NULL, compare = NA) {
+
+  if (is.null(version)) {
+    if (!is.na(compare)) {
+      stop("Cannot set ", sQuote(compare), " without setting ",
+           sQuote(version), call. = FALSE)
+    }
+
+    dep <- suggests_dep(pkg)
+
+    version <- dep$version
+    compare <- dep$compare
+  }
+
+  if (!is_installed(pkg) || !check_dep_version(pkg, version, compare)) {
+    msg <- paste0(sQuote(pkg),
+                  if (is.na(version)) "" else paste0(" >= ", version),
+                  " must be installed for this functionality.")
+
+    if (interactive()) {
+      message(msg, "\nWould you like to install it?")
+      if (menu(c("Yes", "No")) == 1) {
+        install.packages(pkg)
+      } else {
+        stop(msg, call. = FALSE)
+      }
+    } else {
+      stop(msg, call. = FALSE)
+    }
+  }
+}
+
+# from https://github.com/r-lib/devtools/blob/master/R/package.R
+# Coerce input to a package.
+# Possible specifications of package:
+# \itemize{
+#   \item path
+#   \item package object
+# }
+# @param x object to coerce to a package
+# @param create only relevant if a package structure does not exist yet: if
+# \code{TRUE}, create a package structure; if \code{NA}, ask the user
+# (in interactive mode only)
 as.package <- function(x = NULL, create = NA) {
   if (is.package(x)) return(x)
   
@@ -25,20 +118,14 @@ as.package <- function(x = NULL, create = NA) {
   load_pkg_description(x, create = create)
 }
 
-#' Find file in a package.
-#'
-#' It always starts by finding by walking up the path until it finds the
-#' root directory, i.e. a directory containing \code{DESCRIPTION}. If it
-#' cannot find the root directory, or it can't find the specified path, it
-#' will throw an error.
-#'
-#' @param ... Components of the path.
-#' @param path Place to start search for package directory.
-#' @export
-#' @examples
-#' \dontrun{
-#' package_file("figures", "figure_1")
-#' }
+# from https://github.com/r-lib/devtools/blob/master/R/package.R
+# Find file in a package.
+# It always starts by finding by walking up the path until it finds the
+# root directory, i.e. a directory containing \code{DESCRIPTION}. If it
+# cannot find the root directory, or it can't find the specified path, it
+# will throw an error.
+# @param ... Components of the path.
+# @param path Place to start search for package directory.
 package_file <- function(..., path = ".") {
   if (!is.character(path) || length(path) != 1) {
     stop("`path` must be a string.", call. = FALSE)
@@ -64,19 +151,23 @@ package_file <- function(..., path = ".") {
   file.path(path, ...)
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/package.R
 has_description <- function(path) {
   file.exists(file.path(path, 'DESCRIPTION'))
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/package.R
 is_root <- function(path) {
   identical(path, dirname(path))
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/package.R
 strip_slashes <- function(x) {
   x <- sub("/*$", "", x)
   x
 }
 
+# from https://github.com/r-lib/devtools/blob/master/R/package.R
 # Load package DESCRIPTION into convenient form.
 load_pkg_description <- function(path, create) {
   path_desc <- file.path(path, "DESCRIPTION")
@@ -105,33 +196,20 @@ load_pkg_description <- function(path, create) {
   structure(desc, class = "package")
 }
 
-
-#' Is the object a package?
-#'
-#' @keywords internal
-#' @export
+# from https://github.com/r-lib/devtools/blob/master/R/package.R
+# Is the object a package?
 is.package <- function(x) inherits(x, "package")
 
+# from https://github.com/r-lib/devtools/blob/master/R/package.R
 # Mockable variant of interactive
 interactive <- function() .Primitive("interactive")()
 
-
-# unexported fns from devtools, we include them here so
-# we don't have to use :::
-# from https://github.com/hadley/devtools/blob/26c507b128fdaa1911503348fedcf20d2dd30a1d/R/package-deps.r
-
-#' Parse package dependency strings.
-#'
-#' @param string to parse. Should look like \code{"R (>= 3.0), ggplot2"} etc.
-#' @return list of two character vectors: \code{name} package names,
-#'   and \code{version} package versions. If version is not specified,
-#'   it will be stored as NA.
-#' @keywords internal
-#' @export
-#' @examples
-#' parse_deps("httr (< 2.1),\nRCurl (>= 3)")
-#' # only package dependencies are returned
-#' parse_deps("utils (== 2.12.1),\ntools,\nR (>= 2.10),\nmemoise")
+# from https://github.com/r-lib/devtools/blob/master/R/package-deps.R
+# Parse package dependency strings.
+# @param string to parse. Should look like \code{"R (>= 3.0), ggplot2"} etc.
+# @return list of two character vectors: \code{name} package names,
+# and \code{version} package versions. If version is not specified,
+# it will be stored as NA.
 parse_deps <- function(string) {
   if (is.null(string)) return()
   stopifnot(is.character(string), length(string) == 1)
@@ -166,13 +244,11 @@ parse_deps <- function(string) {
   deps[names != "R", ]
 }
 
-
-#' Check that the version of an imported package satisfies the requirements
-#'
-#' @param dep_name The name of the package with objects to import
-#' @param dep_ver The version of the package
-#' @param dep_compare The comparison operator to use to check the version
-#' @keywords internal
+# from https://github.com/r-lib/devtools/blob/master/R/package-deps.R
+# Check that the version of an imported package satisfies the requirements
+# @param dep_name The name of the package with objects to import
+# @param dep_ver The version of the package
+# @param dep_compare The comparison operator to use to check the version
 check_dep_version <- function(dep_name, dep_ver = NA, dep_compare = NA) {
   if (!requireNamespace(dep_name, quietly = TRUE)) {
     stop("Dependency package ", dep_name, " not available.")
@@ -195,4 +271,3 @@ check_dep_version <- function(dep_name, dep_ver = NA, dep_compare = NA) {
   }
   return(TRUE)
 }
-
