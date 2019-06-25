@@ -20,7 +20,7 @@ create_compendium <- function(pkgname, data_in_git = TRUE) {
   # initialize the new project with useful features
   usethis::use_mit_license(name = usethis::use_git_config()$`user.name`)
   rrtools::use_readme_rmd()
-  rrtools::use_git_quietly()
+  use_git_quietly()
   rrtools::use_analysis(data_in_git = data_in_git)
 
   # install the package and its dependencies
