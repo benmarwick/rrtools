@@ -63,14 +63,13 @@ To create a reproducible research compendium step-by-step using the rrtools appr
 -   this adds a reference to the MIT license in the [DESCRIPTION](DESCRIPTION) file and generates a [LICENSE](LICENSE) file listing the name provided as the copyright holder
 -   to use a different license, replace this line with `usethis::use_gpl3_license(name = "My Name")`, or follow the instructions for other licenses
 
-#### 3. `usethis::use_git()` then `usethis::use_github(auth_token = "xxxx", protocol = "https", private = FALSE)`
+#### 3. `usethis::use_git()` then `usethis::use_github(credentials = git2r::cred_ssh_key(), auth_token = "xxxx", protocol = "https", private = FALSE)`
 
 - if you are connected to the internet, this initializes a local git repository (`use_git()`), then `use_github()` connects to [GitHub](https://github.com), and creates a remote repository
 - if you are not connected to the internet, use `use_git()` to initialise a local git repository for your project, and save the `use_github` step for when you are online. Reopen your project in RStudio to see the git buttons on the toolbar.
 - we need to:
-    + install and configure git _before_ running this line. See [Happy Git With R](http://happygitwithr.com) for details on how to do this. 
+    + install and configure git _before_ running this line. See [Happy Git With R](http://happygitwithr.com) for details on how to do this. Make sure to set up a [SSH key](https://happygitwithr.com/ssh-keys.html) to connect to your Github account conveniently.
     + get a [personal access token](https://github.com/settings/tokens), and replace "xxxx" with that token. When you do so (click "Generate new token"), make sure the "repo" scope is included by checking the "repo" box. Don't save this token in your project, keep it elsewhere. 
-    + solve any errors that might occur during this step by using the development version of the git2r package, which can be installed with `devtools::install_github("ropensci/git2r")`
 
 #### 4. `rrtools::use_readme_rmd()`
 

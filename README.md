@@ -115,7 +115,7 @@ your project: they are meant to be once-off setup functions.
     instructions for other
 licenses
 
-#### 3\. `usethis::use_git()` then `usethis::use_github(auth_token = "xxxx", protocol = "https", private = FALSE)`
+#### 3\. `usethis::use_git()` then `usethis::use_github(credentials = git2r::cred_ssh_key(), auth_token = "xxxx", protocol = "https", private = FALSE)`
 
   - if you are connected to the internet, this initializes a local git
     repository (`use_git()`), then `use_github()` connects to
@@ -127,15 +127,14 @@ licenses
   - we need to:
       - install and configure git *before* running this line. See [Happy
         Git With R](http://happygitwithr.com) for details on how to do
-        this.
+        this. Make sure to set up a [SSH
+        key](https://happygitwithr.com/ssh-keys.html) to connect to your
+        Github account conveniently.
       - get a [personal access
         token](https://github.com/settings/tokens), and replace “xxxx”
         with that token. When you do so (click “Generate new token”),
         make sure the “repo” scope is included by checking the “repo”
         box. Don’t save this token in your project, keep it elsewhere.
-      - solve any errors that might occur during this step by using the
-        development version of the git2r package, which can be installed
-        with `devtools::install_github("ropensci/git2r")`
 
 #### 4\. `rrtools::use_readme_rmd()`
 

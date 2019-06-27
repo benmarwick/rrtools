@@ -111,14 +111,6 @@ create_directories <- function(location, pkg){
   {
     # BM: I think we want to let the user have some more control
     # over this, and leave thesis/book out of here?
-    # message("* Creating ", location, "/ directory and contents")
-    # use_directory(location, pkg = pkg)
-    # invisible(file.copy(from = system.file("templates/thesis_template/.",
-    #                                        package = "rrtools",
-    #                                        mustWork = TRUE),
-    #                     to = paste0(location),
-    #                     recursive = TRUE))
-
 
   }
 }
@@ -143,16 +135,15 @@ use_vignette_rmd <- function(location, pkg, gh, template, vignette_yml = "vignet
   add_desc_package(pkg, "Suggests", "rmarkdown")
   add_desc_package(pkg, "VignetteBuilder", "knitr")
   use_directory("vignettes", pkg = pkg)
-  use_git_ignore("inst/doc", pkg = pkg)
+  # use_git_ignore("inst/doc", pkg = pkg) # test to suppress testing error
 
   template_path <- template_path_fn(template)
   rmd <- readLines(template_path)
   vignette_yml <- readLines(template_path_fn(vignette_yml))
 
-  # we inject a bit of vignette yml in our main paper.Rmd template:
-  rmd <- c(rmd[1:18], vignette_yml, rmd[19:32], paste0("\nlibrary(", pkg$package, ")"), rmd[33:length(rmd)])
+  # in case we want to inject some text in the Rmd, we can do that here
   # use_template doesn't seem to work for this...
-  writeLines(rmd, file(paste0(location, "/paper/paper.Rmd")))
+  writeLines(rmd, file.path(pkg$path, location, "/paper/paper.Rmd"))
   closeAllConnections()
 
   open_in_rstudio(paste0(location, "/paper/paper.Rmd"))
