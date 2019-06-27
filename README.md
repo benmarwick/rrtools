@@ -7,6 +7,7 @@
 Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://travis-ci.org/benmarwick/rrtools)
 [![Circle-CI Build
 Status](https://circleci.com/gh/benmarwick/rrtools.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/benmarwick/rrtools)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/benmarwick/rrtools/master?urlpath=rstudio)
 
 ## Motivation
 
@@ -50,6 +51,13 @@ Frampton
 influenced our approach to this package.
 
 ## Installation
+
+To explore and test rrtools without installing anything, click the
+[Binder](https://mybinder.org/v2/gh/benmarwick/rrtools/master?urlpath=rstudio)
+badge above to start RStudio in a browser tab that includes the contents
+of this GitHub repository. In that environment you can browse the files,
+install rrtools, and make a test compendium without altering anything on
+your computer.
 
 You can install rrtools from GitHub with:
 

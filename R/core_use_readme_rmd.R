@@ -24,16 +24,19 @@
 #' @family infrastructure
 use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
   pkg <- as.package(pkg)
+  data <- pkg
 
   if (uses_github(pkg$path)) {
-    pkg$github <- github_info(pkg$path)
+    # assign variables for whisker
+    gh <- github_info(pkg$path)
+    data = c(pkg, gh)
   }
   pkg$Rmd <- TRUE
 
 
   use_template("omni-README",
                save_as = "README.Rmd",
-               data = pkg,
+               data = data,
                ignore = TRUE,
                open = TRUE,
                pkg = pkg,

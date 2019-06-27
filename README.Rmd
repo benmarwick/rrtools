@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # rrtools: Tools for Writing Reproducible Research in R
 
-[![Travis-CI Build Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://travis-ci.org/benmarwick/rrtools) [![Circle-CI Build Status](https://circleci.com/gh/benmarwick/rrtools.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/benmarwick/rrtools)
+[![Travis-CI Build Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://travis-ci.org/benmarwick/rrtools) [![Circle-CI Build Status](https://circleci.com/gh/benmarwick/rrtools.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/benmarwick/rrtools) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/benmarwick/rrtools/master?urlpath=rstudio)
 
 ## Motivation
 
@@ -25,6 +25,8 @@ rrtools provides a template for doing scholarly writing in a literate programmin
 The functions in rrtools allow you to use R to easily follow the best practices outlined in several major scholarly publications on reproducible research. In addition to those cited above, [Wilson et al. (2017)](https://doi.org/10.1371/journal.pcbi.1005510), [Piccolo & Frampton (2016)](https://gigascience.biomedcentral.com/articles/10.1186/s13742-016-0135-4), [Stodden & Miguez (2014)](http://doi.org/10.5334/jors.ay) and rOpenSci (2017[a](http://ropensci.github.io/reproducibility-guide/), [b](https://github.com/ropensci/rrrpkg)) are important sources that have influenced our approach to this package. 
 
 ## Installation
+
+To explore and test rrtools without installing anything, click the [Binder](https://mybinder.org/v2/gh/benmarwick/rrtools/master?urlpath=rstudio) badge above to start RStudio in a browser tab that includes the contents of this GitHub repository. In that environment you can browse the files, install rrtools, and make a test compendium without altering anything on your computer. 
 
 You can install rrtools from GitHub with:
 
