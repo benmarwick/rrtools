@@ -11,12 +11,13 @@ Status](https://circleci.com/gh/benmarwick/rrtools.svg?style=shield&circle-token
 ## Motivation
 
 The goal of **rrtools** is to provide instructions, templates, and
-functions for making a basic compendium suitable for writing
-reproducible research with [R](https://www.r-project.org). This package
-documents the key steps and provides convenient functions for quickly
-creating a new research compendium. The approach is based generally on
-[Kitzes et al. (2017)](https://www.practicereproducibleresearch.org),
-and more specifically on [Marwick
+functions for making a basic compendium suitable for writing a
+reproducible journal article or report with
+[R](https://www.r-project.org). This package documents the key steps and
+provides convenient functions for quickly creating a new research
+compendium. The approach is based generally on [Kitzes et al.
+(2017)](https://www.practicereproducibleresearch.org), and more
+specifically on [Marwick
 (2017)](https://doi.org/10.1007/s10816-015-9272-9), [Marwick et al.
 (2017)](https://doi.org/10.7287/peerj.preprints.3192v1), and [Wickham’s
 (2017)](https://docs.google.com/document/d/1LzZKS44y4OEJa4Azg5reGToNAZL0e0HSUwxamNY7E-Y/edit#)
@@ -31,8 +32,11 @@ isolation of your computational environment using
 [MRAN](https://mran.microsoft.com/documents/rro/reproducibility/), and
 continuous integration using
 [Travis](https://docs.travis-ci.com/user/for-beginners). It makes a
-convenient starting point for writing a journal article, report, or
-thesis.
+convenient starting point for writing a journal article or report. If
+you’re writing a PhD thesis, or a similar type of multi-chapter
+document, a better choice might the [huskydown
+package](https://github.com/benmarwick/huskydown) or other bookdown
+variants.
 
 The functions in rrtools allow you to use R to easily follow the best
 practices outlined in several major scholarly publications on
@@ -212,11 +216,6 @@ licenses
     on GitHub. You should set `data_in_git = FALSE` if your data files
     are large (\>100 mb is the limit for GitHub) or you do not want to
     make the data files publicly accessible on GitHub.
-      - if you’re writing a PhD thesis, replace
-        `rrtools::use_analysis()` with `rmarkdown::draft('index.Rmd',
-        template = 'thesis', package = 'huskydown', create_dir = TRUE)`
-        to create a thesis template from the [huskydown
-        package](https://github.com/benmarwick/huskydown)
       - To load your custom code in the `paper.Rmd`, you have a few
         options. You can write all your R code in chunks in the Rmd,
         that’s the simplest method. Or you can write R code in script
