@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "README-"
 )
-# Please put your title here to include it in the file below. 
+# Please put your title here to include it in the file below.
 Title <- "Title of your paper goes here"
 ```
 
@@ -39,12 +39,13 @@ Please cite this compendium as:
 You can download the compendium as a zip from from this URL: <{{{url}}}/archive/master.zip>
 
 Or you can install this compendium as an R package, {{{ package }}}, from GitHub with:
-{{#github}}
+
+
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("{{{username}}}/{{{repo}}}")
+remotes::install_github("{{{username}}}/{{{repo}}}")
 ```
-{{/github}}
+
 
 ### Licenses
 

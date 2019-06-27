@@ -72,7 +72,9 @@ This function combines the key parts of the first five steps described
 below, using sensible, widely-used defaults. It gives detailed console
 output to guide you on the next steps to take with your compendium (it
 will not create a GitHub repository, or do the Travis and Docker steps
-detailed below).
+detailed below). If you prefer a graphical user interface for the main
+rrtools functions and tips on how to choose among the options, try our
+[rrtools.addin](https://github.com/nevrome/rrtools.addin).
 
 ### Detailed step-by-step creation of a research compendium
 
