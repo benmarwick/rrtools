@@ -1,7 +1,7 @@
 Package: rrtools
 Type: Package
 Title: Creates a Reproducible Research Compendium
-Version: 0.1.0
+Version: 0.1.0.9001
 Authors@R: c(person("Ben", "Marwick", role = c("aut", "cre"), email = "benmarwick@gmail.com"),
              person("Daniel", "Knitter", role = "ctb"),
              person("Patrick", "Kennedy", role = "ctb"),
@@ -17,7 +17,7 @@ Description: Instructions, templates, and functions for making a basic
     compendium suitable for doing reproducible research with R.
 License: MIT + file LICENSE
 Imports: devtools, git2r, whisker, rstudioapi, rmarkdown, curl, RCurl, jsonlite, methods, httr, usethis, clisymbols,
-    crayon, glue, bookdown, here
+    crayon, glue, bookdown, here, packrat
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/benmarwick/rrtools

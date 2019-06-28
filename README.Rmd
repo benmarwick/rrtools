@@ -116,7 +116,7 @@ analysis/
 - this function has an `data_in_git =` argument, which is `TRUE` by default. If set to `FALSE` you will exclude files in the `data/` directory from being tracked by git and prevent them from appearing on GitHub. You should set `data_in_git = FALSE` if your data files are large (>100 mb is the limit for GitHub) or you do not want to make the data files publicly accessible on GitHub.
   -   To load your custom code in the `paper.Rmd`, you have a few options. You can write all your R code in chunks in the Rmd, that's the simplest method. Or you can write R code in script files in `/R`, and include `devtools::load_all(".")` at the top of your `paper.Rmd`. Or you can write functions in `/R` and use `library(pkgname)` at the top of your `paper.Rmd`, or omit `library` and preface each function call with `pkgname::`. Up to you to choose whatever seems most natural to you. 
 
-#### 6. `rrtools::use_dockerfile()`
+#### 6. `rrtools::use_dockerfile(package_manager = TRUE)`
 
 - this creates a basic Dockerfile using [`rocker/verse`](https://github.com/rocker-org/rocker) as the base image
 - the version of R in your rocker container will match the version used when you run this function (e.g.,  `rocker/verse:3.5.0`)
@@ -126,6 +126,14 @@ analysis/
     + modify which Rmd files are rendered when the container is made
     + have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this function generates. Or we can use `rrtools::use_circleci()` to build our Docker container privately at <https://circleci.com>, from a private GitHub repo.
 - If we want to use Travis on our project, we need to make an account at <https://hub.docker.com/> to receive our Docker container after a successful build on travis
+
+##### 1. if you used `package_manager = TRUE` in `use_dockerfile()`
+
+- your compendium ran `install.packages("packrat")`, `packrat:::set_opts("auto.snapshot" = TRUE)`, and `packrat::init()`.
+- this manages your packages so colleagues and future you will always install the same packages and versions when knitting your reports.
+- this, combined with Dockerfile^[A Dockerfile contains enough information to create an environment, but not enough information to [reproduce an environment](https://www.rstudio.com/wp-content/uploads/2018/03/RStudio_Docker_3-9-2018.pdf)], helps maximize reproducibility.
+- note, although `packrat` should automatically take future snapshots as you change the list of packages (install, remove, upgrade, downgrade), **before publication** you should manually call `packrat::snapshot()` to ensure your local report will be accurate reflected in your published report.
+  - test your `Dockerfile` infrequently as the marginal cost of reproducibility due to `packrat` is longer build times for your Docker images.
 
 #### 7. `rrtools::use_travis()`
 

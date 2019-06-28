@@ -5,7 +5,7 @@
 \title{Add a Dockerfile}
 \usage{
 use_dockerfile(pkg = ".", rocker = "verse",
-  rmd_to_knit = "path_to_rmd")
+  rmd_to_knit = "path_to_rmd", package_manager = TRUE)
 }
 \arguments{
 \item{pkg}{defaults to the package in the current working directory}
@@ -19,6 +19,8 @@ to render is at "analysis/paper/paper.Rmd", "vignettes/paper/paper.Rmd" or
 "inst/paper/paper.Rmd". If you have a custom directory structure, and a custom
 file name for the Rmd file, you can specify that file path and name here so
 Docker can find the file to render in the container.B}
+
+\item{package_manager}{If TRUE, use a package manager in order that your package list and versions are also reproducible}
 }
 \description{
 This will create a basic \file{Dockerfile} based on rocker/verse

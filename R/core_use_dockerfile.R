@@ -12,16 +12,30 @@
 #' "inst/paper/paper.Rmd". If you have a custom directory structure, and a custom
 #' file name for the Rmd file, you can specify that file path and name here so
 #' Docker can find the file to render in the container.B
+#' @param package_manager If TRUE, use a package manager in order that your package list and versions are also reproducible
 #'
 #' @import utils
 #' @export
 
-  use_dockerfile <- function(pkg = ".", rocker = "verse", rmd_to_knit = "path_to_rmd") {
+  use_dockerfile <- function(pkg = ".", rocker = "verse", rmd_to_knit = "path_to_rmd", package_manager = TRUE) {
   pkg <- as.package(pkg)
 
   # get R version for rocker/r-ver
   si <- utils::sessionInfo()
   r_version <- paste0(si$R.version$major, ".", si$R.version$minor)
+
+  # get R version for rocker/r-ver
+  if (!packrat:::checkPackified()) {
+    si <- utils::sessionInfo()
+    r_version <- paste0(si$R.version$major, ".", si$R.version$minor)
+  } else {
+    pack.lockfile <- readLines("packrat/packrat.lock")
+    pack.lockfile.r_version.start <- grep(pattern = "^RVersion: ",
+                                          x = pack.lockfile)
+    r_version <- gsub(pattern = "RVersion: ",
+                      replacement = "",
+                      x = pack.lockfile[pack.lockfile.r_version.start])
+  }
 
   # get path to Rmd file to knit
   if(rmd_to_knit == "path_to_rmd"){
@@ -34,25 +48,43 @@
     rmd_path <- gsub("^.|^/|^./|^~/","",rmd_to_knit)
   }
 
-
   # assign variables for whisker
   gh <- github_info(pkg$path)
   gh$r_version <- r_version
   gh$rocker <- rocker
   gh$rmd_path <- rmd_path
 
-  use_template("Dockerfile",
-               "Dockerfile",
-               ignore = TRUE,
-               pkg = pkg,
-               data = gh,
-               open = TRUE,
-               out_path = "")
+  if(package_manager) {
+    use_template("Dockerfile-with-packrat",
+                 "Dockerfile",
+                 ignore = TRUE,
+                 pkg = pkg,
+                 data = gh,
+                 open = TRUE,
+                 out_path = "")
 
-  message("Next: \n",
+    # install packrat
+    install.packages("packrat", quiet = TRUE)
+    # set auto.snapshot to TRUE
+    # initialize packrat, this takes a snapshot
+    usethis::ui_done("Packrat initializing")
+    packrat::init(options = list("auto.snapshot" = TRUE)) ###"symlink.system.packages" = TRUE))
+    usethis::ui_done("A packrat snapshot is here: 'packrat/packrat.lock'")
+  } else {
+    use_template("Dockerfile",
+                 "Dockerfile",
+                 ignore = TRUE,
+                 pkg = pkg,
+                 data = gh,
+                 open = TRUE,
+                 out_path = "")
+  }
+
+
+  usethis::ui_todo(paste0("Next: \n",
           " * Edit the dockerfile with your name & email", "\n",
           " * Edit the dockerfile to include system dependencies, such as linux libraries that are needed by the R packages you're using", "\n",
-          " * Check the last line of the dockerfile to specify which Rmd should be rendered in the Docker container, edit if necessary", "\n"  )
+          " * Check the last line of the dockerfile to specify which Rmd should be rendered in the Docker container, edit if necessary", "\n"  ))
 
   invisible(TRUE)
 }

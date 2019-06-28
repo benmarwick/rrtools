@@ -28,7 +28,7 @@ github_info <- function(path = ".", remote_name = NULL) {
 }
 
 # from https://github.com/hadley/devtools/blob/master/R/git.R
-github_dummy <- list(username = "<USERNAME>", repo = "<REPO>", fullname = "<USERNAME>/<REPO>")
+github_dummy <- list(username = "USERNAME", repo = "REPO", fullname = "USERNAME/REPO")
 
 # from https://github.com/hadley/devtools/blob/master/R/git.R
 remote_urls <- function(r) {
