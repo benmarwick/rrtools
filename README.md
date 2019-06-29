@@ -233,7 +233,7 @@ licenses
         `library` and preface each function call with `pkgname::`. Up to
         you to choose whatever seems most natural to you.
 
-#### 6\. `rrtools::use_dockerfile()`
+#### 6\. `rrtools::use_dockerfile(package_manager = TRUE)`
 
   - this creates a basic Dockerfile using
     [`rocker/verse`](https://github.com/rocker-org/rocker) as the base
@@ -262,6 +262,22 @@ licenses
   - If we want to use Travis on our project, we need to make an account
     at <https://hub.docker.com/> to receive our Docker container after a
     successful build on travis
+
+##### 1\. if you used `package_manager = TRUE` in `use_dockerfile()`
+
+  - your compendium ran `install.packages("packrat")`,
+    `packrat:::set_opts("auto.snapshot" = TRUE)`, and `packrat::init()`.
+  - this manages your packages so colleagues and future you will always
+    install the same packages and versions when knitting your reports.
+  - this, combined with Dockerfile\[1\], helps maximize reproducibility.
+  - note, although `packrat` should automatically take future snapshots
+    as you change the list of packages (install, remove, upgrade,
+    downgrade), **before publication** you should manually call
+    `packrat::snapshot()` to ensure your local report will be accurate
+    reflected in your published report.
+      - test your `Dockerfile` infrequently as the marginal cost of
+        reproducibility due to `packrat` is longer build times for your
+        Docker images.
 
 #### 7\. `rrtools::use_travis()`
 
@@ -359,3 +375,7 @@ Topoi](https://www.topoi.org/),
 Schmidt](https://github.com/SCSchmidt) for help. The convenience
 functions in this package are inspired by similar functions in the
 [`usethis`](https://github.com/r-lib/usethis) package.
+
+1.  A Dockerfile contains enough information to create an environment,
+    but not enough information to [reproduce an
+    environment](https://www.rstudio.com/wp-content/uploads/2018/03/RStudio_Docker_3-9-2018.pdf)
