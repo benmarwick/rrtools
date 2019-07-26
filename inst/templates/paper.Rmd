@@ -32,6 +32,15 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r install-and-load-packages, echo = FALSE}
+# Install all packages here that are required below
+  # install.packages("packageUsedBelow")
+install.packages(c("devtools", "git2r", "here"))
+
+# Load the above packages here or use `package::function()` in your R chunks
+  # library(packageUsedBelow)
+```
+
 # Introduction
 
 Here is a citation [@Marwick2017]
