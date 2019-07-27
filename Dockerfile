@@ -21,4 +21,4 @@ RUN . /etc/environment \
   && sudo chmod a+rwx -R rrtools \
 
  # render the manuscript into a html output
-  && sudo R -e "setwd('/rrtools/analysis'); rmarkdown::render('paper.Rmd')"
+  && sudo R -e "setwd('/rrtools/analysis/paper'); rmarkdown::render('paper.Rmd')"
