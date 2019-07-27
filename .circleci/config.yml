@@ -11,6 +11,9 @@ jobs:
           name: Build the custom container
           command: docker build -t $DOCKER_USER/rrtools  .
           no_output_timeout: 4h
+      - store_artifacts:
+          path: /analysis/paper/paper.docx
+          destination: paper.docx
       - deploy:
           name: Publish application to docker hub
           command: |
