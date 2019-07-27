@@ -12,8 +12,7 @@ jobs:
           command: docker build -t $DOCKER_USER/rrtools  .
           no_output_timeout: 4h
       - store_artifacts:
-          path: /rrtools/analysis/paper
-          destination: paper.docx
+          path: /
       - deploy:
           name: Publish application to docker hub
           command: |
