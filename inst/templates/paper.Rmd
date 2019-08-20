@@ -87,5 +87,5 @@ The current Git commit details are:
 
 ```{r}
 # what commit is this file at? 
-git2r::repository(here::here())
+if(git2r::in_repository(path = ".")) git2r::repository(here::here())
 ```
