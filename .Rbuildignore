@@ -12,3 +12,6 @@
 ^CONTRIBUTING\.md$
 thesis
 ^LICENSE\.md$
+^\.circleci$
+^\.github$
+^\.binder$
