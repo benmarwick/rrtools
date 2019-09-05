@@ -1,13 +1,26 @@
 ---
 title: "Title Goes Here"
 author:
-  - Author One
-  - Author Two
+  - Myfirstname Mylastname:
+      email: fl@oneplace.edu
+      institute: [UofO]
+      correspondence: true
+  - Yourfirstname Yourlastname:
+      email: fl@another.edu
+      institute: [UofA]
+      correspondence: false
+institute:
+  - UofO: University of One Place
+  - UofA: University of Another Place
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
-    bookdown::html_document2:
+    bookdown::word_document2:
       fig_caption: yes
       reference_docx: "../templates/template.docx" # Insert path for the DOCX file
+      pandoc_args:
+      - --lua-filter=../templates/scholarly-metadata.lua
+      - --lua-filter=../templates/author-info-blocks.lua
+      - --lua-filter=../templates/pagebreak.lua
 bibliography: references.bib
 csl: "../templates/journal-of-archaeological-science.csl" # Insert path for the bib-style
 abstract: |
@@ -65,14 +78,14 @@ Here is an example of inline code `r x` in the middle of a sentence.
 
 # Acknowledgements
 
-<!-- The following line inserts a page break when the output is MS Word. For page breaks in PDF, use \newpage on its own line.  -->
-##### pagebreak
+<!-- The following line inserts a page break  -->
+\newpage
 
 # References 
 <!-- The following line ensures the references appear here for the MS Word or HTML output files, rather than right at the end of the document (this will not work for PDF files):  -->
 <div id="refs"></div>
 
-##### pagebreak
+\newpage
 
 ### Colophon
 

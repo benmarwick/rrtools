@@ -103,10 +103,29 @@ create_directories <- function(location, pkg){
                       to = paste0(pkg$path, "/", location, "/templates"),
                       recursive = TRUE))
 
+  # move lua filters
+  invisible(file.copy(from = system.file("templates/pagebreak.lua",
+                                         package = "rrtools",
+                                         mustWork = TRUE),
+                      to = paste0(pkg$path, "/", location, "/templates"),
+                      recursive = TRUE))
+
+  invisible(file.copy(from = system.file("templates/author-info-blocks.lua",
+                                         package = "rrtools",
+                                         mustWork = TRUE),
+                      to = paste0(pkg$path, "/", location, "/templates"),
+                      recursive = TRUE))
+
+  invisible(file.copy(from = system.file("templates/scholarly-metadata.lua",
+                                         package = "rrtools",
+                                         mustWork = TRUE),
+                      to = paste0(pkg$path, "/", location, "/templates"),
+                      recursive = TRUE))
 
   # move bib file in there also
   use_template("references.bib", pkg = pkg, data = gh,
                out_path = file.path(location, "paper"))
+
 
   } else # else do this..
   {
