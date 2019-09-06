@@ -1,10 +1,10 @@
-# image: rocker/verse:3.5.3
 image: docker:stable
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
   MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
 stages:
   - build
@@ -17,8 +17,9 @@ services:
 before_script:
   - docker info
 
-building:
+check-package:
   stage: build
+  image: rocker/{{{rocker}}}:{{{r_version}}}
   script:
     - R -e "remotes::install_deps(dependencies = T)"
     - R -e "devtools::check()"
@@ -27,36 +28,70 @@ building:
 # https://docs.gitlab.com/ee/user/project/pipelines/settings.html#test-coverage-parsing
 # The coverage parsing string is
 # Code coverage: \d+\.\d+
-
-testing:
-    stage: test
-    allow_failure: true
-    when: on_success
-    only:
-        - master
-    script:
-      - Rscript -e "install.packages('DT')"
-      - Rscript -e "cc <- covr::package_coverage(); covr::gitlab(coverage = cc); cat('Code coverage:', paste0(format(covr::percent_coverage(cc), nsmall = 1),'%'))"
-      - docker build -t my-docker-image .
-      - docker run -d my-docker-image /bin/sh -c "while true; do echo hello world; sleep 1; done"
-      - alias dl='docker ps -l -q'
-      - docker cp `dl`:{{{repo}}}/analysis $CI_PROJECT_DIR/public
-    artifacts:
-        paths:
-            - public
-
 # To produce a code coverage report as a GitLab page see
 # https://about.gitlab.com/2016/11/03/publish-code-coverage-report-with-gitlab-pages/
+# Settings > General > Badges > Link = https://USERname.gitlab.io/%{project_path}/coverage.html
+# Settings > General > Badges > Badge Image URL = https://USERname.gitlab.io/%{project_path}/badges/%{default_branch}/coverage.svg
+code-coverage-report:
+  stage: build
+  image: rocker/{{{rocker}}}:{{{r_version}}}
+  allow_failure: true
+  when: on_success
+  only:
+    - master
+  script:
+    - R -e "remotes::install_deps(dependencies = T)"
+    - Rscript -e "install.packages('DT')"
+    # Comment below line if you have 0 `.R` files in `R/` (Error in file(con, "r") : cannot open the connection)
+    - Rscript -e "covr::gitlab(coverage = NULL, file = 'public/coverage.html', quiet = TRUE)"
+  artifacts:
+    paths:
+      - public
+
+render-paper:
+  before_script:
+    - docker info
+  stage: test
+  only:
+    - master
+  script:
+    - docker build -t my-docker-image .
+    - docker run --name my-docker-image -d my-docker-image /bin/sh -c "while true; do echo hello world; sleep 1; done"
+    - alias dl='docker ps -l -q'
+    - docker cp `dl`:{{{repo}}}/analysis/paper/. $CI_PROJECT_DIR/public
+    - cp public/paper.html public/index.html
+  artifacts:
+    paths:
+      # Uncomment below line when you are ready to publish your paper at https://USERname.gitlab.io/PROJECTname
+      # - public
+
+# Enable the Container Registry for your project (default is enabled for gitlab.com),
+# then uncomment script in push-image-to-registry job (this may only work on public projects?)
+# https://docs.gitlab.com/ee/user/project/container_registry.html
+# Once enabled for your GitLab instance, to enable Container Registry for your project:
+#    Go to your project’s Settings > General page.
+#    Expand the Visibility, project features, permissions section and enable the Container Registry feature on your project. For new projects this might be enabled by default. For existing projects (prior GitLab 8.8), you will have to explicitly enable it.
+#    Press Save changes for the changes to take effect. You should now be able to see the Packages > Container Registry link in the sidebar.
+push-image-to-registry:
+    before_script:
+      - docker info
+    stage: deploy
+    only:
+      - master
+    script:
+      # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+      # - docker build -t $IMAGE_TAG .
+      # - docker push $IMAGE_TAG
 
 pages:
     stage: deploy
     dependencies:
-        - testing
+      - render-paper
     script:
-        - ls
+      - ls -al
     artifacts:
         paths:
-            - public
+          - public
         expire_in: 30 days
     only:
-        - master
+      - master
