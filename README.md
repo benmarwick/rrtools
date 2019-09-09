@@ -16,11 +16,12 @@ functions for making a basic compendium suitable for writing a
 reproducible journal article or report with
 [R](https://www.r-project.org). This package documents the key steps and
 provides convenient functions for quickly creating a new research
-compendium. The approach is based generally on [Kitzes et al.
-(2017)](https://www.practicereproducibleresearch.org), and more
+compendium. The approach is based generally on [Kitzes et
+al. (2017)](https://www.practicereproducibleresearch.org), and more
 specifically on [Marwick
-(2017)](https://doi.org/10.1007/s10816-015-9272-9), [Marwick et al.
-(2017)](https://doi.org/10.7287/peerj.preprints.3192v1), and [Wickham’s
+(2017)](https://doi.org/10.1007/s10816-015-9272-9), [Marwick et
+al. (2017)](https://doi.org/10.7287/peerj.preprints.3192v1), and
+[Wickham’s
 (2017)](https://docs.google.com/document/d/1LzZKS44y4OEJa4Azg5reGToNAZL0e0HSUwxamNY7E-Y/edit#)
 work using the R package structure as the basis for a research
 compendium.
@@ -41,8 +42,8 @@ variants.
 
 The functions in rrtools allow you to use R to easily follow the best
 practices outlined in several major scholarly publications on
-reproducible research. In addition to those cited above, [Wilson et al.
-(2017)](https://doi.org/10.1371/journal.pcbi.1005510), [Piccolo &
+reproducible research. In addition to those cited above, [Wilson et
+al. (2017)](https://doi.org/10.1371/journal.pcbi.1005510), [Piccolo &
 Frampton
 (2016)](https://gigascience.biomedcentral.com/articles/10.1186/s13742-016-0135-4),
 [Stodden & Miguez (2014)](http://doi.org/10.5334/jors.ay) and rOpenSci
@@ -72,8 +73,7 @@ devtools::install_github("benmarwick/rrtools")
 
 To make a quick start on creating a compendium, use the
 `create_compendium()` function. This function will create a compendium
-that is instantly ready to work
-with:
+that is instantly ready to work with:
 
 ``` r
 library(rrtools) # will confirm that you have Git installed and configured
@@ -126,8 +126,7 @@ your project: they are meant to be once-off setup functions.
     file listing the name provided as the copyright holder
   - to use a different license, replace this line with
     `usethis::use_gpl3_license(name = "My Name")`, or follow the
-    instructions for other
-licenses
+    instructions for other licenses
 
 #### 3\. `usethis::use_git()` then `usethis::use_github(credentials = git2r::cred_ssh_key(), auth_token = "xxxx", protocol = "https", private = FALSE)`
 
@@ -146,9 +145,12 @@ licenses
         Github account conveniently.
       - get a [personal access
         token](https://github.com/settings/tokens), and replace “xxxx”
-        with that token. When you do so (click “Generate new token”),
-        make sure the “repo” scope is included by checking the “repo”
-        box. Don’t save this token in your project, keep it elsewhere.
+        with that token. See the
+        [usethis](https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token)
+        documentation for an easy method to get this token. When you do
+        so (click “Generate new token”), make sure the “repo” scope is
+        included by checking the “repo” box. Don’t save this token in
+        your project, keep it elsewhere.
 
 #### 4\. `rrtools::use_readme_rmd()`
 
@@ -213,8 +215,8 @@ licenses
     and [Zotero](https://www.zotero.org/) to efficiently insert
     citations while writing in an Rmd file
   - remember that the `Imports:` field in the `DESCRIPTION` file must
-    include the names of all packages used in analysis documents (e.g.
-    `paper.Rmd`). We have a helper function
+    include the names of all packages used in analysis documents
+    (e.g. `paper.Rmd`). We have a helper function
     `rrtools::add_dependencies_to_description()` that will scan the Rmd
     file, identify libraries used in there, and add them to the
     `DESCRIPTION` file.
@@ -337,7 +339,7 @@ Wickham, H. (2017) *Research compendia*. Note prepared for the 2017
 rOpenSci Unconf.
 <https://docs.google.com/document/d/1LzZKS44y4OEJa4Azg5reGToNAZL0e0HSUwxamNY7E-Y/edit#>
 
-Wilson G, Bryan J, Cranston K, Kitzes J, Nederbragt L, et al. (2017).
+Wilson G, Bryan J, Cranston K, Kitzes J, Nederbragt L, et al. (2017).
 Good enough practices in scientific computing. *PLOS Computational
 Biology* 13(6): e1005510. <https://doi.org/10.1371/journal.pcbi.1005510>
 

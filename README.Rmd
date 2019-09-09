@@ -71,7 +71,7 @@ To create a reproducible research compendium step-by-step using the rrtools appr
 - if you are not connected to the internet, use `use_git()` to initialise a local git repository for your project, and save the `use_github` step for when you are online. Reopen your project in RStudio to see the git buttons on the toolbar.
 - we need to:
     + install and configure git _before_ running this line. See [Happy Git With R](http://happygitwithr.com) for details on how to do this. Make sure to set up a [SSH key](https://happygitwithr.com/ssh-keys.html) to connect to your Github account conveniently.
-    + get a [personal access token](https://github.com/settings/tokens), and replace "xxxx" with that token. When you do so (click "Generate new token"), make sure the "repo" scope is included by checking the "repo" box. Don't save this token in your project, keep it elsewhere. 
+    + get a [personal access token](https://github.com/settings/tokens), and replace "xxxx" with that token. See the [usethis](https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token) documentation for an easy method to get this token. When you do so (click "Generate new token"), make sure the "repo" scope is included by checking the "repo" box. Don't save this token in your project, keep it elsewhere. 
 
 #### 4. `rrtools::use_readme_rmd()`
 
