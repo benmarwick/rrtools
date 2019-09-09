@@ -18,6 +18,9 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
 
   usethis::ui_done("Adding bookdown to Imports\n")
   add_desc_package(pkg, "Imports", "bookdown")
+  add_desc_package(pkg, "Imports", "devtools")
+  add_desc_package(pkg, "Imports", "git2r")
+  add_desc_package(pkg, "Imports", "here")
 
   location <- ifelse(location == "top_level", "analysis",
                      ifelse(location == "vignettes", "vignettes",
