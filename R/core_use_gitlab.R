@@ -62,6 +62,8 @@ use_gitlab <- function(pkg = ".", auth_token = "xxxx", rocker = "verse", rmd_to_
                open = TRUE,
                pkg = pkg,
                out_path = "")
+  # replace the README.md
+  rrtools::use_readme_rmd()
 
   # attempt to push the current branch and set the remote as upstream
   system(paste0("git push --set-upstream https://oauth2:", auth_token, "@gitlab.com/", username, "/", pkgname, ".git master"))
