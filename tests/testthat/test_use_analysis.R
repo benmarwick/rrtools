@@ -18,7 +18,20 @@ test_that("use_analysis generates the template directories and files", {
 
 })
 
+#### DESCRIPTION updated correctly ####
 
+test_that("use_analysis updates DESCRIPTION correctly", {
+
+  pkg <- as.package(package_path)
+
+  # check there's only a single suggests field
+  expect_equal(sum(grepl("suggests", names(pkg))), 1)
+
+  # check there's only a single imports field
+  expect_equal(sum(grepl("imports", names(pkg))), 1)
+  expect_equal(pkg$suggests , "devtools,\ngit2r")
+
+})
 
 #### run function inst/ ####
 
