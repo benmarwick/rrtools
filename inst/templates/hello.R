@@ -18,7 +18,7 @@
 #' @return print 'Hello'
 #' @export
 #'
-#' @examples
+#' @examples hello()
 hello <- function() {
   print("Hello, world!")
 }
