@@ -21,7 +21,7 @@ services:
 
 check-package:
   stage: build
-  image: rocker/verse:3.6.1
+  image: rocker/{{{rocker}}}:{{{r_version}}}
   script:
     - R -e "remotes::install_deps(dependencies = T)"
     - R -e "devtools::check()"
@@ -43,7 +43,7 @@ check-package:
 # https://about.gitlab.com/2016/11/03/publish-code-coverage-report-with-gitlab-pages/
 code-coverage-report:
   stage: build
-  image: rocker/verse:3.6.1
+  image: rocker/{{{rocker}}}:{{{r_version}}}
   allow_failure: true
   only:
     - master
@@ -65,7 +65,7 @@ render-paper:
     - docker build -t my-docker-image .
     - docker run --name my-docker-image -d my-docker-image /bin/sh -c "while true; do echo hello world; sleep 1; done"
     - alias dl='docker ps -l -q'
-    - docker cp `dl`:<REPO>/analysis/paper/. $CI_PROJECT_DIR/public
+    - docker cp `dl`:{{{repo}}}/analysis/paper/. $CI_PROJECT_DIR/public
     - cp public/paper.html public/index.html
   artifacts:
     paths:
