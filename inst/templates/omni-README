@@ -37,12 +37,12 @@ Please cite this compendium as:
 
 You can download the compendium as a zip from from this URL: <{{{url}}}/archive/master.zip>
 
-Or you can install this compendium as an R package, {{{ package }}}, from GitHub with:
+Or you can install this compendium as an R package, {{{ package }}}, from {{{gitRemoteService}}} with:
 
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
-remotes::install_github("{{{username}}}/{{{repo}}}")
+remotes::install_{{{gitRemoteService}}}("{{{username}}}/{{{repo}}}")
 ```
 
 
