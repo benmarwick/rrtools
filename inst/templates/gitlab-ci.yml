@@ -4,11 +4,11 @@ variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-  # Set to "yes" to produce a code coverage report to https://USERname.gitlab.io/PROJECTname/coverage.html
+  # Set to "yes" to produce a code coverage report
   CODE_COVERAGE_REPORT: "no"
-  # Set to "yes" to publish paper to https://USERname.gitlab.io/PROJECTname/
+  # Set to "yes" to publish paper to https://USERname.gitlab.io/PROJECTname/ (and/or code coverage report to https://USERname.gitlab.io/PROJECTname/coverage.html)
   PUBLISH_PAPER: "no"
-  # Set to "yes" to push image to container registry registry.gitlab.com/group/project/image (see https://gitlab.com/USERname/PROJECTname/container_registry)
+  # Set to "yes" to push image to container registry https://registry.gitlab.com/group/project/image (see https://gitlab.com/USERname/PROJECTname/container_registry)
   PUSH_IMAGE_TO_REGISTRY: "no"
 
 stages:
@@ -46,7 +46,10 @@ code-coverage-report:
   image: rocker/{{{rocker}}}:{{{r_version}}}
   allow_failure: true
   only:
-    - master
+    refs:
+      - master
+    variables:
+      - $CODE_COVERAGE_REPORT == "yes"
   script:
     - R -e "remotes::install_deps(dependencies = T)"
     - Rscript -e "install.packages('DT')"
