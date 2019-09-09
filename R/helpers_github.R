@@ -6,7 +6,7 @@ uses_github <- function(path = ".") {
   r <- git2r::repository(path, discover = TRUE)
   r_remote_urls <- git2r::remote_url(r)
 
-  any(grepl("github", r_remote_urls))
+  any(grepl("(github)|(gitlab)", r_remote_urls))
 }
 
 # from https://github.com/hadley/devtools/blob/master/R/git.R
@@ -15,7 +15,7 @@ github_info <- function(path = ".", remote_name = NULL) {
     return(github_dummy)
 
   r <- git2r::repository(path, discover = TRUE)
-  r_remote_urls <- grep("github", remote_urls(r), value = TRUE)
+  r_remote_urls <- grep("(github)|(gitlab)", remote_urls(r), value = TRUE)
 
   if (!is.null(remote_name) && !remote_name %in% names(r_remote_urls))
     stop("no github-related remote named ", remote_name, " found")
@@ -28,7 +28,7 @@ github_info <- function(path = ".", remote_name = NULL) {
 }
 
 # from https://github.com/hadley/devtools/blob/master/R/git.R
-github_dummy <- list(username = "<USERNAME>", repo = "<REPO>", fullname = "<USERNAME>/<REPO>")
+github_dummy <- list(username = "USERNAME", repo = "REPO", fullname = "USERNAME/REPO")
 
 # from https://github.com/hadley/devtools/blob/master/R/git.R
 remote_urls <- function(r) {
@@ -39,18 +39,22 @@ remote_urls <- function(r) {
 # from https://github.com/hadley/devtools/blob/master/R/git.R
 github_remote_parse <- function(x) {
   if (length(x) == 0) return(github_dummy)
-  if (!grepl("github", x)) return(github_dummy)
+  if (!grepl("(github)|(gitlab)", x)) return(github_dummy)
 
   if (grepl("^(https|git)", x)) {
     # https://github.com/hadley/devtools.git
     # https://github.com/hadley/devtools
     # git@github.com:hadley/devtools.git
-    re <- "github[^/:]*[/:]([^/]+)/(.*?)(?:\\.git)?$"
+    re_github <- "github[^/:]*[/:]([^/]+)/(.*?)(?:\\.git)?$"
+    re_gitlab <- "gitlab[^/:]*[/:]([^/]+)/(.*?)(?:\\.git)?$"
   } else {
     stop("Unknown GitHub repo format", call. = FALSE)
   }
 
-  m <- regexec(re, x)
+  m <- regexec(re_github, x)
+  if(m[[1]][1] == -1) {
+    m <- regexec(re_gitlab, x)
+  }
   match <- regmatches(x, m)[[1]]
   list(
     username = match[2],
