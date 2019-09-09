@@ -65,8 +65,8 @@ use_gitlab <- function(pkg = ".", auth_token = "xxxx", rocker = "verse", rmd_to_
   # replace the README.md
   rrtools::use_readme_rmd()
 
-  # attempt to push the current branch and set the remote as upstream
-  system(paste0("git push --set-upstream https://oauth2:", auth_token, "@gitlab.com/", username, "/", pkgname, ".git master"))
-  system(paste0("git remote add origin https://gitlab.com/", username, "/", pkgname, ".git"))
-  git2r::config(branch.master.remote = "origin")
+  # alert user to purpose of .gitlab-ci.yml
+  save_as <- ".gitlab-ci.yml"
+  usethis::ui_done("{usethis::ui_value(save_as)} currently checks your package, builds and runs `Dockerfile` to produce your paper.")
+  usethis::ui_todo("Change relevant variables in {usethis::ui_value(save_as)} to 'yes' to push Docker image to gitlab.com container registry plus publish your paper to https://USERNAME.gitlab.io/PROJECTname plus produce a code coverage report.")
 }
