@@ -34,6 +34,11 @@ use_gitlab <- function(pkg = ".", auth_token = "xxxx", rocker = "verse", rmd_to_
     rmd_path <- gsub("^.|^/|^./|^~/","",rmd_to_knit)
   }
 
+  # attempt to push the current branch and set the remote as upstream
+  system(paste0("git push --set-upstream https://oauth2:", auth_token, "@gitlab.com/", username, "/", pkgname, ".git master"))
+  system(paste0("git remote add origin https://gitlab.com/", username, "/", pkgname, ".git"))
+  git2r::config(branch.master.remote = "origin")
+
   # assign variables for whisker
   gh <- github_info(pkg$path)
   gh$r_version <- r_version
