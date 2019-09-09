@@ -29,7 +29,19 @@ use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
   if (uses_github(pkg$path)) {
     # assign variables for whisker
     gh <- github_info(pkg$path)
+    gitRemoteService <- gsub(pattern = "(^.*\\.)|(^.*//)",
+                               replacement = "",
+                               gsub(pattern = "\\.com.*$",
+                                    replacement = "",
+                                    remote_urls(git2r::repository(pkg$path, discover = TRUE))))[[1]]
+    gh$gitRemoteService <- gitRemoteService
     data = c(pkg, gh)
+  } else {
+    # gather relevant information for remote git repo
+    data$username <- system("git config user.name",
+                         intern = TRUE)
+    data$repo <- data$package
+    data$gitRemoteService <- "github"
   }
   pkg$Rmd <- TRUE
 
@@ -60,7 +72,7 @@ use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
   use_code_of_conduct(pkg)
 
   usethis::ui_done("Adding instructions to contributors.")
-  use_contributing(pkg)
+  use_contributing(pkg, data = data)
 
   invisible(TRUE)
 }
@@ -75,9 +87,9 @@ use_code_of_conduct <- function(pkg){
                          out_path = "")
 }
 
-use_contributing <- function(pkg){
+use_contributing <- function(pkg, data){
   pkg <- as.package(pkg)
-  gh <-  github_info(pkg$path)
-  use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh,
+  # gh <-  github_info(pkg$path)
+  use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = data,
                          out_path = "")
 }
