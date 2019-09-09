@@ -21,7 +21,7 @@ use_template <- function(template, save_as = template, data = list(),
   }
 
   if (open) {
-    usethis::ui_todo("Modify ", usethis::ui_value(save_as))
+    usethis::ui_todo("Modify {usethis::ui_value(save_as)}")
     open_in_rstudio(path)
   }
 
