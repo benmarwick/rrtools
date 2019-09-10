@@ -16,8 +16,10 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
   pkg$Rmd <- TRUE
   gh <- github_info(pkg$path)
 
-  usethis::ui_done("Adding bookdown to Imports\n")
+  usethis::ui_done("Adding 'bookdown' to Imports\n")
   add_desc_package(pkg, "Imports", "bookdown")
+  usethis::ui_done("Adding 'here' pkg to Imports\n")
+  add_desc_package(pkg, "Imports", "here")
   lapply(X = c("devtools", "git2r"),
          FUN = add_desc_package, pkg = pkg, field = "Suggests")
 
