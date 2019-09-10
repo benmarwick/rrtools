@@ -22,13 +22,20 @@ use_compendium <- function(
   quiet = FALSE
 ){
 
+  # if we have options setting the description, use that for Authors@R
+
+  authors_at_R_preset <-  getOption("usethis.description")$`Authors@R`
+  blank_authors <- 'person("First", "Last", , "first.last@example.com", c("aut", "cre"))'
+  authors_at_R <- ifelse(is.null(authors_at_R_preset), blank_authors, authors_at_R_preset)
+
+
   # seems that use_description creates a different description for OSX and Linux, so we force all to have ByteCompile
   options(
     usethis.description = list(
       Version = "0.0.0.9000",
       Title =  "What the Package Does (One Line, Title Case)",
       Description = "What the package does (one paragraph)",
-      `Authors@R` = 'person("First", "Last", , "first.last@example.com", c("aut", "cre"))',
+      `Authors@R` = authors_at_R,
       License =  "What license it uses",
       Encoding = "UTF-8",
       LazyData = "true",
