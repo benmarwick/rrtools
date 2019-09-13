@@ -90,7 +90,7 @@ use_compendium <- function(
       fileConn <- file(file.path(path, ".Rprofile"))
       writeLines(
         c(
-          "cat(crayon::bold('\nThis project was set up by rrtools.'))",
+          "cat(crayon::bold('\nThis project was set up by rrtools.\n'))",
           "cat('\nYou can start working now or apply some more basic configuration.\n')",
           "cat('Check out ')",
           "cat(crayon::underline('https://github.com/benmarwick/rrtools'))",
