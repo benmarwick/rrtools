@@ -36,6 +36,7 @@ use_travis <- function(
   gh <- github_info(pkg$path)
   gh$rmd_path <- rmd_path
   travis_url <- file.path("https://travis-ci.org", gh$fullname)
+  gh$repo <- tolower(gh$repo)
 
   if(docker){
     use_template("travis.yml-with-docker",
