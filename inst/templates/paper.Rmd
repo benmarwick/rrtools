@@ -41,7 +41,8 @@ knitr::opts_chunk$set(
   message = FALSE,
   echo = FALSE,
   comment = "#>",
-  fig.path = "../figures/"
+  fig.path = "../figures/",
+  dpi = 300
 )
 ```
 
