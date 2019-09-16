@@ -25,7 +25,7 @@ use_travis <- function(
   # get path to Rmd file to knit
   if(rmd_to_knit == "path_to_rmd"){
     dir_list   <- list.dirs()
-    paper_dir  <- dir_list[grep(pattern = "/paper", dir_list)]
+    paper_dir  <- dir_list[grep(pattern = "/paper$", dir_list)]
     rmd_path   <- regmatches(paper_dir, regexpr("analysis|vignettes|inst", paper_dir))
     rmd_path <-  file.path(rmd_path, "paper/paper.Rmd")
   } else {
