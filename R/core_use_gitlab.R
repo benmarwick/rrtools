@@ -1,20 +1,56 @@
-#' Title
+#' Connect a local repo with GitLab
 #'
-#' @param auth_token personal access token
+#' `use_gitlab()` takes a local project, creates an associated PRIVATE repo on GitLab.com,
+#' adds it to your local repo as the `origin` remote, and makes an initial push
+#' to synchronize. `use_gitlab()` requires that your project already be a Git
+#' repository, which you can accomplish with [usethis::use_git()], if needed. See the
+#' Authentication section below for other necessary setup.
+#'
+#' In addition, `use_gitlab()` creates a `.gitlab-ci.yml` and will run two
+#' Gitlab.com CI/CD jobs, `check-package` and `render-paper`.
+#' These should both succeed, indicating that you have produced a reproducible paper using Docker.
+#'
+#' Should you desire, you may change the values of three variables from "no" to "yes".
+#' This allows you to simply push the Docker image to your GitLab registry, produce a code coverage
+#' report, and publish your paper to https://USERname.gitlab.io/REPOname.
+#'
+#' @section Authentication:
+#' A new GitLab repo will be created via the GitLab API, therefore you must
+#' make a [GitLab personal access token
+#' (PAT)](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#personal-access-tokens) available. You must
+#' provide this directly via the `auth_token` argument (`auth_token = readLines("filepath_to_token" works).
+#'
+#' @param auth_token personal access token. Go to GitLab "User Settings" (currently click avatar at top-right of webpage), then click "Access Tokens" on the left sidebar, enter a "Name", "Expiration Date", check "api" under "Scopes", and click "Create personal access token". You will need to copy this alphanumeric and save it to your device(s) now as you will never have access again. (https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#creating-a-personal-access-token)
 #' @param pkg file location of package
 #' @param rocker name the rocker image
 #' @param rmd_to_knit the path to the .Rmd
 #'
 #' @return NULL
 #' @export
+#' @examples
+#' \dontrun{
+#' # create a rrtools compendium
+#' rrtools::create_compendium("testpkg")
 #'
+#' # create GitLab.com repository, configure as git remote
+#' rrtools::use_gitlab(auth_token = readLines("filepath_to_token"))
+#' }
+#' Title
 use_gitlab <- function(pkg = ".", auth_token = "xxxx", rocker = "verse", rmd_to_knit = "path_to_rmd") {
+  if (!usethis:::uses_git()) {
+    warning("You have not initialized the local git repository yet.")
+    stop()
+  }
   pkg <- as.package(pkg)
 
   # gather relevant information for remote git repo
-  username <- system("git config user.name",
-                     intern = TRUE)
-  pkgname <- gsub(pattern = "Package: ",
+  if (is.null(getOption("gitlab.username"))) {
+    username <- readline(prompt = "   ...   Please enter your GitLab username: ")
+    options(gitlab.username = username)
+  } else {
+    username <- getOption("gitlab.username")
+  }
+    pkgname <- gsub(pattern = "Package: ",
                   replacement = "",
                   readLines("DESCRIPTION")[1])
 
