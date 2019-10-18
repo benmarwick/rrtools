@@ -71,38 +71,47 @@ use_gitlab <- function(pkg = ".", auth_token = "xxxx", rocker = "verse", rmd_to_
   }
 
   # attempt to push the current branch and set the remote as upstream
-  system(paste0("git push --set-upstream https://oauth2:", auth_token, "@gitlab.com/", username, "/", pkgname, ".git master"))
-  system(paste0("git remote add origin https://gitlab.com/", username, "/", pkgname, ".git"))
-  git2r::config(branch.master.remote = "origin")
+  if (length(grep("^origin\thttps", system("git remote --verbose", intern = TRUE)[2])) > 0) {
+    warning("There is already an `origin` remote associated with this local repo. Please remove it and try again.")
+    stop()
+  } else {
+    system(paste0("git push --set-upstream https://oauth2:", auth_token, "@gitlab.com/", username, "/", pkgname, ".git master"))
+    system(paste0("git remote add origin https://gitlab.com/", username, "/", pkgname, ".git"))
+    git2r::config(branch.master.remote = "origin")
 
-  # assign variables for whisker
-  gh <- github_info(pkg$path)
-  gh$r_version <- r_version
-  gh$rocker <- rocker
-  gh$rmd_path <- rmd_path
-  gh$rmd_parent_path <- rmd_parent_path
+    # assign variables for whisker
+    gh <- github_info(pkg$path)
+    gh$r_version <- r_version
+    gh$rocker <- rocker
+    gh$rmd_path <- rmd_path
+    gh$rmd_parent_path <- rmd_parent_path
 
-  # use the templated .gitlab-ci.yml file for CI/CD
-  use_template("gitlab-ci.yml",
-               save_as = ".gitlab-ci.yml",
-               data = gh,
-               ignore = TRUE,
-               open = TRUE,
-               pkg = pkg,
-               out_path = "")
-  # use the templated Dockerfile file for CI/CD
-  use_template("Dockerfile",
-               save_as = "Dockerfile",
-               data = gh,
-               ignore = TRUE,
-               open = TRUE,
-               pkg = pkg,
-               out_path = "")
-  # replace the README.md
-  rrtools::use_readme_rmd()
+    # use the templated .gitlab-ci.yml file for CI/CD
+    use_template("gitlab-ci.yml",
+                 save_as = ".gitlab-ci.yml",
+                 data = gh,
+                 ignore = TRUE,
+                 open = TRUE,
+                 pkg = pkg,
+                 out_path = "")
+    # use the templated Dockerfile file for CI/CD
+    use_template("Dockerfile",
+                 save_as = "Dockerfile",
+                 data = gh,
+                 ignore = TRUE,
+                 open = TRUE,
+                 pkg = pkg,
+                 out_path = "")
+    # replace the README.md
+    file.rename("CONDUCT.md", "CONDUCT.md.bak")
+    file.rename("CONTRIBUTING.md", "CONTRIBUTING.md.bak")
+    file.rename("README.md", "README.md.bak")
+    file.rename("README.Rmd", "README.Rmd.bak")
+    rrtools::use_readme_rmd()
 
-  # alert user to purpose of .gitlab-ci.yml
-  save_as <- ".gitlab-ci.yml"
-  usethis::ui_done("{usethis::ui_value(save_as)} currently checks your package, builds and runs `Dockerfile` to produce your paper.")
-  usethis::ui_todo("Change relevant variables in {usethis::ui_value(save_as)} to 'yes' to push Docker image to gitlab.com container registry plus publish your paper to https://USERNAME.gitlab.io/PROJECTname plus produce a code coverage report.")
+    # alert user to purpose of .gitlab-ci.yml
+    save_as <- ".gitlab-ci.yml"
+    usethis::ui_done("{usethis::ui_value(save_as)} currently checks your package, builds and runs `Dockerfile` to produce your paper.")
+    usethis::ui_todo('Change relevant variables in {usethis::ui_value(save_as)} to "yes" to push Docker image to gitlab.com container registry plus publish your paper to https://USERname.gitlab.io/REPOname plus produce a code coverage report.')
+  }
 }
