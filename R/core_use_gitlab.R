@@ -37,9 +37,12 @@
 #' }
 #' Title
 use_gitlab <- function(pkg = ".", auth_token = "xxxx", rocker = "verse", rmd_to_knit = "path_to_rmd") {
+  if (auth_token == "xxxx") {
+    stop('This function fails without setting auth_token to your GitLab.com personal access token, e.g., `auth_token = "abcd12345"`. See `?rrtools::use_gitlab` for more details.')
+  }
+
   if (!usethis:::uses_git()) {
-    warning("You have not initialized the local git repository yet.")
-    stop()
+    stop("You have not initialized the local git repository yet.")
   }
   pkg <- as.package(pkg)
 
@@ -72,8 +75,7 @@ use_gitlab <- function(pkg = ".", auth_token = "xxxx", rocker = "verse", rmd_to_
 
   # attempt to push the current branch and set the remote as upstream
   if (length(grep("^origin\thttps", system("git remote --verbose", intern = TRUE)[2])) > 0) {
-    warning("There is already an `origin` remote associated with this local repo. Please remove it and try again.")
-    stop()
+    stop("There is already an `origin` remote associated with this local repo. Please remove it and try again.")
   } else {
     system(paste0("git push --set-upstream https://oauth2:", auth_token, "@gitlab.com/", username, "/", pkgname, ".git master"))
     system(paste0("git remote add origin https://gitlab.com/", username, "/", pkgname, ".git"))
