@@ -6,9 +6,9 @@ variables:
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   # Set to "yes" to produce a code coverage report
   CODE_COVERAGE_REPORT: "no"
-  # Set to "yes" to publish paper to https://USERname.gitlab.io/PROJECTname/ (and/or code coverage report to https://USERname.gitlab.io/PROJECTname/coverage.html)
+  # Set to "yes" to publish paper to https://USERname.gitlab.io/REPOname/ (and/or code coverage report to https://USERname.gitlab.io/REPOname/coverage.html)
   PUBLISH_PAPER: "no"
-  # Set to "yes" to push image to container registry https://registry.gitlab.com/group/project/image (see https://gitlab.com/USERname/PROJECTname/container_registry)
+  # Set to "yes" to push image to container registry https://registry.gitlab.com/group/project/image (see https://gitlab.com/USERname/REPOname/container_registry)
   PUSH_IMAGE_TO_REGISTRY: "no"
 
 stages:
