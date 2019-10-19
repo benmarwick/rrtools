@@ -35,7 +35,6 @@
 #' # create GitLab.com repository, configure as git remote
 #' rrtools::use_gitlab(auth_token = readLines("filepath_to_token"))
 #' }
-#' Title
 use_gitlab <- function(pkg = ".", auth_token = "xxxx", rocker = "verse", rmd_to_knit = "path_to_rmd") {
   if (auth_token == "xxxx") {
     stop('This function fails without setting auth_token to your GitLab.com personal access token, e.g., `auth_token = "abcd12345"`. See `?rrtools::use_gitlab` for more details.')
