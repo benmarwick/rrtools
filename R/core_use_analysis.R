@@ -16,11 +16,12 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
   pkg$Rmd <- TRUE
   gh <- github_info(pkg$path)
 
-  usethis::ui_done("Adding bookdown to Imports\n")
+  usethis::ui_done("Adding 'bookdown' to Imports\n")
   add_desc_package(pkg, "Imports", "bookdown")
-  add_desc_package(pkg, "Imports", "devtools")
-  add_desc_package(pkg, "Imports", "git2r")
+  usethis::ui_done("Adding 'here' pkg to Imports\n")
   add_desc_package(pkg, "Imports", "here")
+  lapply(X = c("devtools", "git2r"),
+         FUN = add_desc_package, pkg = pkg, field = "Suggests")
 
   location <- ifelse(location == "top_level", "analysis",
                      ifelse(location == "vignettes", "vignettes",
@@ -105,10 +106,29 @@ create_directories <- function(location, pkg){
                       to = paste0(pkg$path, "/", location, "/templates"),
                       recursive = TRUE))
 
+  # move lua filters
+  invisible(file.copy(from = system.file("templates/pagebreak.lua",
+                                         package = "rrtools",
+                                         mustWork = TRUE),
+                      to = paste0(pkg$path, "/", location, "/templates"),
+                      recursive = TRUE))
+
+  invisible(file.copy(from = system.file("templates/author-info-blocks.lua",
+                                         package = "rrtools",
+                                         mustWork = TRUE),
+                      to = paste0(pkg$path, "/", location, "/templates"),
+                      recursive = TRUE))
+
+  invisible(file.copy(from = system.file("templates/scholarly-metadata.lua",
+                                         package = "rrtools",
+                                         mustWork = TRUE),
+                      to = paste0(pkg$path, "/", location, "/templates"),
+                      recursive = TRUE))
 
   # move bib file in there also
   use_template("references.bib", pkg = pkg, data = gh,
                out_path = file.path(location, "paper"))
+
 
   } else # else do this..
   {
