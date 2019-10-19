@@ -48,5 +48,4 @@ rrtools::create_compendium("testpkg")
 # create GitLab.com repository, configure as git remote
 rrtools::use_gitlab(auth_token = readLines("filepath_to_token"))
 }
-Title
 }
