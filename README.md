@@ -216,10 +216,10 @@ your project: they are meant to be once-off setup functions.
     citations while writing in an Rmd file
   - remember that the `Imports:` field in the `DESCRIPTION` file must
     include the names of all packages used in analysis documents
-    (e.g. `paper.Rmd`). We have a helper function
-    `rrtools::add_dependencies_to_description()` that will scan the Rmd
-    file, identify libraries used in there, and add them to the
-    `DESCRIPTION` file.
+    (e.g. `paper.Rmd`). The
+    [attachment](https://github.com/Thinkr-open/attachment) package
+    provides some useful functions that scan R and Rmd files, identify
+    libraries used in there, and add them to the `DESCRIPTION` file.
   - this function has an `data_in_git =` argument, which is `TRUE` by
     default. If set to `FALSE` you will exclude files in the `data/`
     directory from being tracked by git and prevent them from appearing

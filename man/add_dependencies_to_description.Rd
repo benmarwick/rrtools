@@ -2,20 +2,13 @@
 % Please edit documentation in R/core_manage_dependencies.R
 \name{add_dependencies_to_description}
 \alias{add_dependencies_to_description}
-\title{Searches for external packages and adds them to the Imports field in the description}
+\title{add_dependencies_to_description() is deprecated}
 \usage{
-add_dependencies_to_description(path = getwd(),
-  description_file = "DESCRIPTION", just_packages = FALSE)
+add_dependencies_to_description(...)
 }
 \arguments{
-\item{path}{location of individual file or directory where to search for scripts.}
-
-\item{description_file}{location of description file to be updated.}
-
-\item{just_packages}{just give back a character vector of the found packages.}
+\item{...}{nothing}
 }
 \description{
-Scans script files (.R, .Rmd, .Rnw, .Rpres, etc.) for external package dependencies indicated by
-\code{library()}, \code{require()} or \code{::} and adds those packages to the Imports field in
-the package DESCRIPTION.
+Please use \code{attachment::att_to_description()} from https://cran.r-project.org/package=attachment.
 }
