@@ -23,7 +23,7 @@ check-package:
   stage: build
   image: rocker/{{{rocker}}}:{{{r_version}}}
   script:
-    - R -e "remotes::install_deps(dependencies = T)"
+    - R -e "devtools::install(dep=TRUE)"
     - R -e "devtools::check()"
 
 # To have the coverage percentage appear as a gitlab badge follow these instructions
@@ -51,7 +51,7 @@ code-coverage-report:
     variables:
       - $CODE_COVERAGE_REPORT == "yes"
   script:
-    - R -e "remotes::install_deps(dependencies = T)"
+    - R -e "devtools::install(dep=TRUE)"
     - Rscript -e "install.packages('DT')"
     - Rscript -e "covr::gitlab(coverage = NULL, file = 'public/coverage.html', quiet = TRUE)"
   artifacts:
