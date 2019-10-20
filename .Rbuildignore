@@ -15,3 +15,4 @@ thesis
 ^\.circleci$
 ^\.github$
 ^\.binder$
+^\.gitlab-ci\.yml$

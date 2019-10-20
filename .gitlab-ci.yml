@@ -1,0 +1,87 @@
+image: rocker/verse:3.5.3
+
+#stages:
+ # - build
+  #- test
+  #- deploy
+
+check-package:
+  stage: build
+  script:
+    - R -e "devtools::install(dep=TRUE)"
+    - R -e "devtools::check()"
+  artifacts:
+    paths:
+      - "*.Rcheck"
+    name: logs
+    when: always
+
+# To produce a code coverage report as a GitLab page see
+# https://about.gitlab.com/2016/11/03/publish-code-coverage-report-with-gitlab-pages/
+code-coverage-report:
+  stage: build
+  allow_failure: true
+  #only:
+   # refs:
+    #  - master
+  script:
+    - R -e "devtools::install(dep=TRUE)"
+    - Rscript -e "install.packages('DT')"
+    - Rscript -e "covr::gitlab(coverage = NULL, file = 'public/coverage.html', quiet = TRUE)"
+  artifacts:
+    paths:
+      - public
+
+r-release:
+  stage: build
+  image: rocker/verse:latest
+  script:
+    - R -e "devtools::install(dep=TRUE)"
+    - R -e "devtools::check()"
+  artifacts:
+    paths:
+      - "*.Rcheck"
+    name: logs
+    when: always
+
+r-devel:
+  stage: build
+  image: rocker/verse:devel
+  script:
+    - R -e "devtools::install(dep=TRUE)"
+    - R -e "devtools::check()"
+  artifacts:
+    paths:
+      - "*.Rcheck"
+    name: logs
+    when: always
+
+# use case (1): user creates new compendium, immediately runs `rrtools::use_gitlab()`
+make-new-rrtools-compendium:
+    stage: build
+    script:
+        - R -e "remotes::install_github('ntrlshrp/rrtools', ref = 'feature/gitlab-02')"
+        - cd /
+        - git config --global user.name "MyGitUSERNAME"
+        - git config --global user.email "MyGitUSEREMAIL"
+        - R -e "rrtools::create_compendium('newRRtoolsCompendium')"
+        - cd newRRtoolsCompendium
+        - R -e "options(gitlab.username = '$GITLAB_USER_LOGIN'); rrtools::use_gitlab(auth_token = '$RRTOOLS_TOKEN')"
+        - git add .
+        - git commit -m "Added all new files since initial commit"
+        - git push https://oauth2:$RRTOOLS_TOKEN@gitlab.com/$GITLAB_USER_LOGIN/newRRtoolsCompendium.git
+
+render-paper:
+  before_script:
+    - docker info
+  stage: test
+  script:
+    - cd newRRtoolsCompendium
+    - docker build -t my-docker-image .
+    - docker run --name my-docker-image -d my-docker-image /bin/sh -c "while true; do echo hello world; sleep 1; done"
+    - alias dl='docker ps -l -q'
+    - docker cp `dl`:newRRtoolsCompendium/analysis/paper/. $CI_PROJECT_DIR/public
+    - cp public/paper.html public/index.html
+  artifacts:
+    paths:
+      - public
