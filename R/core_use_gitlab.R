@@ -40,7 +40,7 @@ use_gitlab <- function(pkg = ".", auth_token = "xxxx", rocker = "verse", rmd_to_
     stop('This function fails without setting auth_token to your GitLab.com personal access token, e.g., `auth_token = "abcd12345"`. See `?rrtools::use_gitlab` for more details.')
   }
 
-  if (is.null(git2r::discover_repository(usethis::proj_get))) {
+  if (is.null(git2r::discover_repository(usethis::proj_get()))) {
     stop("You have not initialized the local git repository yet.")
   }
   pkg <- as.package(pkg)
