@@ -1,4 +1,11 @@
-image: rocker/verse:3.5.3
+image: docker:stable
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:dind
 
 #stages:
  # - build
@@ -7,6 +14,7 @@ image: rocker/verse:3.5.3
 
 check-package:
   stage: build
+  image: rocker/verse:3.5.3
   script:
     - R -e "devtools::install(dep=TRUE)"
     - R -e "devtools::check()"
@@ -20,6 +28,7 @@ check-package:
 # https://about.gitlab.com/2016/11/03/publish-code-coverage-report-with-gitlab-pages/
 code-coverage-report:
   stage: build
+  image: rocker/verse:3.5.3
   allow_failure: true
   #only:
    # refs:
@@ -59,6 +68,7 @@ r-devel:
 # use case (1): user creates new compendium, immediately runs `rrtools::use_gitlab()`
 make-new-rrtools-compendium:
     stage: build
+    image: rocker/verse:3.5.3
     script:
         - R -e "remotes::install_github('ntrlshrp/rrtools', ref = 'feature/gitlab-02')"
         - cd /
@@ -75,13 +85,12 @@ render-paper:
   before_script:
     - docker info
   stage: test
+  image: docker:stable
   script:
-    - cd newRRtoolsCompendium
     - docker build -t my-docker-image .
     - docker run --name my-docker-image -d my-docker-image /bin/sh -c "while true; do echo hello world; sleep 1; done"
     - alias dl='docker ps -l -q'
-    - docker cp `dl`:newRRtoolsCompendium/analysis/paper/. $CI_PROJECT_DIR/public
-    - cp public/paper.html public/index.html
+    - docker cp `dl`:rrtools/analysis/paper/. $CI_PROJECT_DIR/public
   artifacts:
     paths:
       - public
