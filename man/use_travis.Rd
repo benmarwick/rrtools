@@ -5,8 +5,13 @@
 \alias{add_travis}
 \title{Add a travis config file}
 \usage{
-use_travis(pkg = ".", browse = interactive(), docker = TRUE,
-  rmd_to_knit = "path_to_rmd", ask = TRUE)
+use_travis(
+  pkg = ".",
+  browse = interactive(),
+  docker = TRUE,
+  rmd_to_knit = "path_to_rmd",
+  ask = TRUE
+)
 }
 \arguments{
 \item{pkg}{defaults to the package in the current working directory}
