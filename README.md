@@ -69,27 +69,6 @@ devtools::install_github("benmarwick/rrtools")
 
 ## How to use
 
-### Quick start
-
-To make a quick start on creating a compendium, use the
-`create_compendium()` function. This function will create a compendium
-that is instantly ready to work with:
-
-``` r
-library(rrtools) # will confirm that you have Git installed and configured
-create_compendium("pkgname")
-```
-
-This function combines the key parts of the first five steps described
-below, using sensible, widely-used defaults. It gives detailed console
-output to guide you on the next steps to take with your compendium (it
-will not create a GitHub repository, or do the Travis and Docker steps
-detailed below). If you prefer a graphical user interface for the main
-rrtools functions and tips on how to choose among the options, try our
-[rrtools.addin](https://github.com/nevrome/rrtools.addin).
-
-### Detailed step-by-step creation of a research compendium
-
 To create a reproducible research compendium step-by-step using the
 rrtools approach, follow these detailed instructions. We use
 [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), and
@@ -98,20 +77,38 @@ copy-pasting these directly into your console, and editing the options
 before running. We don’t recommend saving these lines in a script in
 your project: they are meant to be once-off setup functions.
 
+#### 0\. Create a Git managed directory linked to an online repository
+
+  - usually you want your research compendium to be managed by the
+    version control software Git.
+  - we need to:
+      - create an empty repository `pkgname` (you should use a different
+        one **\[\*\]**) on Github, Gitlab, or the like and clone the
+        repository to have a local empty directory `pkgname` linked to
+        this remote repository. Or create a local, empty directory
+        `pkgname` and initialize it with Git (`git init`). See [Happy
+        Git With R](http://happygitwithr.com) for details on how to do
+        this.
+      - [stage, commit and
+        push](https://happygitwithr.com/git-basics.html) every future
+        change in the repository with Git.
+
+**\[\*\]** `pkgname` has to…
+
+  - … contain only ASCII letters, numbers, and ‘.’
+  - … have at least two characters
+  - … start with a letter
+  - … not end with ‘.’
+
 #### 1\. `rrtools::use_compendium("pkgname")`
 
-  - this uses `usethis::create_package()` to create a basic R package
-    with the name `pkgname` (you should use a different one), and then,
-    if you’re using RStudio, opens the project. If you’re not using
-    RStudio, it sets the working directory to the `pkgname` directory.
+  - this uses `usethis::create_package()` to create a basic R package in
+    the `pkgname` directory, and then, if you’re using RStudio, opens
+    the project. If you’re not using RStudio, it sets the working
+    directory to the `pkgname` directory.
   - we need to:
-      - choose a location for the compendium package. We recommend two
-        ways to do this. First, you can specify the full path directly,
-        (e.g.,
-        `rrtools::use_compendium("C:/Users/bmarwick/Desktop/pkgname")`).
-        Alternatively, you can set the working directory in RStudio
-        using the drop-down menu: `Session` -\> `Set Working Directory`
-        and then run `rrtools::use_compendium("pkgname")`.
+      - run `rrtools::use_compendium("path/to/pkgname")` (you use the
+        path to `pkgname` in your system)
       - edit the `DESCRIPTION` file (located in your `pkgname`
         directory) to include accurate metadata
       - periodically update the `Imports:` section of the `DESCRIPTION`
@@ -128,31 +125,7 @@ your project: they are meant to be once-off setup functions.
     `usethis::use_gpl3_license(name = "My Name")`, or follow the
     instructions for other licenses
 
-#### 3\. `usethis::use_git()` then `usethis::use_github(credentials = git2r::cred_ssh_key(), auth_token = "xxxx", protocol = "https", private = FALSE)`
-
-  - if you are connected to the internet, this initializes a local git
-    repository (`use_git()`), then `use_github()` connects to
-    [GitHub](https://github.com), and creates a remote repository
-  - if you are not connected to the internet, use `use_git()` to
-    initialise a local git repository for your project, and save the
-    `use_github` step for when you are online. Reopen your project in
-    RStudio to see the git buttons on the toolbar.
-  - we need to:
-      - install and configure git *before* running this line. See [Happy
-        Git With R](http://happygitwithr.com) for details on how to do
-        this. Make sure to set up a [SSH
-        key](https://happygitwithr.com/ssh-keys.html) to connect to your
-        Github account conveniently.
-      - get a [personal access
-        token](https://github.com/settings/tokens), and replace “xxxx”
-        with that token. See the
-        [usethis](https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token)
-        documentation for an easy method to get this token. When you do
-        so (click “Generate new token”), make sure the “repo” scope is
-        included by checking the “repo” box. Don’t save this token in
-        your project, keep it elsewhere.
-
-#### 4\. `rrtools::use_readme_rmd()`
+#### 3\. `rrtools::use_readme_rmd()`
 
   - this generates [README.Rmd](README.Rmd) and renders it to
     [README.md](README.md), ready to display on GitHub. It contains:
@@ -169,7 +142,7 @@ your project: they are meant to be once-off setup functions.
     [README.md](README.md), which is the file that GitHub displays on
     the repository home page
 
-#### 5\. `rrtools::use_analysis()`
+#### 4\. `rrtools::use_analysis()`
 
   - this function has three `location =` options: `top_level` to create
     a top-level `analysis/` directory, `inst` to create an `inst/`
@@ -235,7 +208,7 @@ your project: they are meant to be once-off setup functions.
         `library` and preface each function call with `pkgname::`. Up to
         you to choose whatever seems most natural to you.
 
-#### 6\. `rrtools::use_dockerfile()`
+#### 5\. `rrtools::use_dockerfile()`
 
   - this creates a basic Dockerfile using
     [`rocker/verse`](https://github.com/rocker-org/rocker) as the base
@@ -265,7 +238,7 @@ your project: they are meant to be once-off setup functions.
     at <https://hub.docker.com/> to receive our Docker container after a
     successful build on travis
 
-#### 7\. `rrtools::use_travis()`
+#### 6\. `rrtools::use_travis()`
 
   - this creates a minimal `.travis.yml` file. By default it configures
     travis to build our Docker container from our Dockerfile, and build,
@@ -292,7 +265,7 @@ your project: they are meant to be once-off setup functions.
     container from appearing on Docker Hub, so our Docker container
     stays completely private.
 
-#### 8\. `usethis::use_testthat()`
+#### 7\. `usethis::use_testthat()`
 
   - if you add functions in `R/`, include tests to ensure they function
     as intended
