@@ -12,6 +12,7 @@ package_path <- paste0(
   playground_path,
   tempfile(pattern = "testpackage.", tmpdir = "", fileext = "")
 )
+dir.create(package_path)
 
 library(rrtools)
 rrtools:::quietly(
