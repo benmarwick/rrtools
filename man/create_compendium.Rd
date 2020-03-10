@@ -7,10 +7,10 @@
 create_compendium(pkgname, data_in_git = TRUE)
 }
 \arguments{
-\item{pkgname}{location to create new package. The last component of the path will be used as the package name}
+\item{pkgname}{path to an empty, git initialized directory. The last component of the path will be used as the package name}
 
 \item{data_in_git}{should git track the files in the data directory? Default is TRUE}
 }
 \description{
-In one step, this will create an R package, attach the MIT license to it, add the rrtools' README to it, initiate a Git repository and make an initial commit to track files in the package, and create the 'analysis' directory structure, and populate it with an R Markdown file and bib file. This function will not create a GitHub repository for the compendium, a Dockerfile, a Travis config file, or any package tests. Those require some interaction outside of R and are left to the user.
+In one step, this will create an R package in an empty, git initialized directory, attach the MIT license to it, add the rrtools' README to it, create the 'analysis' directory structure, and populate it with an R Markdown file and bib file. This function will not create a GitHub repository for the compendium, a Dockerfile, a Travis config file, or any package tests. Those require some interaction outside of R and are left to the user.
 }
