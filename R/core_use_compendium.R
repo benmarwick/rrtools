@@ -22,6 +22,10 @@ use_compendium <- function(
   quiet = FALSE
 ){
 
+  if (!dir.exists(path)) {
+    stop(message("The directory ", path, " could not be found."))
+  }
+
   # if we have options setting the description, use that for Authors@R
 
   authors_at_R_preset <-  getOption("usethis.description")$`Authors@R`
@@ -86,7 +90,7 @@ use_compendium <- function(
 
     # welcome message in new repo at first start
     if (rstudio & open & !quiet) {
-      dir.create(path)
+
       fileConn <- file(file.path(path, ".Rprofile"))
       writeLines(
         c(
@@ -112,7 +116,6 @@ use_compendium <- function(
       rstudio = rstudio,
       open = open
     )
-
 
     usethis::ui_done("The package {name} has been created")
 
