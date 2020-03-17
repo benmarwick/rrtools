@@ -6,3 +6,5 @@ RUN chown -R ${NB_USER} ${HOME}
 ## Become normal user again
 USER ${NB_USER}
 RUN wget https://github.com/benmarwick/rrtools/raw/master/DESCRIPTION && R -e "devtools::install_deps()"
+
+RUN rm DESCRIPTION.1; exit 0

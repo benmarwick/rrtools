@@ -4,8 +4,7 @@
 \alias{use_dockerfile}
 \title{Add a Dockerfile}
 \usage{
-use_dockerfile(pkg = ".", rocker = "verse",
-  rmd_to_knit = "path_to_rmd")
+use_dockerfile(pkg = ".", rocker = "verse", rmd_to_knit = "path_to_rmd")
 }
 \arguments{
 \item{pkg}{defaults to the package in the current working directory}
