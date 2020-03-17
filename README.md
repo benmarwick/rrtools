@@ -79,26 +79,18 @@ your project: they are meant to be once-off setup functions.
 
 #### 0\. Create a Git managed directory linked to an online repository
 
-  - usually you want your research compendium to be managed by the
-    version control software Git.
+  - usually we want our research compendium to be managed by the version control software [Git]().
   - we need to:
-      - create an empty repository `pkgname` (you should use a different
-        one **\[\*\]**) on Github, Gitlab, or the like and clone the
-        repository to have a local empty directory `pkgname` linked to
-        this remote repository. Or create a local, empty directory
-        `pkgname` and initialize it with Git (`git init`). See [Happy
-        Git With R](http://happygitwithr.com) for details on how to do
-        this.
+      - start on Github, Gitlab, or a similar web service and create an empty repository called `pkgname` (you should use a different
+        name), then clone that repository to have a local empty directory on your computer `pkgname` linked to this remote repository. Or create a local, empty directory `pkgname` and initialize it with Git (`git init`). See [Happy Git With R](http://happygitwithr.com) for details on how to do this.
       - [stage, commit and
         push](https://happygitwithr.com/git-basics.html) every future
         change in the repository with Git.
-
-**\[\*\]** `pkgname` has to…
-
-  - … contain only ASCII letters, numbers, and ‘.’
-  - … have at least two characters
-  - … start with a letter
-  - … not end with ‘.’
+  - Your `pkgname` must follow some rules for everything to work, it must: 
+    + … contain only ASCII letters, numbers, and ‘.’
+    + … have at least two characters
+    + … start with a letter (not a number)
+    + … not end with ‘.’
 
 #### 1\. `rrtools::use_compendium("pkgname")`
 
