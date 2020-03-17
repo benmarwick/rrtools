@@ -79,13 +79,11 @@ your project: they are meant to be once-off setup functions.
 
 #### 0\. Create a Git managed directory linked to an online repository
 
-  - usually we want our research compendium to be managed by the version control software [Git]().
-  - we need to:
-      - start on Github, Gitlab, or a similar web service and create an empty repository called `pkgname` (you should use a different
-        name), then clone that repository to have a local empty directory on your computer `pkgname` linked to this remote repository. Or create a local, empty directory `pkgname` and initialize it with Git (`git init`). See [Happy Git With R](http://happygitwithr.com) for details on how to do this.
-      - [stage, commit and
-        push](https://happygitwithr.com/git-basics.html) every future
-        change in the repository with Git.
+  - Usually we want our research compendium to be managed by the version control software [Git](https://git-scm.com/). The free online book [Happy Git With R](http://happygitwithr.com) has details on how to do this. In brief, there are two methods to get started:
+      + Start on Github, Gitlab, or a similar web service, and create an empty repository called `pkgname` (you should use a different
+        name, please follow the rules below) on that service. Then [clone](https://happygitwithr.com/new-github-first.html) that repository to have a local empty directory on your computer, called `pkgname`, that is linked to this remote repository. 
+      + An alternative approach is to create a local, empty, directory called `pkgname` on your computer, and initialize it with Git (`git init`). 
+  - Whichever of those two methods that you choose, you continue by [staging, commiting an pushing](https://happygitwithr.com/git-basics.html) every future change in the repository with Git.
   - Your `pkgname` must follow some rules for everything to work, it must: 
     + … contain only ASCII letters, numbers, and ‘.’
     + … have at least two characters
