@@ -52,6 +52,11 @@ The **analysis** directory contains:
 
 ## How to run in your broswer or download and run locally
 
+This research compendium has been developed using the statistical programming
+language R. To work with the compendium, you will need
+installed on your computer the [R software](https://cloud.r-project.org/)
+itself and optionally [RStudio Desktop](https://rstudio.com/products/rstudio/download/).
+
 The simplest way to explore the text, code and data is to click on
 [binder](https://mybinder.org/v2/gh/{{{username}}}/{{{repo}}}/master?urlpath=rstudio)
 to open an instance of RStudio in your browser, which will have the
@@ -64,7 +69,7 @@ You can download the compendium as a zip from from this URL:
 - open the `.Rproj` file in RStudio
 - run `devtools::install()` to ensure you have the packages this analysis depends on (also listed in the
 [DESCRIPTION](/DESCRIPTION) file).
-- finally, open `paper.Rmd` and knit to produce the `paper.docx`.
+- finally, open `analysis/paper/paper.Rmd` and knit to produce the `paper.docx`, or run `rmarkdown::render("analysis/paper/paper.Rmd")` in the R console
 
 ### Licenses
 
