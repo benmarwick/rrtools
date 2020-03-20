@@ -95,7 +95,8 @@ test_that("README.Rmd is a text file and has the correct headings", {
       c(
         paste("#", basename(package_path)),
         "### How to cite",
-        "### How to download or install",
+        "### Contents",
+        "### How to run in your broswer or download and run locally",
         "### Licenses",
         "### Contributions"
       ) %in%
