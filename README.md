@@ -20,7 +20,7 @@ compendium. The approach is based generally on [Kitzes et
 al. (2017)](https://www.practicereproducibleresearch.org), and more
 specifically on [Marwick
 (2017)](https://doi.org/10.1007/s10816-015-9272-9), [Marwick et
-al. (2017)](https://doi.org/10.7287/peerj.preprints.3192v1), and
+al. (2018)](https://doi.org/10.7287/peerj.preprints.3192v1), and
 [Wickham’s
 (2017)](https://docs.google.com/document/d/1LzZKS44y4OEJa4Azg5reGToNAZL0e0HSUwxamNY7E-Y/edit#)
 work using the R package structure as the basis for a research
@@ -265,7 +265,7 @@ You should be able to follow these steps to get a new research
 compendium repository connected to travis and ready to write in just a
 few minutes.
 
-## References
+## References and related reading
 
 Kitzes, J., Turek, D., & Deniz, F. (Eds.). (2017). *The Practice of
 Reproducible Research: Case Studies and Lessons from the Data-Intensive
@@ -277,9 +277,9 @@ research: Basic principles and a case study of their implementation.
 *Journal of Archaeological Method and Theory*, 24(2), 424-450.
 <https://doi.org/10.1007/s10816-015-9272-9>
 
-Marwick, B., Boettiger, C. & L. Mullen (2017). Packaging data analytical
-work reproducibly using R (and friends). *PeerJ Preprints* 5:e3192v1
-<https://doi.org/10.7287/peerj.preprints.3192v1>
+Marwick, B., Boettiger, C., & Mullen, L. (2018). Packaging data 
+analytical work reproducibly using R (and friends). 
+*The American Statistician* 72(1), 80-88. <https://doi.org/10.1080/00031305.2017.1375986>
 
 Piccolo, S. R. and M. B. Frampton (2016). “Tools and techniques for
 computational reproducibility.” GigaScience 5(1): 30.
@@ -291,6 +291,8 @@ enhancing reproducibility in scientific results and writing. Online at
 
 rOpenSci community (2017b). rrrpkg: Use of an R package to facilitate
 reproducible research. Online at <https://github.com/ropensci/rrrpkg>
+
+Schmidt, S.C. and Marwick, B., 2020. Tool-Driven Revolutions in Archaeological Science. *Journal of Computer Applications in Archaeology*, 3(1), pp.18–32. DOI: <http://doi.org/10.5334/jcaa.29>
 
 Stodden, V. & Miguez, S., (2014). Best Practices for Computational
 Science: Software Infrastructure and Environments for Reproducible and
