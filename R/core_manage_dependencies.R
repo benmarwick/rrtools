@@ -130,16 +130,21 @@ get_pkgs_from_R_files <- function(R_files) {
       r_libs <- grep("[A-Za-z0-9\\.]*\\)", r_libs, value = TRUE)
       r_libs <- unlist(lapply(r_libs, function(x) { gsub("(.+?)(\\).*)", "\\1", x) }))
       # get libraries implicitly called via ::
-      point_lines <- grep(pattern = "::", x = current_file, value = TRUE)
+      point2_lines <- grep(pattern = "::", x = current_file, value = TRUE)
       # search for all collections of alphanumeric signs in between the
       # line start/a non-alphanumeric sign and ::
-      p_libs <- regmatches(
-        point_lines,
-        gregexpr("(?<=^|[^a-zA-Z0-9])[a-zA-Z0-9]*?(?=::)", point_lines, perl = TRUE)
-      )
-      p_libs <- unlist(p_libs)
+      p2_libs <- unlist(regmatches(
+        point2_lines,
+        gregexpr("(?<=^|[^a-zA-Z0-9])[a-zA-Z0-9]*?(?=::)", point2_lines, perl = TRUE)
+      ))
+      # get libraries implicitly called via :::
+      point3_lines <- grep(pattern = ":::", x = current_file, value = TRUE)
+      p3_libs <- unlist(regmatches(
+        point3_lines,
+        gregexpr("(?<=^|[^a-zA-Z0-9])[a-zA-Z0-9]*?(?=:::)", point3_lines, perl = TRUE)
+      ))
       # merge results for current file
-      res <- c(l_libs, r_libs, p_libs)
+      res <- c(l_libs, r_libs, p2_libs, p3_libs)
       return(unique(res))
     }
   )
