@@ -84,24 +84,14 @@ test_that("CONTRIBUTING.md could be rendered to html", {
 })
 
 # README.Rmd
-test_that("README.Rmd is a text file and has the correct headings", {
+test_that("README.Rmd is a text file and has the correct heading", {
   readme <- readLines(file.path(package_path, "README.Rmd"))
   expect_gt(
     length(readme),
     1
   )
   expect_true(
-    all(
-      c(
-        paste("#", basename(package_path)),
-        "### How to cite",
-        "### Contents",
-        "### How to run in your broswer or download and run locally",
-        "### Licenses",
-        "### Contributions"
-      ) %in%
-        readme
-    )
+    paste("#", basename(package_path)) %in% readme
   )
 })
 
