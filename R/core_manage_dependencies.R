@@ -1,6 +1,6 @@
 #' Searches for external packages and adds them to the Imports field in the description
 #'
-#' Scans script files (.R, .Rmd, .Rnw, .Rpres, etc.) for external package dependencies indicated by
+#' Scans script files (.R, .Rmd, .Rnw, .Rpres) for external package dependencies indicated by
 #' \code{library()}, \code{require()} or \code{::} and adds those packages to the Imports field in
 #' the package DESCRIPTION.
 #'
@@ -15,60 +15,10 @@ add_dependencies_to_description <- function(
   just_packages = FALSE
 ) {
 
-  # check if directory or single file
-  if (utils::file_test("-d", path)) {
-    # if directory, search for all possible R or Rmd files
-    pattern <- "\\.[rR]$|\\.[rR]md$|\\.[rR]nw$|\\.[rR]pres$"
-    R_files <- list.files(
-      path,
-      pattern = pattern,
-      ignore.case = TRUE,
-      recursive = TRUE,
-      full.names = TRUE
-    )
-  } else if (utils::file_test("-f", path)) {
-    # if file, just copy it into the files list
-    R_files <- path
-  } else {
-    # stop if path doesn't exist at all
-    stop("File or directory doesn't exist.")
-  }
+  R_files <- get_R_files(path)
 
-  # loop over every file
-  pkgs <- lapply(
-    R_files,
-    function(y) {
-      # read files libe by line
-      current_file <- readLines(y)
-      # get libraries explicitly called via library()
-      library_lines <- grep(pattern = "library", x = current_file, value = TRUE)
-      l_libs <- strsplit(library_lines, split = "library\\(")
-      l_libs <- lapply(l_libs, function(x){strsplit(x[2], split = "\\)")})
-      l_libs <- unlist(l_libs)
-      # get libraries explicitly called via require()
-      require_lines <- grep(pattern = "require", x = current_file, value = TRUE)
-      r_libs <- strsplit(require_lines, split = "require\\(")
-      r_libs <- lapply(r_libs, function(x){strsplit(x[2], split = "\\)")})
-      r_libs <- unlist(r_libs)
-      # get libraries implicitly called via ::
-      point_lines <- grep(pattern = "::", x = current_file, value = TRUE)
-      # search for all collections of alphanumeric signs in between the
-      # line start/a non-alphanumeric sign and ::
-      p_libs <- regmatches(
-        point_lines,
-        gregexpr("(?<=^|[^a-zA-Z0-9])[a-zA-Z0-9]*?(?=::)", point_lines, perl = TRUE)
-      )
-      p_libs <- unlist(p_libs)
-      # merge results for current file
-      res <- c(l_libs, r_libs, p_libs)
-      return(unique(res))
-    }
-  )
+  pkgs <- get_pkgs_from_R_files(R_files)
 
-  # merge results of every file
-  pkgs <- unique(unlist(pkgs))
-  # remove NA and empty string
-  pkgs <- pkgs[pkgs != "" & !is.na(pkgs)]
   # order alphabetically
   pkgs <- sort(pkgs)
 
@@ -135,3 +85,67 @@ add_dependencies_to_description <- function(
   # write result back into DESCRIPTION file
   writeLines(text = tmp, con = description_file)
 }
+
+#### helper functions ####
+
+get_R_files <- function(path, pattern = "\\.[rR]$|\\.[rR]md$|\\.[rR]nw$|\\.[rR]pres$") {
+  # check if directory or single file
+  if (dir.exists(path)) {
+    # if directory, search for all possible R or Rmd files
+    R_files <- list.files(
+      path,
+      pattern = pattern,
+      ignore.case = TRUE,
+      recursive = TRUE,
+      full.names = TRUE
+    )
+  } else if (file.exists(path)) {
+    # if file, just copy it into the files list
+    R_files <- path
+  } else {
+    # stop if path doesn't exist at all
+    stop("File or directory doesn't exist.")
+  }
+
+  return(R_files)
+}
+
+get_pkgs_from_R_files <- function(R_files) {
+  # loop over every file
+  pkgs <- lapply(
+    R_files,
+    function(y) {
+      # read files libe by line
+      current_file <- readLines(y, warn = FALSE)
+      # get libraries explicitly called via library()
+      library_lines <- grep(pattern = "library", x = current_file, value = TRUE)
+      l_libs <- strsplit(library_lines, split = "library\\(")
+      l_libs <- lapply(l_libs, function(x){strsplit(x[2], split = "\\)")})
+      l_libs <- unlist(l_libs)
+      # get libraries explicitly called via require()
+      require_lines <- grep(pattern = "require", x = current_file, value = TRUE)
+      r_libs <- strsplit(require_lines, split = "require\\(")
+      r_libs <- lapply(r_libs, function(x){strsplit(x[2], split = "\\)")})
+      r_libs <- unlist(r_libs)
+      # get libraries implicitly called via ::
+      point_lines <- grep(pattern = "::", x = current_file, value = TRUE)
+      # search for all collections of alphanumeric signs in between the
+      # line start/a non-alphanumeric sign and ::
+      p_libs <- regmatches(
+        point_lines,
+        gregexpr("(?<=^|[^a-zA-Z0-9])[a-zA-Z0-9]*?(?=::)", point_lines, perl = TRUE)
+      )
+      p_libs <- unlist(p_libs)
+      # merge results for current file
+      res <- c(l_libs, r_libs, p_libs)
+      return(unique(res))
+    }
+  )
+  # merge results of every file
+  pkgs <- unique(unlist(pkgs))
+  # remove NA and empty string
+  pkgs <- pkgs[pkgs != "" & !is.na(pkgs)]
+
+  return(pkgs)
+}
+

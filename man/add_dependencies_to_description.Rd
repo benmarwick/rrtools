@@ -18,7 +18,7 @@ add_dependencies_to_description(
 \item{just_packages}{just give back a character vector of the found packages.}
 }
 \description{
-Scans script files (.R, .Rmd, .Rnw, .Rpres, etc.) for external package dependencies indicated by
+Scans script files (.R, .Rmd, .Rnw, .Rpres) for external package dependencies indicated by
 \code{library()}, \code{require()} or \code{::} and adds those packages to the Imports field in
 the package DESCRIPTION.
 }
