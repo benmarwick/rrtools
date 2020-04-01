@@ -23,15 +23,25 @@ add_dependencies_to_description <- function(
   pkgs <- sort(pkgs)
 
   # remove packages that are not on CRAN
-  # TODO: keep an eye on that one: https://github.com/ropenscilabs/available
-  if (curl::has_internet()==TRUE & RCurl::url.exists("https://cran.r-project.org") ==TRUE ) {
-    pkgs <- pkgs[pkgs %in% utils::available.packages(repos = "https://cran.r-project.org")[,1]==TRUE]
-  }
+  # if (curl::has_internet() == TRUE & RCurl::url.exists("https://cran.r-project.org") == TRUE ) {
+  #   pkgs <- pkgs[pkgs %in% utils::available.packages(repos = "https://cran.r-project.org")[,1] == TRUE]
+  # }
+
+  # remove packages that are not valid package names
+  pkgs <- pkgs[sapply(pkgs, function(y) { valid_name(y) } )]
 
   # if the just_packages option is selected, just give back the list of packages
   if (just_packages) {
     return(pkgs)
   }
+
+  write_packages_to_DESCRIPTION(pkgs, description_file)
+
+}
+
+#### helper functions ####
+
+write_packages_to_DESCRIPTION <- function(pkgs, description_file) {
 
   # read DESCRIPTION file
   tmp <- readLines(description_file)
@@ -84,9 +94,8 @@ add_dependencies_to_description <- function(
   tmp[i_end] <- paste0(tmp[i_end], ",", to_add_final)
   # write result back into DESCRIPTION file
   writeLines(text = tmp, con = description_file)
-}
 
-#### helper functions ####
+}
 
 get_R_files <- function(path, pattern = "\\.[rR]$|\\.[rR]md$|\\.[rR]nw$|\\.[rR]pres$") {
   # check if directory or single file
