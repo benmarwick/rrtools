@@ -9,26 +9,11 @@
 #' @param just_packages just give back a character vector of the found packages.
 #'
 #' @export
-add_dependencies_to_description <- function(
-  path = getwd(),
-  description_file = "DESCRIPTION",
-  just_packages = FALSE
-) {
-
+add_dependencies_to_description <- function(path = getwd(), description_file = "DESCRIPTION", just_packages = FALSE) {
   R_files <- get_R_files(path)
-
   pkgs <- get_pkgs_from_R_files(R_files)
-
-  # order alphabetically
-  pkgs <- sort(pkgs)
-
-  # if the just_packages option is selected, just give back the list of packages
-  if (just_packages) {
-    return(pkgs)
-  }
-
+  if (just_packages) { return(pkgs) }
   write_packages_to_DESCRIPTION(pkgs, description_file)
-
 }
 
 #### helper functions ####
@@ -171,6 +156,8 @@ get_pkgs_from_R_files <- function(R_files) {
   # if (curl::has_internet() == TRUE & RCurl::url.exists("https://cran.r-project.org") == TRUE ) {
   #   pkgs <- pkgs[pkgs %in% utils::available.packages(repos = "https://cran.r-project.org")[,1] == TRUE]
   # }
+  # order alphabetically
+  pkgs <- sort(pkgs)
 
   return(pkgs)
 }
