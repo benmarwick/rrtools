@@ -34,46 +34,49 @@ add_dependencies_to_description <- function(
 #### helper functions ####
 
 write_packages_to_DESCRIPTION <- function(pkgs, description_file) {
-
   # read DESCRIPTION file
-  tmp <- readLines(description_file)
+  desc <- readLines(description_file)
   # check, if Imports fields is available
-  if (length(grep("Imports", tmp)) == 0) {
+  if (any(grepl("Imports:", desc))) {
+    imports_already_existed <- TRUE
+  } else {
+    imports_already_existed <- FALSE
     # if no: add it
-    tmp[length(tmp)+1] <- "Imports:"
+    desc[length(desc)+1] <- "Imports:"
   }
   # get line where Imports starts
-  i_begin <- grep("Imports", tmp)
+  i_begin <- grep("Imports:", desc)
   # get line where Imports ends (determination via search for next ":")
   # if Imports is the last tag, set i_end to the last line
-  if((i_begin + 1) >= length(tmp)) {
-    i_end <- length(tmp)
+  if((i_begin + 1) >= length(desc)) {
+    i_end <- length(desc)
   } else {
-    i_end <- i_begin + grep(":", tmp[(i_begin + 1):length(tmp)])[1] - 1
+    i_end <- i_begin + grep(":", desc[(i_begin + 1):length(desc)])[1] - 1
     if(is.na(i_end)) {
-      i_end <- length(tmp)
+      i_end <- length(desc)
     }
   }
   # check which packages are already present in DESCRIPTION
-  present <- unlist(lapply(
-    pkgs,
-    function(x) {
-      doublespace <- paste0(" ", x, " ")
-      space <- any(grep(doublespace, tmp))
-      spacecomma <- paste0(" ", x, ",")
-      comma <- any(grep(spacecomma, tmp))
-      spacelinebreak <- paste0(" ", x, "$")
-      linebreak <- any(grep(spacelinebreak, tmp))
-      return(space | comma | linebreak)
-    }
-  ))
+  missing_pkgs <- reduce_to_missing_in_DESCRIPTION(pkgs, desc)
   # stop if all packages already in DESCRIPTION
-  if(all(present)) {
+  if(length(missing_pkgs) == 0) {
     stop("All used packages are already in the DESCRIPTION somewhere (Imports, Suggests, Depends).")
   }
   # create string with missing packages and their version number in correct layout
-  to_add_version <- unlist(lapply(
-    pkgs[!present],
+  to_add_package_string <- create_to_add_package_string(missing_pkgs)
+  to_add_package_string <- paste0("\n    ", paste0(to_add_package_string, collapse = ",\n    "))
+  # add newly created package string to last line of Imports
+  if (imports_already_existed) {
+    desc[i_end] <- paste0(desc[i_end], ",", to_add_package_string)
+  } else {
+    desc[i_end] <- paste0(desc[i_end], to_add_package_string)
+  }
+  # write result back into DESCRIPTION file
+  writeLines(text = desc, con = description_file)
+}
+
+create_to_add_package_string <- function(missing_pkgs) {
+  unlist(lapply(missing_pkgs,
     function(x) {
       # check if package is installed
       if(x %in% rownames(installed.packages())) {
@@ -81,12 +84,21 @@ write_packages_to_DESCRIPTION <- function(pkgs, description_file) {
       } else {x}
     }
   ))
-  to_add_final <- paste0("\n    ", paste0(to_add_version, collapse = ",\n    "))
-  # add newly created package string to last line of Imports
-  tmp[i_end] <- paste0(tmp[i_end], ",", to_add_final)
-  # write result back into DESCRIPTION file
-  writeLines(text = tmp, con = description_file)
+}
 
+reduce_to_missing_in_DESCRIPTION <- function(pkgs, desc) {
+  present <- unlist(lapply(pkgs,
+    function(x) {
+      doublespace <- paste0(" ", x, " ")
+      space <- any(grep(doublespace, desc))
+      spacecomma <- paste0(" ", x, ",")
+      comma <- any(grep(spacecomma, desc))
+      spacelinebreak <- paste0(" ", x, "$")
+      linebreak <- any(grep(spacelinebreak, desc))
+      return(space | comma | linebreak)
+    }
+  ))
+  return(pkgs[!present])
 }
 
 get_R_files <- function(path, pattern = "\\.[rR]$|\\.[rR]md$|\\.[rR]nw$|\\.[rR]pres$") {
@@ -162,4 +174,3 @@ get_pkgs_from_R_files <- function(R_files) {
 
   return(pkgs)
 }
-
