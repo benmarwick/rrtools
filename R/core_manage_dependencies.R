@@ -22,14 +22,6 @@ add_dependencies_to_description <- function(
   # order alphabetically
   pkgs <- sort(pkgs)
 
-  # remove packages that are not on CRAN
-  # if (curl::has_internet() == TRUE & RCurl::url.exists("https://cran.r-project.org") == TRUE ) {
-  #   pkgs <- pkgs[pkgs %in% utils::available.packages(repos = "https://cran.r-project.org")[,1] == TRUE]
-  # }
-
-  # remove packages that are not valid package names
-  pkgs <- pkgs[sapply(pkgs, function(y) { valid_name(y) } )]
-
   # if the just_packages option is selected, just give back the list of packages
   if (just_packages) {
     return(pkgs)
@@ -161,6 +153,12 @@ get_pkgs_from_R_files <- function(R_files) {
   pkgs <- unique(unlist(pkgs))
   # remove NA and empty string
   pkgs <- pkgs[pkgs != "" & !is.na(pkgs)]
+  # remove packages that are not valid package names
+  pkgs <- pkgs[sapply(pkgs, function(y) { valid_name(y) } )]
+  # remove packages that are not on CRAN
+  # if (curl::has_internet() == TRUE & RCurl::url.exists("https://cran.r-project.org") == TRUE ) {
+  #   pkgs <- pkgs[pkgs %in% utils::available.packages(repos = "https://cran.r-project.org")[,1] == TRUE]
+  # }
 
   return(pkgs)
 }
