@@ -20,5 +20,5 @@ jobs:
       - deploy:
           name: Publish application to docker hub
           command: |
-            docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+            docker login --username=$DOCKER_USER --password=$DOCKER_PASS
             docker push $DOCKER_USER/{{{repo}}}
