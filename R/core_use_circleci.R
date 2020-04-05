@@ -21,7 +21,7 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
   pkg <- as.package(pkg)
 
   gh <- github_info(pkg$path)
-  circleci_url <- file.path("https://circleci.com/gh/", gh$username)
+  circleci_url <- paste0("https://circleci.com/gh/", gh$username)
 
   if(docker_hub){
 
