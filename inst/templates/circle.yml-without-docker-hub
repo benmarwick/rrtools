@@ -14,6 +14,6 @@ jobs:
             docker build -t $DOCKER_USER/{{{repo}}}  .
           no_output_timeout: 4h
       - run:
-          name: test if we can start the container
+          name: Test if the container can be started
           command: |
             docker run --name {{{repo}}} -d -p 8787:8787 $DOCKER_USER/{{{repo}}}
