@@ -1,14 +1,19 @@
-machine:
-  services:
-    - docker
-
-dependencies:
-  override:
-    - docker info
-    - docker build -t $DOCKER_USER/{{{repo}}}  .
-
-test:
-  override:
-  # see if we can start container...
-    - docker run --name {{{repo}}} -d -p 8787:8787 $DOCKER_USER/{{{repo}}}
-
+version: 2.1
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Get info
+          command: |
+            docker info
+      - run:
+          name: Build the custom container
+          command: |
+            docker build -t $DOCKER_USER/{{{repo}}}  .
+          no_output_timeout: 4h
+      - run:
+          name: test if we can start the container
+          command: |
+            docker run --name {{{repo}}} -d -p 8787:8787 $DOCKER_USER/{{{repo}}}
