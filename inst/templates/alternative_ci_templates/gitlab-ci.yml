@@ -1,0 +1,114 @@
+# Written by ntrlshrp (https://github.com/ntrlshrp) in 2019
+
+image: docker:stable
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  # Set to "yes" to produce a code coverage report
+  CODE_COVERAGE_REPORT: "no"
+  # Set to "yes" to publish paper to https://USERname.gitlab.io/REPOname/ (and/or code coverage report to https://USERname.gitlab.io/REPOname/coverage.html)
+  PUBLISH_PAPER: "no"
+  # Set to "yes" to push image to container registry https://registry.gitlab.com/group/project/image (see https://gitlab.com/USERname/REPOname/container_registry)
+  PUSH_IMAGE_TO_REGISTRY: "no"
+
+stages:
+  - build
+  - test
+  - deploy
+
+services:
+  - docker:dind
+
+check-package:
+  stage: build
+  image: rocker/{{{rocker}}}:{{{r_version}}}
+  script:
+    - R -e "devtools::install(dep=TRUE)"
+    - R -e "devtools::check()"
+
+# To have the coverage percentage appear as a gitlab badge follow these instructions
+# https://docs.gitlab.com/ee/user/project/pipelines/settings.html#test-coverage-report-badge
+# Pipeline Badges
+# In the pipelines settings page you can find pipeline status and test coverage badges for your project. The latest successful pipeline will be used to read the pipeline status and test coverage values.
+# Visit the pipelines settings page in your project to see the exact link to your badges, as well as ways to embed the badge image in your HTML or Markdown pages.
+# Settings > General > Badges > Link = https://USERname.gitlab.io/%{project_path}/coverage.html
+# Settings > General > Badges > Badge Image URL = https://USERname.gitlab.io/%{project_path}/badges/%{default_branch}/coverage.svg
+
+# If you use test coverage in your code, GitLab can capture its output in the job log using a regular expression. In the pipelines settings, search for the “Test coverage parsing” section.
+# The coverage parsing string is
+# Code coverage: \d+\.\d+
+# https://docs.gitlab.com/ee/user/project/pipelines/settings.html#test-coverage-parsing
+
+# To produce a code coverage report as a GitLab page see
+# https://about.gitlab.com/2016/11/03/publish-code-coverage-report-with-gitlab-pages/
+code-coverage-report:
+  stage: build
+  image: rocker/{{{rocker}}}:{{{r_version}}}
+  allow_failure: true
+  only:
+    refs:
+      - master
+    variables:
+      - $CODE_COVERAGE_REPORT == "yes"
+  script:
+    - R -e "devtools::install(dep=TRUE)"
+    - Rscript -e "install.packages('DT')"
+    - Rscript -e "covr::gitlab(coverage = NULL, file = 'public/coverage.html', quiet = TRUE)"
+  artifacts:
+    paths:
+      - public
+
+render-paper:
+  before_script:
+    - docker info
+  stage: test
+  only:
+    - master
+  script:
+    - docker build -t my-docker-image .
+    - docker run --name my-docker-image -d my-docker-image /bin/sh -c "while true; do echo hello world; sleep 1; done"
+    - alias dl='docker ps -l -q'
+    - docker cp `dl`:{{{repo}}}/analysis/paper/. $CI_PROJECT_DIR/public
+  artifacts:
+    paths:
+      - public
+
+# Enable the Container Registry for your GitLab instance (default is enabled for gitlab.com),
+# then uncomment script in push-image-to-registry job (this may only work on public projects?)
+# https://docs.gitlab.com/ee/user/project/container_registry.html
+# Once enabled for your GitLab instance, to enable Container Registry for your project (default is enabled for gitlab.com once done for another project?):
+#    Go to your project’s Settings > General page.
+#    Expand the Visibility, project features, permissions section and enable the Container Registry feature on your project. For new projects this might be enabled by default. For existing projects (prior GitLab 8.8), you will have to explicitly enable it.
+#    Press Save changes for the changes to take effect. You should now be able to see the Packages > Container Registry link in the sidebar.
+push-image-to-registry:
+  before_script:
+    - docker info
+  stage: deploy
+  only:
+    refs:
+      - master
+    variables:
+      - $PUSH_IMAGE_TO_REGISTRY == "yes"
+  script:
+    - ls -al
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
+
+pages:
+  stage: deploy
+  dependencies:
+    - render-paper
+  only:
+    refs:
+      - master
+    variables:
+      - $PUBLISH_PAPER == "yes"
+  script:
+    - ls -al
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
