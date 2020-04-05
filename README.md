@@ -113,6 +113,7 @@ To create a reproducible research compendium step-by-step using the rrtools appr
       - add environment variables to enable push of the Docker container to the Docker Hub
       - make an account at <https://hub.docker.com/> to host our Docker container
   - Note that you should run this function only when we are ready for our GitHub repository to be public. The free travis service we’re using here requires your GitHub repository to be public. It will not work on private repositories. If you want to keep your GitHub repo private until after publication, you can use `rrtools::use_circleci()` for running free private continuous integration tests at <https://circleci.com>, instead of travis. With `rrtools::use_circleci(docker_hub = FALSE)` we can stop our Docker container from appearing on Docker Hub, so our Docker container stays completely private.
+  - Besides travis and circleci there are also other Continous Integration (CI) services. Gitlab and Github even offer this as part of their repository hosting now. So far rrtools only provides configuration templates for travis and circleci, but we collect examples for other options [here](inst/templates/alternative_ci_templates).
 
 #### 7\. `usethis::use_testthat()`
 
