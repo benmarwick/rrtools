@@ -31,8 +31,15 @@ highlights: |
   These are the highlights. 
 ---
 
-
 <!-- This is the format for text comments that will be ignored during renderings. Do not put R code in these comments because it will not be ignored. -->
+
+<!-- With the following code you can access and display values from the yml header above. -->
+
+Keywords: `r rmarkdown::metadata$keywords`
+
+Highlights: `r rmarkdown::metadata$highlights`
+
+<!-- The following code chunk defines some general settings how code chunks should behave. -->
 
 ```{r setup, echo = FALSE}
 knitr::opts_chunk$set(
@@ -46,6 +53,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+<!-- The actual document text starts here: -->
+
 # Introduction
 
 Here is a citation [@Marwick2017]
@@ -55,6 +64,8 @@ Here is a citation [@Marwick2017]
 # Methods
 
 # Results
+
+<!-- Here's some example analysis code: -->
 
 ```{r get-data, eval = FALSE}
 # Note the path that we need to use to access our data files when rendering this document
@@ -80,10 +91,13 @@ Here is an example of inline code `r x` in the middle of a sentence.
 # Acknowledgements
 
 <!-- The following line inserts a page break  -->
+
 \newpage
 
 # References 
+
 <!-- The following line ensures the references appear here for the MS Word or HTML output files, rather than right at the end of the document (this will not work for PDF files):  -->
+
 <div id="refs"></div>
 
 \newpage
