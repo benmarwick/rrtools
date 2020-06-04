@@ -61,3 +61,35 @@ test_that("add_dependencies_to_description provides correct packages vector if j
     c("bookdown", "git2r", "glue", "knitr", "rmarkdown", "usethis")
   )
 })
+
+#### check that adding more packages later works as expected as well ###
+
+testfile_3 <- file.path(package_path, "/R/testfile_3.R")
+writeLines(
+  c("library(raster)"),
+  con = testfile_3
+)
+
+rrtools::add_dependencies_to_description(
+  package_path,
+  description_path,
+  just_packages = FALSE
+)
+
+description_changed_once_more <- readLines(description_path)
+
+test_that("the DESCRIPTION file has once more changed exactly as expected", {
+  expect_equal(
+    all.equal(
+      description_changed_once_more, description_changed
+    ),
+    c("Lengths (23, 22) differ (string compare on first 22)", "1 string mismatch")
+  )
+})
+
+test_that("the DESCRIPTION file again contains the package dependencies", {
+  expect_equal(
+    grep("bookdown | git2r | glue | knitr | rmarkdown | usethis | raster", description_changed),
+    c(17:22)
+  )
+})
