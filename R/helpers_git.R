@@ -191,3 +191,16 @@ use_git_ignore <- function(ignores, directory = ".", pkg = ".", quiet = FALSE) {
 
   invisible(TRUE)
 }
+
+# from https://github.com/r-lib/usethis/blob/master/R/git-utils.R
+get_git_config <- function (name, global = FALSE) {
+  if (global) {
+    config <- git2r::config()
+    config$global[[name]]
+  }
+  else {
+    message("Not able to determine your name from git settings. Will use 'Jane Smith' in the license text file now. Please replace it with your name.")
+    return("Jane Smith")
+  }
+}
+

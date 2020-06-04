@@ -19,7 +19,7 @@ create_compendium <- function(pkgname, data_in_git = TRUE, simple = TRUE) {
   setwd(pkgname)
 
   # initialize the new project with useful features
-  usethis::use_mit_license(name = usethis:::git_config_get("user.name", global = TRUE))
+  usethis::use_mit_license(name = get_git_config("user.name", global = TRUE))
   rrtools::use_readme_rmd()
   rrtools::use_analysis(data_in_git = data_in_git)
 
