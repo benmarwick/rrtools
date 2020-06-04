@@ -67,11 +67,6 @@ use_compendium <- function(
       crayon::blue(encodeString(x, quote = "'"))
     }
 
-    # from usethis
-    valid_name <- function(x){
-      grepl("^[[:alpha:]][[:alnum:].]+$", x) && !grepl("\\.$", x)
-    }
-
     # from usethis, modified
     check_package_name <- function(name) {
       if (!valid_name(name)) {
@@ -140,3 +135,9 @@ use_compendium <- function(
   }
 
 }
+
+# from usethis
+valid_name <- function(x){
+  grepl("^[[:alpha:]][[:alnum:].]+$", x) && !grepl("\\.$", x)
+}
+
