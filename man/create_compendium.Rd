@@ -4,12 +4,14 @@
 \alias{create_compendium}
 \title{Quickly create a basic research compendium by combining several rrtools functions into one.}
 \usage{
-create_compendium(pkgname, data_in_git = TRUE)
+create_compendium(pkgname, data_in_git = TRUE, simple = TRUE)
 }
 \arguments{
 \item{pkgname}{path to an empty, git initialized directory. The last component of the path will be used as the package name}
 
 \item{data_in_git}{should git track the files in the data directory? Default is TRUE}
+
+\item{simple}{if TRUE, the default, the R/ directory is not created, because it's not necessary for many if not most research repositories}
 }
 \description{
 In one step, this will create an R package in an empty, git initialized directory, attach the MIT license to it, add the rrtools' README to it, create the 'analysis' directory structure, and populate it with an R Markdown file and bib file. This function will not create a GitHub repository for the compendium, a Dockerfile, a Travis config file, or any package tests. Those require some interaction outside of R and are left to the user.

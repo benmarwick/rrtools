@@ -9,6 +9,7 @@
 #' @param rstudio create an RStudio project file? (with \code{usethis::use_rstudio})
 #' @param open if TRUE and in RStudio, the new project is opened in a new instance. If TRUE and not in RStudio, the working directory is set to the new project
 #' @param quiet if FALSE, the default, prints informative messages
+#' @param simple if TRUE, the default, the R/ directory is not created, because it's not necessary for many if not most research repositories
 #'
 #' @importFrom usethis create_package
 #' @importFrom rstudioapi isAvailable
@@ -19,7 +20,8 @@ use_compendium <- function(
   fields = getOption("usethis.description"),
   rstudio = rstudioapi::isAvailable(),
   open = interactive(),
-  quiet = FALSE
+  quiet = FALSE,
+  simple = TRUE
 ){
 
   if (!dir.exists(path)) {
@@ -111,6 +113,10 @@ use_compendium <- function(
       rstudio = rstudio,
       open = open
     )
+
+    if (simple) {
+      unlink(file.path(path, "R"), recursive = T)
+    }
 
     usethis::ui_done("The package {name} has been created")
 

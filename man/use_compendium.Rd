@@ -10,7 +10,8 @@ use_compendium(
   fields = getOption("usethis.description"),
   rstudio = rstudioapi::isAvailable(),
   open = interactive(),
-  quiet = FALSE
+  quiet = FALSE,
+  simple = TRUE
 )
 }
 \arguments{
@@ -23,6 +24,8 @@ use_compendium(
 \item{open}{if TRUE and in RStudio, the new project is opened in a new instance. If TRUE and not in RStudio, the working directory is set to the new project}
 
 \item{quiet}{if FALSE, the default, prints informative messages}
+
+\item{simple}{if TRUE, the default, the R/ directory is not created, because it's not necessary for many if not most research repositories}
 }
 \description{
 This is usethis::create_package() with some additional messages to simplify the transition into the new project setting

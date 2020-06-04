@@ -5,14 +5,15 @@
 #'
 #' @param pkgname path to an empty, git initialized directory. The last component of the path will be used as the package name
 #' @param data_in_git should git track the files in the data directory? Default is TRUE
+#' @param simple if TRUE, the default, the R/ directory is not created, because it's not necessary for many if not most research repositories
 #'
 #' @importFrom usethis use_mit_license use_git
 #' @export
 
-create_compendium <- function(pkgname, data_in_git = TRUE) {
+create_compendium <- function(pkgname, data_in_git = TRUE, simple = TRUE) {
 
   # create new project
-  rrtools::use_compendium(pkgname)
+  rrtools::use_compendium(pkgname, simple = simple)
 
   # move us into the new project
   setwd(pkgname)
