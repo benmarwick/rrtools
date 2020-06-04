@@ -4,7 +4,7 @@
 \alias{use_circleci}
 \title{Add a circleci config file}
 \usage{
-use_circleci(pkg = ".", browse = interactive(), docker_hub = TRUE)
+use_circleci(pkg = ".", browse = interactive(), docker_hub = FALSE)
 }
 \arguments{
 \item{pkg}{defaults to the package in the current working directory}

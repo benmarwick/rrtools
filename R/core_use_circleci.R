@@ -17,16 +17,20 @@
 #' @importFrom curl has_internet
 #' @importFrom utils browseURL
 #' @export
-use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
+use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = FALSE) {
   pkg <- as.package(pkg)
 
   gh <- github_info(pkg$path)
-  circleci_url <- file.path("https://circleci.com/gh/", gh$username)
+  circleci_url <- paste0("https://circleci.com/gh/", gh$username)
+
+  if (!dir.exists(file.path(".circleci"))) {
+    dir.create(".circleci")
+  }
 
   if(docker_hub){
 
     use_template("circle.yml-with-docker-hub",
-                 "circle.yml",
+                 file.path(".circleci", "config.yml"),
                  ignore = TRUE,
                  pkg = pkg,
                  data = gh,
@@ -35,7 +39,7 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
   } else {
 
     use_template("circle.yml-without-docker-hub",
-                 "circle.yml",
+                 file.path(".circleci", "config.yml"),
                  ignore = TRUE,
                  pkg = pkg,
                  data = gh,
@@ -43,19 +47,22 @@ use_circleci <- function(pkg = ".", browse = interactive(), docker_hub = TRUE) {
 
   }
 
-
-  message("Next: \n",
-          " * Add a circleci shield to your README.Rmd:\n",
-          "[![Circle-CI Build Status]",
-          "(https://circleci.com/gh/", gh$fullname, ".svg?style=shield&circle-token=:circle-token)]",
-          "(https://circleci.com/gh/", gh$fullname, ")\n",
-          " * Turn on circleci for your repo at ", circleci_url, "\n",
-          "   and add your environment variables: DOCKER_EMAIL, ", "\n",
-          "   DOCKER_USER, DOCKER_PASS.",  "\n",
-          ifelse(docker_hub,
-          paste0(" * Your Docker container will be pushed to the Docker Hub", "\n",
-          "   if the build completes successfully", "\n" ),
-          paste0(" * Your Docker container will be kept private and NOT be pushed to the Docker Hub", "\n" )))
+  cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
+  usethis::ui_todo("Commit and push the new file 'config.yml' and the change to '.Rbuildignore'")
+  usethis::ui_todo(paste0("Add your environment variable DOCKER_USER at ", circleci_url))
+  if (docker_hub) {
+    usethis::ui_todo("Add the additional environment variables DOCKER_EMAIL and DOCKER_PASS.")
+    cat("Your Docker container will be pushed to the Docker Hub if the build completes successfully", "\n")
+    cat("The container will be kept private and NOT be pushed to the Docker Hub. \n")
+  }
+  usethis::ui_todo("Configure circleci to start building with your config.yml.")
+  usethis::ui_todo(paste0(
+    "Optional: Add a circleci shield to your README.Rmd: [![Circle-CI Build Status](https://circleci.com/gh/",
+    gh$fullname,
+    ".svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/",
+    gh$fullname,
+    ")"
+  ))
 
   if (browse) {
     if(curl::has_internet()) {
