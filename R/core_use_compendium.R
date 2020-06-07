@@ -25,7 +25,8 @@ use_compendium <- function(
 ){
 
   if (!dir.exists(path)) {
-    stop(message("The directory ", path, " could not be found."))
+    dir.create(path)
+    message("The directory ", path, " has been created.")
   }
 
   # if we have options setting the description, use that for Authors@R
