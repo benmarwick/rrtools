@@ -21,6 +21,7 @@ use_compendium(
   fields = getOption("devtools.desc"),
   rstudio = FALSE,
   open = FALSE,
+  simple = FALSE,
   quiet = TRUE
 ))
 

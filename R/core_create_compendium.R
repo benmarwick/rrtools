@@ -10,7 +10,9 @@
 #' @importFrom usethis use_mit_license use_git
 #' @export
 
-create_compendium <- function(pkgname, data_in_git = TRUE, simple = TRUE) {
+create_compendium <- function(pkgname,
+                              data_in_git = TRUE,
+                              simple = TRUE) {
 
   # create new project
   rrtools::use_compendium(pkgname, simple = simple)
