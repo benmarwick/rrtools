@@ -4,7 +4,9 @@
 # can be applied safely and subsequently tested.
 
 # create temporary directory in file system
-playground_path <- paste0(tempdir(), "/testpackages")
+tempdirstr <- tempdir()
+unlink(tempdirstr)
+playground_path <- paste0(tempdirstr, "/testpackages")
 dir.create(playground_path, showWarnings = FALSE)
 
 # create test package
@@ -12,7 +14,7 @@ package_path <- paste0(
   playground_path,
   tempfile(pattern = "testpackage.", tmpdir = "", fileext = "")
 )
-dir.create(package_path)
+# dir.create(package_path)
 
 library(rrtools)
 rrtools:::quietly(

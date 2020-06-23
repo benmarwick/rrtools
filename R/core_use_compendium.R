@@ -27,6 +27,8 @@ use_compendium <- function(
   if (!dir.exists(path)) {
     dir.create(path)
     message("The directory ", path, " has been created.")
+  } else {
+    stop("Directory already exists. Please choose a different name or location for your compendium.")
   }
 
   # if we have options setting the description, use that for Authors@R
