@@ -41,9 +41,9 @@ use_compendium <- function(
     usethis.description = list(
       Version = "0.0.0.9000",
       Title =  "What the Package Does (One Line, Title Case)",
-      Description = "What the package does (one paragraph)",
+      Description = "What the package does (one paragraph).",
       `Authors@R` = authors_at_R,
-      License =  "What license it uses",
+      License =  "MIT + file LICENSE",
       Encoding = "UTF-8",
       LazyData = "true",
       ByteCompile = "true"
@@ -131,7 +131,6 @@ use_compendium <- function(
     cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
     usethis::ui_todo("Edit the DESCRIPTION file")
     usethis::ui_todo("Use other 'rrtools' functions to add components to the compendium\n")
-
 
   })
 
