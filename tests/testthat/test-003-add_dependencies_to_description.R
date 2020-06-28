@@ -5,7 +5,7 @@ context("add_dependencies_to_description()")
 # create artificial files with some dependencies
 testfile_1 <- file.path(package_path, "/R/testfile_1.R")
 writeLines(
-  c("library(knitr)", "require(glue)", "rmarkdown::draft()"),
+  c("library(knitr)", "require(glue)", "rmarkdown::draft()", "#'@importFrom magrittr \"%>%\""),
   con = testfile_1
 )
 
@@ -38,14 +38,14 @@ test_that("the DESCRIPTION file has changed exactly as expected", {
     all.equal(
       description_unchanged, description_changed
     ),
-    "Lengths (15, 22) differ (string compare on first 15)"
+    "Lengths (15, 23) differ (string compare on first 15)"
   )
 })
 
 test_that("the DESCRIPTION file now actually contains the package dependencies", {
   expect_equal(
-    grep("bookdown | git2r | glue | knitr | rmarkdown | usethis", description_changed),
-    c(17:22)
+    grep("bookdown | git2r | glue | knitr | rmarkdown | usethis | magrittr", description_changed),
+    c(17:23)
   )
 })
 
@@ -58,7 +58,7 @@ test_that("add_dependencies_to_description provides correct packages vector if j
       description_path,
       just_packages = TRUE
     ),
-    c("bookdown", "git2r", "glue", "knitr", "rmarkdown", "usethis")
+    c("bookdown", "git2r", "glue", "knitr", "magrittr", "rmarkdown", "usethis")
   )
 })
 
@@ -83,13 +83,13 @@ test_that("the DESCRIPTION file has once more changed exactly as expected", {
     all.equal(
       description_changed_once_more, description_changed
     ),
-    c("Lengths (23, 22) differ (string compare on first 22)", "1 string mismatch")
+    c("Lengths (24, 23) differ (string compare on first 23)", "1 string mismatch")
   )
 })
 
 test_that("the DESCRIPTION file again contains the package dependencies", {
   expect_equal(
-    grep("bookdown | git2r | glue | knitr | rmarkdown | usethis | raster", description_changed),
-    c(17:22)
+    grep("bookdown | git2r | glue | knitr | rmarkdown | usethis | raster | magrittr", description_changed),
+    c(17:23)
   )
 })

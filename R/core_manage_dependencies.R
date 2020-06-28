@@ -141,8 +141,11 @@ get_pkgs_from_R_files <- function(R_files) {
         point3_lines,
         gregexpr("(?<=^|[^a-zA-Z0-9])[a-zA-Z0-9]*?(?=:::)", point3_lines, perl = TRUE)
       ))
+      # get libraries introduced with @importFrom
+      importFrom_lines <- grep(pattern = "@importFrom", x = current_file, value = TRUE)
+      iF_libs <- gsub("#'\\s*@importFrom\\s([^ ]*).*$", "\\1", importFrom_lines)
       # merge results for current file
-      res <- c(l_libs, r_libs, p2_libs, p3_libs)
+      res <- c(l_libs, r_libs, p2_libs, p3_libs, iF_libs)
       return(unique(res))
     }
   )
