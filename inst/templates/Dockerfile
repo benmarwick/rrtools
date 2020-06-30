@@ -2,7 +2,7 @@
 FROM rocker/{{{rocker}}}:{{{r_version}}}
 
 # required
-MAINTAINER Your Name <your_email@somewhere.com>
+MAINTAINER {{{maintainer}}}
 
 COPY . /{{{repo}}}
 

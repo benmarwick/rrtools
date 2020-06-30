@@ -40,6 +40,7 @@
   gh$r_version <- r_version
   gh$rocker <- rocker
   gh$rmd_path <- rmd_path
+  gh$maintainer <- if (!is.null(pkg$maintainer)) pkg$maintainer else "Your Name <your_email@somewhere.com>"
 
   use_template("Dockerfile",
                "Dockerfile",
@@ -50,7 +51,7 @@
                out_path = "")
 
   message("Next: \n",
-          " * Edit the dockerfile with your name & email", "\n",
+          " * Edit the dockerfile with your name & email if needed", "\n",
           " * Edit the dockerfile to include system dependencies, such as linux libraries that are needed by the R packages you're using", "\n",
           " * Check the last line of the dockerfile to specify which Rmd should be rendered in the Docker container, edit if necessary", "\n"  )
 
