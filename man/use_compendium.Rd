@@ -6,10 +6,10 @@
 switches to the working directory of this new package, ready to work}
 \usage{
 use_compendium(
-  path,
+  path = getwd(),
   fields = getOption("usethis.description"),
   rstudio = rstudioapi::isAvailable(),
-  open = interactive(),
+  open = FALSE,
   quiet = FALSE,
   simple = TRUE
 )

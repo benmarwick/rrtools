@@ -16,10 +16,10 @@
 #' @export
 
 use_compendium <- function(
-  path,
+  path = getwd(),
   fields = getOption("usethis.description"),
   rstudio = rstudioapi::isAvailable(),
-  open = interactive(),
+  open = FALSE,
   quiet = FALSE,
   simple = TRUE
 ){
@@ -28,7 +28,7 @@ use_compendium <- function(
     dir.create(path)
     message("The directory ", path, " has been created.")
   } else {
-    stop("Directory already exists. Please choose a different name or location for your compendium.")
+   message("Creating the compendium in the current directory: ", path)
   }
 
   # if we have options setting the description, use that for Authors@R
