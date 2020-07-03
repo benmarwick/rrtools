@@ -56,10 +56,10 @@ use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.Rm
 
  cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),4), "\n")
   usethis::ui_todo("Write your article/report/thesis, start at the paper.Rmd file")
-  usethis::ui_todo("Add the citation style library file (csl) to replace the default provided here, see {crayon::bgBlue('https://github.com/citation-style-language/')}")
+  usethis::ui_todo("Add the citation style library file (csl) to replace the default provided here, see {crayon::bgBlue(crayon::white('https://github.com/citation-style-language/'))}")
   usethis::ui_todo("Add bibliographic details of cited items to the {usethis::ui_value('references.bib')} file")
-  usethis::ui_todo("For adding captions & cross-referencing in an Rmd, see {crayon::bgBlue('https://bookdown.org/yihui/bookdown/')}")
-  usethis::ui_todo("For adding citations & reference lists in an Rmd, see {crayon::bgBlue('http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html')}")
+  usethis::ui_todo("For adding captions & cross-referencing in an Rmd, see {crayon::bgBlue(crayon::white('https://bookdown.org/yihui/bookdown/'))}")
+  usethis::ui_todo("For adding citations & reference lists in an Rmd, see {crayon::bgBlue(crayon::white('http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html'))}")
 
   # message about whether data files are tracked by Git:
   cat(crayon::bold("\nNote that:\n"))
