@@ -1,10 +1,12 @@
-FROM rocker/binder:latest
-LABEL maintainer="bmarwick"
+FROM rocker/binder:4.0.2
+LABEL maintainer='Ben Marwick'
 USER root
 COPY . ${HOME}
 RUN chown -R ${NB_USER} ${HOME}
-## Become normal user again
 USER ${NB_USER}
-RUN wget https://github.com/benmarwick/rrtools/raw/master/DESCRIPTION && R -e "devtools::install_deps()"
+
+
+
+RUN wget https://github.com/benmarwick/rrtools/raw/master/DESCRIPTION && R -e "options(repos = list(CRAN = 'http://mran.revolutionanalytics.com/snapshot/2020-09-24/')); devtools::install_deps()"
 
 RUN rm DESCRIPTION.1; exit 0
