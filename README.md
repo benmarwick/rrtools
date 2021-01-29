@@ -46,10 +46,10 @@ To create a reproducible research compendium step-by-step using the rrtools appr
       - edit the `DESCRIPTION` file (located in your `pkgname` directory) to include accurate metadata
       - periodically update the `Imports:` section of the `DESCRIPTION` file with the names of packages used in the code we write in the         Rmd document(s) (e.g., `usethis::use_package("dplyr", "imports")`)
 
-#### 2\. `usethis::use_mit_license(name = "My Name")`
+#### 2\. `usethis::use_mit_license(copyright_holder = "My Name")`
 
   - this adds a reference to the MIT license in the [DESCRIPTION](DESCRIPTION) file and generates a [LICENSE](LICENSE) file listing the name provided as the copyright holder
-  - to use a different license, replace this line with `usethis::use_gpl3_license(name = "My Name")`, or follow the instructions for other licenses
+  - to use a different license, replace this line with any of the licenses mentioned here: `?usethis::use_mit_license()`
 
 #### 3\. `rrtools::use_readme_rmd()`
 

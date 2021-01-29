@@ -4,10 +4,10 @@
 \alias{create_compendium}
 \title{Quickly create a basic research compendium by combining several rrtools functions into one.}
 \usage{
-create_compendium(pkgname, data_in_git = TRUE, simple = TRUE)
+create_compendium(pkgname = getwd(), data_in_git = TRUE, simple = TRUE)
 }
 \arguments{
-\item{pkgname}{path to an empty, git initialized directory. The last component of the path will be used as the package name}
+\item{pkgname}{path to an empty, git initialized directory. The last component of the path will be used as the package name. Default is the current directory name.}
 
 \item{data_in_git}{should git track the files in the data directory? Default is TRUE}
 

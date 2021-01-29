@@ -5,7 +5,7 @@ context("license")
 wd <- getwd()
 setwd(package_path)
 suppressMessages(
-usethis::use_mit_license(name = rrtools:::get_git_config("user.name", global = TRUE))
+usethis::use_mit_license(copyright_holder = rrtools:::get_git_config("user.name", global = TRUE))
 )
 setwd(wd)
 
