@@ -123,13 +123,6 @@ use_compendium <- function(
 
     usethis::ui_done("The package {name} has been created")
 
-    if (rstudio & open) {
-      usethis::ui_done("Opening the new compendium in a new RStudio session...")
-    } else {
-      usethis::ui_done("Now opening the new compendium...")
-      usethis::ui_done("Done. The working directory is currently {getwd()}")
-    }
-
     cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
     usethis::ui_todo("Edit the DESCRIPTION file")
     usethis::ui_todo("Use other 'rrtools' functions to add components to the compendium\n")
