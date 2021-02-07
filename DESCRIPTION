@@ -1,7 +1,7 @@
 Package: rrtools
 Type: Package
 Title: Creates a Reproducible Research Compendium
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(person("Ben", "Marwick", role = c("aut", "cre"), email = "benmarwick@gmail.com"),
              person("Daniel", "Knitter", role = "ctb"),
              person("Patrick", "Kennedy", role = "ctb"),
