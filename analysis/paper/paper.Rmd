@@ -31,6 +31,7 @@ knitr::opts_chunk$set(
 )
 
 library(rrtools) # Or use devtools::load_all('.', quiet = T) if your code is in script files, rather than as functions in the `/R` directory
+library(here)
 ```
 
 # Introduction
@@ -49,7 +50,9 @@ Here is a citation [@Marwick2017]
 
 ```{r get-data, eval = FALSE}
 # Note the path that we need to use to access our data files when rendering this document
-my_data <- readr::read_csv("../data/raw_data/my_csv_file.csv")
+# To avoid encountering relative filepath probles when rendering files we recommend using the "here" package
+# Simply wrap the path to your file with the function here() like in the example below
+my_data <- readr::read_csv(here("analysis/data/raw_data/my_csv_file.csv"))
 ```
 
 # Discussion
