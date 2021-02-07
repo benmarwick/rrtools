@@ -18,6 +18,9 @@ create_compendium <- function(pkgname = getwd(),
   # create new project
   rrtools::use_compendium(pkgname, simple = simple)
 
+  # move us into the new project
+  setwd(pkgname)
+
   # initialize the new project with useful features
   usethis::use_mit_license(copyright_holder = get_git_config("user.name", global = TRUE))
   rrtools::use_readme_rmd()
