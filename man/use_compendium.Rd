@@ -9,7 +9,7 @@ use_compendium(
   path = getwd(),
   fields = getOption("usethis.description"),
   rstudio = rstudioapi::isAvailable(),
-  open = FALSE,
+  open = TRUE,
   quiet = FALSE,
   simple = TRUE
 )

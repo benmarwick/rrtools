@@ -29,4 +29,6 @@ create_compendium <- function(pkgname = getwd(),
   # install the package and its dependencies
   devtools::install(quiet = TRUE)
 
+  usethis::ui_done("The working directory is now {getwd()}")
+
 }

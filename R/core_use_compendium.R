@@ -19,7 +19,7 @@ use_compendium <- function(
   path = getwd(),
   fields = getOption("usethis.description"),
   rstudio = rstudioapi::isAvailable(),
-  open = FALSE,
+  open = TRUE,
   quiet = FALSE,
   simple = TRUE
 ){
@@ -123,6 +123,13 @@ use_compendium <- function(
 
     usethis::ui_done("The package {name} has been created")
 
+    # change working directory if not in RStudio
+    if (open & !rstudio) {
+      setwd(path)
+      usethis::ui_done("The working directory is now {getwd()}")
+    }
+
+    # ToDo messages
     cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
     usethis::ui_todo("Edit the DESCRIPTION file")
     usethis::ui_todo("Add a license file (e.g. with usethis::use_mit_license(name = 'Your Name'))")
