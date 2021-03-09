@@ -5,30 +5,90 @@
 #'
 #' @param pkgname path to an empty, git initialized directory. The last component of the path will be used as the package name. Default is the current directory name.
 #' @param data_in_git should git track the files in the data directory? Default is TRUE
+#' @param rstudio create an RStudio project file? (with \code{usethis::use_rstudio})
+#' @param open if TRUE and in RStudio, the new project is opened in a new instance.
+#' If TRUE and not in RStudio, the working directory is set to the new project
 #' @param simple if TRUE, the default, the R/ directory is not created, because it's not necessary for many if not most research repositories
 #'
 #' @importFrom usethis use_mit_license use_git
 #' @export
 
-create_compendium <- function(pkgname = getwd(),
-                              data_in_git = TRUE,
-                              simple = TRUE) {
+create_compendium <- function(
+  pkgname = getwd(),
+  data_in_git = TRUE,
+  rstudio = rstudioapi::isAvailable(),
+  open = TRUE,
+  simple = TRUE
+) {
 
-
-  # create new project
-  rrtools::use_compendium(pkgname, simple = simple)
-
-  # move us into the new project
-  setwd(pkgname)
+  if (!dir.exists(pkgname)) {
+    dir.create(pkgname)
+    message("The directory ", pkgname, " has been created.")
+  } else {
+    message("Creating the compendium in the current directory: ", pkgname)
+  }
 
   # initialize the new project with useful features
-  usethis::use_mit_license(copyright_holder = get_git_config("user.name", global = TRUE))
-  rrtools::use_readme_rmd()
-  rrtools::use_analysis(data_in_git = data_in_git)
+  if (rstudio & open) {
 
-  # install the package and its dependencies
-  devtools::install(quiet = TRUE)
+    fileConn <- file(file.path(pkgname, ".Rprofile"))
+    writeLines(
+      c(
+        # run additional commands
+        paste0("usethis::use_mit_license(copyright_holder = '", get_git_config('user.name', global = TRUE), "')"),
+        "cat('\n')",
+        "rrtools::use_readme_rmd(render_readme = FALSE)",
+        "cat('\n')",
+        paste0("rrtools::use_analysis(data_in_git = ", data_in_git, ")"),
+        "cat('\n')",
+        # print welcome message
+        "cat(crayon::bold('\nThis project was set up by rrtools.\n'))",
+        "cat('\nYou can start working now or apply some more basic configuration.\n')",
+        "cat('Check out ')",
+        "cat(crayon::underline('https://github.com/benmarwick/rrtools'))",
+        "cat(' for an explanation of all the project configuration functions of rrtools.\n')",
+        "cat('Or run the rrtools configuration addin: ')",
+        "cat(crayon::cyan('rrtools.addin::rrtools_assistant() '))",
+        "cat(crayon::underline('https://github.com/nevrome/rrtools.addin\n\n'))",
+        "invisible(file.remove('.Rprofile'))"
+      ),
+      fileConn
+    )
+    close(fileConn)
 
-  usethis::ui_done("The working directory is now {getwd()}")
+    # create new project
+    rrtools::use_compendium(
+      pkgname,
+      rstudio = rstudio,
+      open = open,
+      simple = simple,
+      welcome_message = FALSE
+    )
+
+  } else {
+
+    # create new project
+    rrtools::use_compendium(
+      pkgname,
+      rstudio = rstudio,
+      open = open,
+      simple = simple,
+      welcome_message = TRUE
+    )
+
+    # switch to new dir
+    setwd(pkgname)
+
+    # run additional commands
+    usethis::use_mit_license(copyright_holder = get_git_config('user.name', global = TRUE))
+    cat('\n')
+    rrtools::use_readme_rmd(render_readme = FALSE)
+    cat('\n')
+    rrtools::use_analysis(data_in_git = data_in_git)
+    cat('\n')
+
+    usethis::ui_done("The working directory is now {getwd()}")
+
+  }
 
 }

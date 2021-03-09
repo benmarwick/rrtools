@@ -7,9 +7,13 @@
 #' @param path location to create new package. The last component of the path will be used as the package name
 #' @param fields list of description values to override default values or add additional values
 #' @param rstudio create an RStudio project file? (with \code{usethis::use_rstudio})
-#' @param open if TRUE and in RStudio, the new project is opened in a new instance. If TRUE and not in RStudio, the working directory is set to the new project
+#' @param open if TRUE and in RStudio, the new project is opened in a new instance.
+#' If TRUE and not in RStudio, the working directory is set to the new project
 #' @param quiet if FALSE, the default, prints informative messages
-#' @param simple if TRUE, the default, the R/ directory is not created, because it's not necessary for many if not most research repositories
+#' @param simple if TRUE, the default, the R/ directory is not created, because it's not necessary
+#' for many if not most research repositories
+#' @param welcome_message if TRUE, rstudio, open and not quiet, then the .Rprofile file in the
+#' newly created package is prepopulated with a welcome message.
 #'
 #' @importFrom usethis create_package
 #' @importFrom rstudioapi isAvailable
@@ -21,7 +25,8 @@ use_compendium <- function(
   rstudio = rstudioapi::isAvailable(),
   open = TRUE,
   quiet = FALSE,
-  simple = TRUE
+  simple = TRUE,
+  welcome_message = TRUE
 ){
 
   if (!dir.exists(path)) {
@@ -89,7 +94,7 @@ use_compendium <- function(
     check_package_name(name)
 
     # welcome message in new repo at first start
-    if (rstudio & open & !quiet) {
+    if (welcome_message & rstudio & open & !quiet) {
 
       fileConn <- file(file.path(path, ".Rprofile"))
       writeLines(
