@@ -7,9 +7,13 @@
 #' @param path location to create new package. The last component of the path will be used as the package name
 #' @param fields list of description values to override default values or add additional values
 #' @param rstudio create an RStudio project file? (with \code{usethis::use_rstudio})
-#' @param open if TRUE and in RStudio, the new project is opened in a new instance. If TRUE and not in RStudio, the working directory is set to the new project
+#' @param open if TRUE and in RStudio, the new project is opened in a new instance.
+#' If TRUE and not in RStudio, the working directory is set to the new project
 #' @param quiet if FALSE, the default, prints informative messages
-#' @param simple if TRUE, the default, the R/ directory is not created, because it's not necessary for many if not most research repositories
+#' @param simple if TRUE, the default, the R/ directory is not created, because it's not necessary
+#' for many if not most research repositories
+#' @param welcome_message if TRUE, rstudio, open and not quiet, then the .Rprofile file in the
+#' newly created package is prepopulated with a welcome message.
 #'
 #' @importFrom usethis create_package
 #' @importFrom rstudioapi isAvailable
@@ -19,9 +23,10 @@ use_compendium <- function(
   path = getwd(),
   fields = getOption("usethis.description"),
   rstudio = rstudioapi::isAvailable(),
-  open = FALSE,
+  open = TRUE,
   quiet = FALSE,
-  simple = TRUE
+  simple = TRUE,
+  welcome_message = TRUE
 ){
 
   if (!dir.exists(path)) {
@@ -89,7 +94,7 @@ use_compendium <- function(
     check_package_name(name)
 
     # welcome message in new repo at first start
-    if (rstudio & open & !quiet) {
+    if (welcome_message & rstudio & open & !quiet) {
 
       fileConn <- file(file.path(path, ".Rprofile"))
       writeLines(
@@ -123,6 +128,13 @@ use_compendium <- function(
 
     usethis::ui_done("The package {name} has been created")
 
+    # change working directory if not in RStudio
+    if (open & !rstudio) {
+      setwd(path)
+      usethis::ui_done("The working directory is now {getwd()}")
+    }
+
+    # ToDo messages
     cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
     usethis::ui_todo("Edit the DESCRIPTION file")
     usethis::ui_todo("Add a license file (e.g. with usethis::use_mit_license(name = 'Your Name'))")

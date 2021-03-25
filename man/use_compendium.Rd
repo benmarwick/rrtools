@@ -9,9 +9,10 @@ use_compendium(
   path = getwd(),
   fields = getOption("usethis.description"),
   rstudio = rstudioapi::isAvailable(),
-  open = FALSE,
+  open = TRUE,
   quiet = FALSE,
-  simple = TRUE
+  simple = TRUE,
+  welcome_message = TRUE
 )
 }
 \arguments{
@@ -21,11 +22,16 @@ use_compendium(
 
 \item{rstudio}{create an RStudio project file? (with \code{usethis::use_rstudio})}
 
-\item{open}{if TRUE and in RStudio, the new project is opened in a new instance. If TRUE and not in RStudio, the working directory is set to the new project}
+\item{open}{if TRUE and in RStudio, the new project is opened in a new instance.
+If TRUE and not in RStudio, the working directory is set to the new project}
 
 \item{quiet}{if FALSE, the default, prints informative messages}
 
-\item{simple}{if TRUE, the default, the R/ directory is not created, because it's not necessary for many if not most research repositories}
+\item{simple}{if TRUE, the default, the R/ directory is not created, because it's not necessary
+for many if not most research repositories}
+
+\item{welcome_message}{if TRUE, rstudio, open and not quiet, then the .Rprofile file in the
+newly created package is prepopulated with a welcome message.}
 }
 \description{
 This is usethis::create_package() with some additional messages to simplify the transition into the new project setting
