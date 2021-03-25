@@ -16,8 +16,6 @@ Title <- "Title of your paper goes here"
 
 # {{{ package }}}
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/{{{username}}}/{{{repo}}}/master?urlpath=rstudio)
-
 This repository contains the data and code for our paper:
 
 > Authors, (YYYY). _`r Title`_. Name of journal/book <https://doi.org/xxx/xxx>
@@ -56,13 +54,6 @@ This research compendium has been developed using the statistical programming
 language R. To work with the compendium, you will need
 installed on your computer the [R software](https://cloud.r-project.org/)
 itself and optionally [RStudio Desktop](https://rstudio.com/products/rstudio/download/).
-
-The simplest way to explore the text, code and data is to click on
-[binder](https://mybinder.org/v2/gh/{{{username}}}/{{{repo}}}/master?urlpath=rstudio)
-to open an instance of RStudio in your browser, which will have the
-compendium files ready to work with. Binder uses rocker-project.org
-Docker images to ensure a consistent and reproducible computational
-environment. These Docker images can also be used locally.
 
 You can download the compendium as a zip from from this URL:
 [master.zip](/archive/master.zip). After unzipping:
