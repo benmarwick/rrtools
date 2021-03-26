@@ -16,6 +16,8 @@ Title <- "Title of your paper goes here"
 
 # {{{ package }}}
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/{{{username}}}/{{{repo}}}/master?urlpath=rstudio)
+
 This repository contains the data and code for our paper:
 
 > Authors, (YYYY). _`r Title`_. Name of journal/book <https://doi.org/xxx/xxx>

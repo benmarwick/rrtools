@@ -137,7 +137,7 @@ use_compendium <- function(
     # ToDo messages
     cat(crayon::bold("\nNext, you need to: "), rep(crayon::green(clisymbols::symbol$arrow_down),3), "\n")
     usethis::ui_todo("Edit the DESCRIPTION file")
-    usethis::ui_todo("Add a license file (e.g. with usethis::use_mit_license(name = 'Your Name'))")
+    usethis::ui_todo("Add a license file (e.g. with usethis::use_mit_license(copyright_holder = 'Your Name'))")
     usethis::ui_todo("Use other 'rrtools' functions to add components to the compendium\n")
 
   })

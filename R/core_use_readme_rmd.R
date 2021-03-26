@@ -62,6 +62,9 @@ use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
   usethis::ui_done("Adding instructions to contributors.")
   use_contributing(pkg)
 
+  usethis::ui_done("Adding runtime.txt for Binder")
+  use_runtime()
+
   invisible(TRUE)
 }
 
@@ -80,4 +83,15 @@ use_contributing <- function(pkg){
   gh <-  github_info(pkg$path)
   use_template("CONTRIBUTING.md", ignore = TRUE, pkg = pkg, data = gh,
                          out_path = "")
+}
+
+# this will write the runtime.txt that works well with binder
+# e.g. https://github.com/binder-examples/r because the dockerfile
+# from holepunch don't seem to work
+use_runtime <- function(){
+  fileConn <- file(file.path(usethis::proj_path(), "runtime.txt"))
+  string_to_write <- paste0("r-", R.Version()$major,  "-", format(Sys.time(), "%Y-%m-%d") )
+  writeLines(string_to_write,
+             fileConn)
+  close(fileConn)
 }

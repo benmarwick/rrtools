@@ -115,5 +115,8 @@ test_that("README.Rmd could be rendered to github markdown and then html", {
       )
     )
   )
+
 })
+
+
 

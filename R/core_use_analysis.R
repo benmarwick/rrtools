@@ -87,6 +87,7 @@ create_directories <- function(location, pkg){
   use_directory(paste0(location, "/data"), pkg = pkg)
   use_directory(paste0(location, "/data/raw_data"), pkg = pkg)
   use_directory(paste0(location, "/data/derived_data"), pkg = pkg)
+  use_directory(paste0(location, "/supplementary-materials"), pkg = pkg)
 
   # create a file that inform of best practices
   invisible(file.create(paste0(pkg$path, "/", location, "/data/DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND")))
