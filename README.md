@@ -7,7 +7,7 @@
 
 The goal of **rrtools** is to provide instructions, templates, and functions for making a basic compendium suitable for writing a reproducible journal article or report with [R](https://www.r-project.org). This package documents the key steps and provides convenient functions for quickly creating a new research compendium. The approach is based generally on [Kitzes et al. (2017)](https://www.practicereproducibleresearch.org), and more specifically on [Marwick (2017)](https://doi.org/10.1007/s10816-015-9272-9), [Marwick et al. (2018)](https://doi.org/10.7287/peerj.preprints.3192v1), and [Wickham’s (2017)](https://docs.google.com/document/d/1LzZKS44y4OEJa4Azg5reGToNAZL0e0HSUwxamNY7E-Y/edit#) work using the R package structure as the basis for a research compendium.
 
-rrtools provides a template for doing scholarly writing in a literate programming environment using [R Markdown](http://rmarkdown.rstudio.com) and [bookdown](https://bookdown.org/home/about.html). It also allows for isolation of your computational environment using [Docker](https://www.docker.com/what-docker), package versioning using [MRAN](https://mran.microsoft.com/documents/rro/reproducibility/), and continuous integration using [Travis](https://docs.travis-ci.com/user/for-beginners). It makes a convenient starting point for writing a journal article or report. If you’re writing a PhD thesis, or a similar type of multi-chapter document, a better choice might the [huskydown package](https://github.com/benmarwick/huskydown) or other bookdown variants.
+rrtools provides a template for doing scholarly writing in a literate programming environment using [R Markdown](http://rmarkdown.rstudio.com) and [bookdown](https://bookdown.org/home/about.html). It also allows for isolation of your computational environment using [Docker](https://www.docker.com/what-docker), package versioning using [MRAN](https://mran.microsoft.com/documents/rro/reproducibility/), and continuous integration using [Travis](https://docs.travis-ci.com/user/for-beginners). It makes a convenient starting point for writing a journal article or report. If you're writing a PhD thesis, or a similar type of multi-chapter document, a better choice might the [huskydown package](https://github.com/benmarwick/huskydown) or other bookdown variants.
 
 The functions in rrtools allow you to use R to easily follow the best practices outlined in several major scholarly publications on reproducible research. In addition to those cited above, [Wilson et al. (2017)](https://doi.org/10.1371/journal.pcbi.1005510), [Piccolo & Frampton (2016)](https://gigascience.biomedcentral.com/articles/10.1186/s13742-016-0135-4), [Stodden & Miguez (2014)](http://doi.org/10.5334/jors.ay) and rOpenSci (2017[a](http://ropensci.github.io/reproducibility-guide/), [b](https://github.com/ropensci/rrrpkg)) are important sources that have influenced our approach to this package.
 
@@ -15,10 +15,10 @@ The functions in rrtools allow you to use R to easily follow the best practices 
 
 To explore and test rrtools without installing anything, click the [Binder](https://mybinder.org/v2/gh/benmarwick/rrtools/master?urlpath=rstudio) badge above to start RStudio in a browser tab that includes the contents of this GitHub repository. In that environment you can browse the files, install rrtools, and make a test compendium without altering anything on your computer.
 
-You can install rrtools from GitHub with:
+You can install rrtools from GitHub with these lines of R code (Windows users are recommended to install a separate program, [Rtools](https://cran.r-project.org/bin/windows/Rtools/), before proceeding with this step):
 
 ``` r
-# install.packages("devtools")
+if (!require("devtools")) install.packages("devtools")
 devtools::install_github("benmarwick/rrtools")
 ```
 
@@ -26,10 +26,10 @@ devtools::install_github("benmarwick/rrtools")
 
 To create a reproducible research compendium step-by-step using the rrtools approach, follow these detailed instructions. We use [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), and recommend it, but is not required for these steps to work. We recommend copy-pasting these directly into your console, and editing the options before running. We don’t recommend saving these lines in a script in your project: they are meant to be once-off setup functions.
 
-#### 0\. Create a Git managed directory linked to an online repository
+#### 0\. Create a Git-managed directory linked to an online repository
 
-  - Usually we want our research compendium to be managed by the version control software [Git](https://git-scm.com/). The free online book [Happy Git With R](http://happygitwithr.com) has details on how to do this. In brief, there are two methods to get started:
-      + [New project on GitHub first, then download to RStudio](https://happygitwithr.com/new-github-first.html): Start on Github, Gitlab, or a similar web service, and create an empty repository called `pkgname` (you should use a different name, please follow the rules below) on that service. Then [clone](https://happygitwithr.com/new-github-first.html) that repository to have a local empty directory on your computer, called `pkgname`, that is linked to this remote repository. 
+  - It is possible to use rrtools without Git, but usually we want our research compendium to be managed by the version control software [Git](https://git-scm.com/). The free online book [Happy Git With R](http://happygitwithr.com) has details on how to do this. In brief, there are two methods to get started:
+      + [New project on GitHub first, then download to RStudio](https://happygitwithr.com/new-github-first.html): Start on Github, Gitlab, or a similar web service, and create an empty repository called `pkgname` (you should use a different name, please follow the rules below) on that service. Then [clone](https://happygitwithr.com/new-github-first.html) that repository to have a local empty directory on your computer, called `pkgname`, that is linked to this remote repository. Please see our [wiki](https://github.com/benmarwick/rrtools/wiki/Create-a-new,-empty-research-compendium,-starting-with-an-empty-GitHub-repository) for a step-by-step walk-though of this method, illustrated with screenshots. 
       + [New project in RStudio first, then connect to GitHub/GitLab](https://happygitwithr.com/existing-github-first.html): An alternative approach is to create a local, empty, directory called `pkgname` on your computer, and initialize it with Git (`git init`), then create a GitHub/GitLab repository and connect your local project to the remote repository.
   - Whichever of those two methods that you choose, you continue by [staging, commiting an pushing](https://happygitwithr.com/git-basics.html) every future change in the repository with Git.
   - Your `pkgname` must follow some rules for everything to work, it must: 
@@ -43,8 +43,8 @@ To create a reproducible research compendium step-by-step using the rrtools appr
   - this uses `usethis::create_package()` to create a basic R package in the `pkgname` directory, and then, if you’re using RStudio, opens the project. If you’re not using RStudio, it sets the working directory to the `pkgname` directory. 
   - we need to:
       - run `rrtools::use_compendium("path/to/pkgname")` (you use the path to `pkgname` in your system)
-      - edit the `DESCRIPTION` file (located in your `pkgname` directory) to include accurate metadata
-      - periodically update the `Imports:` section of the `DESCRIPTION` file with the names of packages used in the code we write in the         Rmd document(s) (e.g., `usethis::use_package("dplyr", "imports")`)
+      - edit the `DESCRIPTION` file (located in your `pkgname` directory) to include accurate metadata, e.g. your [ORCID](https://orcid.org/)
+      - periodically update the `Imports:` section of the `DESCRIPTION` file with the names of packages used in the code we write in the         Rmd document(s) by running `rrtools::add_dependencies_to_description()`
 
 #### 2\. `usethis::use_mit_license(copyright_holder = "My Name")`
 
@@ -57,6 +57,7 @@ To create a reproducible research compendium step-by-step using the rrtools appr
       - a template citation to show others how to cite your project. Edit this to include the correct title and [DOI](https://doi.org).
       - license information for the text, figures, code and data in your compendium
   - this also adds two other markdown files: a code of conduct for users [CONDUCT.md](CONDUCT.md), and basic instructions for people who want to contribute to your project [CONTRIBUTING.md](CONTRIBUTING.md), including for first-timers to git and GitHub. 
+  - this adds a `runtime.txt` that makes [Binder](https://mybinder.org/) work, if your compendium is hosted online (e.g. GitHub, Zenodo, Figshare, Dataverse, etc.)
   - render this document after each change to refresh [README.md](README.md), which is the file that GitHub displays on the repository home page
 
 #### 4\. `rrtools::use_analysis()`
@@ -89,7 +90,7 @@ To create a reproducible research compendium step-by-step using the rrtools appr
       - a colophon that adds some git commit details to the end of the document. This means that the output file (HTML/PDF/Word) is always traceable to a specific state of the code.
   - the `references.bib` file has just one item to demonstrate the format. It is ready to insert more reference details.
   - you can replace the supplied `csl` file with a different citation style from <https://github.com/citation-style-language/>
-  - we recommend using the [citr addin](https://github.com/crsh/citr) and [Zotero](https://www.zotero.org/) to efficiently insert citations while writing in an Rmd file
+  - we recommend using the [RStudio 1.4](https://www.rstudio.com/products/rstudio/download/preview/) or higher to efficiently insert citations from your  [Zotero](https://www.zotero.org/) library while writing in an Rmd file (see [here](https://blog.rstudio.com/2020/11/09/rstudio-1-4-preview-citations/) for detailed setup and use information to connect your RStudio to your Zotero)
   - remember that the `Imports:` field in the `DESCRIPTION` file must include the names of all packages used in analysis documents (e.g. `paper.Rmd`). We have a helper function
     `rrtools::add_dependencies_to_description()` that will scan the Rmd file, identify libraries used in there, and add them to the `DESCRIPTION` file.
   - this function has an `data_in_git =` argument, which is `TRUE` by default. If set to `FALSE` you will exclude files in the `data/` directory from being tracked by git and prevent them from appearing on GitHub. You should set `data_in_git = FALSE` if your data files are large (\>100 mb is the limit for GitHub) or you do not want to make the data files publicly accessible on GitHub.
