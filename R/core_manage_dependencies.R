@@ -133,13 +133,13 @@ get_pkgs_from_R_files <- function(R_files) {
       # line start/a non-alphanumeric sign and ::
       p2_libs <- unlist(regmatches(
         point2_lines,
-        gregexpr("(?<=^|[^a-zA-Z0-9])[a-zA-Z0-9]*?(?=::)", point2_lines, perl = TRUE)
+        gregexpr("(?<=^|[^a-zA-Z0-9\\.])[a-zA-Z0-9\\.]*?(?=::)", point2_lines, perl = TRUE)
       ))
       # get libraries implicitly called via :::
       point3_lines <- grep(pattern = ":::", x = current_file, value = TRUE)
       p3_libs <- unlist(regmatches(
         point3_lines,
-        gregexpr("(?<=^|[^a-zA-Z0-9])[a-zA-Z0-9]*?(?=:::)", point3_lines, perl = TRUE)
+        gregexpr("(?<=^|[^a-zA-Z0-9\\.])[a-zA-Z0-9\\.]*?(?=:::)", point3_lines, perl = TRUE)
       ))
       # get libraries introduced with @importFrom
       importFrom_lines <- grep(pattern = "@importFrom", x = current_file, value = TRUE)
