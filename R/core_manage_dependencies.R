@@ -21,19 +21,15 @@ add_dependencies_to_description <- function(path = getwd(), description_file = "
 write_packages_to_DESCRIPTION <- function(pkgs, description_file) {
   # read DESCRIPTION file
   desc <- readLines(description_file)
-  # check, if Imports fields is available
-  if (any(grepl("Imports:", desc))) {
-    imports_already_existed <- TRUE
-  } else {
-    imports_already_existed <- FALSE
-    # if no: add it
+  # check, if Imports fields is available, else create it
+  if (!any(grepl("Imports:", desc))) {
     desc[length(desc)+1] <- "Imports:"
   }
   # get line where Imports starts
   i_begin <- grep("Imports:", desc)
   # get line where Imports ends (determination via search for next ":")
   # if Imports is the last tag, set i_end to the last line
-  if((i_begin + 1) >= length(desc)) {
+  if((i_begin + 1) > length(desc)) {
     i_end <- length(desc)
   } else {
     i_end <- i_begin + grep(":", desc[(i_begin + 1):length(desc)])[1] - 1
@@ -41,6 +37,8 @@ write_packages_to_DESCRIPTION <- function(pkgs, description_file) {
       i_end <- length(desc)
     }
   }
+  # get line where new packages should be written
+  i_write <- i_end - which( trimws(desc[i_end:i_begin]) != "" )[1] + 1
   # check which packages are already present in DESCRIPTION
   missing_pkgs <- reduce_to_missing_in_DESCRIPTION(pkgs, desc)
   # stop if all packages already in DESCRIPTION
@@ -48,13 +46,13 @@ write_packages_to_DESCRIPTION <- function(pkgs, description_file) {
     stop("All used packages are already in the DESCRIPTION somewhere (Imports, Suggests, Depends).")
   }
   # create string with missing packages and their version number in correct layout
-  to_add_package_string <- create_to_add_package_string(missing_pkgs)
-  to_add_package_string <- paste0("\n    ", paste0(to_add_package_string, collapse = ",\n    "))
+  pac_string <- create_to_add_package_string(missing_pkgs)
+  to_add_package_string <- paste0(pac_string, collapse = ",\n    ")
   # add newly created package string to last line of Imports
-  if (imports_already_existed) {
-    desc[i_end] <- paste0(desc[i_end], ",", to_add_package_string)
+  if (grepl("[\\:,]\\s*$", desc[i_write])) {
+    desc[i_write] <- paste0(desc[i_write], "\n    ",  to_add_package_string)
   } else {
-    desc[i_end] <- paste0(desc[i_end], to_add_package_string)
+    desc[i_write] <- paste0(desc[i_write], ",\n    ", to_add_package_string)
   }
   # write result back into DESCRIPTION file
   writeLines(text = desc, con = description_file)
@@ -133,13 +131,13 @@ get_pkgs_from_R_files <- function(R_files) {
       # line start/a non-alphanumeric sign and ::
       p2_libs <- unlist(regmatches(
         point2_lines,
-        gregexpr("(?<=^|[^a-zA-Z0-9])[a-zA-Z0-9]*?(?=::)", point2_lines, perl = TRUE)
+        gregexpr("(?<=^|[^a-zA-Z0-9\\.])[a-zA-Z0-9\\.]*?(?=::)", point2_lines, perl = TRUE)
       ))
       # get libraries implicitly called via :::
       point3_lines <- grep(pattern = ":::", x = current_file, value = TRUE)
       p3_libs <- unlist(regmatches(
         point3_lines,
-        gregexpr("(?<=^|[^a-zA-Z0-9])[a-zA-Z0-9]*?(?=:::)", point3_lines, perl = TRUE)
+        gregexpr("(?<=^|[^a-zA-Z0-9\\.])[a-zA-Z0-9\\.]*?(?=:::)", point3_lines, perl = TRUE)
       ))
       # get libraries introduced with @importFrom
       importFrom_lines <- grep(pattern = "@importFrom", x = current_file, value = TRUE)
