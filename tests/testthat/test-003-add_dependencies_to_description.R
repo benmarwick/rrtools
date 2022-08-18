@@ -14,7 +14,7 @@ if (!dir.exists(file.path(package_path, "/playground"))) {
 }
 testfile_2 <- file.path(package_path, "/playground/testfile_2.R")
 writeLines(
-  c("library(bookdown)", "require(git2r)", "usethis::use_template()"),
+  c("require(git2r)", "usethis::use_template()"),
   con = testfile_2
 )
 
@@ -38,14 +38,14 @@ test_that("the DESCRIPTION file has changed exactly as expected", {
     all.equal(
       description_unchanged, description_changed
     ),
-    "Lengths (15, 23) differ (string compare on first 15)"
+    "Lengths (12, 19) differ (string compare on first 12)"
   )
 })
 
 test_that("the DESCRIPTION file now actually contains the package dependencies", {
   expect_equal(
-    grep("bookdown | git2r | glue | knitr | rmarkdown | usethis | magrittr", description_changed),
-    c(17:23)
+    grep(" git2r | glue | knitr | rmarkdown | usethis | magrittr", description_changed),
+    c(14:19)
   )
 })
 
@@ -58,7 +58,7 @@ test_that("add_dependencies_to_description provides correct packages vector if j
       description_path,
       just_packages = TRUE
     ),
-    c("bookdown", "git2r", "glue", "knitr", "magrittr", "rmarkdown", "usethis")
+    c("git2r", "glue", "knitr", "magrittr", "rmarkdown", "usethis")
   )
 })
 
@@ -83,13 +83,13 @@ test_that("the DESCRIPTION file has once more changed exactly as expected", {
     all.equal(
       description_changed_once_more, description_changed
     ),
-    c("Lengths (24, 23) differ (string compare on first 23)", "1 string mismatch")
+    c("Lengths (20, 19) differ (string compare on first 19)", "1 string mismatch")
   )
 })
 
 test_that("the DESCRIPTION file again contains the package dependencies", {
   expect_equal(
-    grep("bookdown | git2r | glue | knitr | rmarkdown | usethis | raster | magrittr", description_changed),
-    c(17:23)
+    grep(" git2r | glue | knitr | magrittr | rmarkdown | usethis | raster ", description_changed_once_more),
+    c(14:20)
   )
 })

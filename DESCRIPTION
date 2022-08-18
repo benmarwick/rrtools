@@ -17,12 +17,14 @@ Description: Instructions, templates, and functions for making a basic
     compendium suitable for doing reproducible research with R.
 License: MIT + file LICENSE
 Imports: devtools, git2r, whisker, rstudioapi, rmarkdown, curl, RCurl, jsonlite, methods, httr, usethis, clisymbols,
-    crayon, glue, bookdown, here
+    crayon, glue
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/benmarwick/rrtools
 BugReports: https://github.com/benmarwick/rrtools/issues
-Suggests: testthat, knitr
+Suggests: testthat, knitr,
+    devtools,
+    git2r
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Date: 2019-01-15

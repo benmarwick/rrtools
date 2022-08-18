@@ -104,9 +104,6 @@ use_compendium <- function(
           "cat('Check out ')",
           "cat(crayon::underline('https://github.com/benmarwick/rrtools'))",
           "cat(' for an explanation of all the project configuration functions of rrtools.\n')",
-          "cat('Or run the rrtools configuration addin: ')",
-          "cat(crayon::cyan('rrtools.addin::rrtools_assistant() '))",
-          "cat(crayon::underline('https://github.com/nevrome/rrtools.addin\n\n'))",
           "invisible(file.remove('.Rprofile'))"
         ),
         fileConn

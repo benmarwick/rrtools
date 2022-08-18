@@ -1,26 +1,40 @@
 ---
 title: "Title Goes Here"
 author:
-  - Myfirstname Mylastname:
-      email: fl@oneplace.edu
-      institute: [UofO]
-      correspondence: true
-  - Yourfirstname Yourlastname:
-      email: fl@another.edu
-      institute: [UofA]
-      correspondence: false
+  - Jane Doe:
+      institute:
+        - fosg
+        - fop
+  - John Q. Doe:
+      institute: fosg
+  - Peder Ås:
+      institute: fosg
+  - Juan Pérez:
+      institute:
+        - name: Acme Corporation
+  - Max Mustermann
 institute:
-  - UofO: University of One Place
-  - UofA: University of Another Place
-date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: 
-    bookdown::word_document2:
-      fig_caption: yes
-      reference_docx: "../templates/template.docx" # Insert path for the DOCX file
-      pandoc_args:
-      - --lua-filter=../templates/scholarly-metadata.lua
-      - --lua-filter=../templates/author-info-blocks.lua
-      - --lua-filter=../templates/pagebreak.lua
+  - fosg:
+      name: Formatting Open Science Group
+      address: 23 Science Street, Eureka, Mississippi, USA
+  - fop: Federation of Planets
+title-block-published: "Last updated"  
+date: now
+date-format: long
+format: 
+  docx:
+    reference-doc: "../templates/template.docx" # Insert path for the DOCX file
+execute:
+  echo: true
+  warning: false
+  message: false
+  comment: "#>"
+  fig-path: "../figures/"
+  fig-dpi: 600
+filters:
+  - ../templates/scholarly-metadata.lua
+  - ../templates/author-info-blocks.lua
+  - ../templates/pagebreak.lua
 bibliography: references.bib
 csl: "../templates/journal-of-archaeological-science.csl" # Insert path for the bib-style
 abstract: |
@@ -39,20 +53,6 @@ Keywords: `r rmarkdown::metadata$keywords`
 
 Highlights: `r rmarkdown::metadata$highlights`
 
-<!-- The following code chunk defines some general settings how code chunks should behave. -->
-
-```{r setup, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  warning = FALSE,
-  message = FALSE,
-  echo = FALSE,
-  comment = "#>",
-  fig.path = "../figures/",
-  dpi = 300
-)
-```
-
 <!-- The actual document text starts here: -->
 
 # Introduction
@@ -67,22 +67,28 @@ Here is a citation [@Marwick2017]
 
 <!-- Here's some example analysis code: -->
 
-```{r get-data, eval = FALSE}
+```{r}
+#| label: get-data
+#| eval: false
 # Note the path that we need to use to access our data files when rendering this document
 my_data <- read.csv(here::here('analysis/data/raw_data/my_csv_file.csv'))
 ```
 
-```{r demo-plot, fig.cap="A plot of random numbers"}
+```{r}
+#| label: fig-demo-plot
+#| fig-cap: "A plot of random numbers"
 plot(rnorm(10))
 ```
 
-Figure \@ref(fig:demo-plot) shows how we can have a caption and cross-reference for a plot
+Figure @fig-demo-plot shows how we can have a caption and cross-reference for a plot. Note that figure label and cross-references must both be prefixed with `fig-`
 
-```{r demo-inline-code}
+```{r}
+#| label: demo-inline-code
+#| echo: false
 x <- round(pi, 2)
 ```
 
-Here is an example of inline code `r x` in the middle of a sentence. 
+Here is an example of inline code `r x` in the middle of a sentence.
 
 # Discussion
 
@@ -94,19 +100,23 @@ Here is an example of inline code `r x` in the middle of a sentence.
 
 \newpage
 
-# References 
+# References
 
 <!-- The following line ensures the references appear here for the MS Word or HTML output files, rather than right at the end of the document (this will not work for PDF files):  -->
 
-<div id="refs"></div>
+::: {#refs}
+:::
 
 \newpage
 
 ### Colophon
 
-This report was generated on `r Sys.time()` using the following computational environment and dependencies: 
+This report was generated on `r Sys.time()` using the following computational environment and dependencies:
 
-```{r colophon, cache = FALSE}
+```{r}
+#| label: colophon
+#| cache: false
+
 # which R packages and versions?
 if ("devtools" %in% installed.packages()) devtools::session_info()
 ```

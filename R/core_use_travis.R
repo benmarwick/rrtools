@@ -7,7 +7,7 @@
 #' @param pkg defaults to the package in the current working directory
 #' @param browse open a browser window to enable Travis builds for the package automatically
 #' @param docker logical, if TRUE (the default) the travis config will build a Docker container according to the instructions in the Dockerfile, and build and install the package in that container. If FALSE, the standard config for R on travis is used.
-#' @param rmd_to_knit path to .Rmd file that should be knitted by the virtual build environment: default is "path_to_rmd" which causes the function to search for a paper.Rmd file by itself.
+#' @param qmd_to_knit path to .qmd file that should be knitted by the virtual build environment: default is "path_to_qmd" which causes the function to search for a paper.qmd file by itself.
 #' @param ask should the function ask with \code{yesno()} if an old .travis.yml should be overwritten with a new one? default: TRUE
 #'
 #' @importFrom curl has_internet
@@ -17,24 +17,24 @@ use_travis <- function(
   pkg = ".",
   browse = interactive(),
   docker = TRUE,
-  rmd_to_knit = "path_to_rmd",
+  qmd_to_knit = "path_to_qmd",
   ask = TRUE
 ) {
   pkg <- as.package(pkg)
 
-  # get path to Rmd file to knit
-  if(rmd_to_knit == "path_to_rmd"){
+  # get path to qmd file to knit
+  if(qmd_to_knit == "path_to_qmd"){
     dir_list   <- list.dirs()
     paper_dir  <- dir_list[grep(pattern = "/paper$", dir_list)]
-    rmd_path   <- regmatches(paper_dir, regexpr("analysis|vignettes|inst", paper_dir))
-    rmd_path <-  file.path(rmd_path, "paper/paper.Rmd")
+    qmd_path   <- regmatches(paper_dir, regexpr("analysis|vignettes|inst", paper_dir))
+    qmd_path <-  file.path(qmd_path, "paper/paper.qmd")
   } else {
     #  preempt the string with home directory notation or back-slash (thx Matt Harris)
-    rmd_path <- gsub("^.|^/|^./|^~/","",rmd_to_knit)
+    qmd_path <- gsub("^.|^/|^./|^~/","",qmd_to_knit)
   }
 
   gh <- github_info(pkg$path)
-  gh$rmd_path <- rmd_path
+  gh$qmd_path <- qmd_path
   travis_url <- file.path("https://travis-ci.org", gh$fullname)
   gh$repo <- tolower(gh$repo)
 

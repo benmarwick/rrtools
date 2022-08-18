@@ -84,7 +84,7 @@ reduce_to_missing_in_DESCRIPTION <- function(pkgs, desc) {
   return(pkgs[!present])
 }
 
-get_R_files <- function(path, pattern = "\\.[rR]$|\\.[rR]md$|\\.[rR]nw$|\\.[rR]pres$") {
+get_R_files <- function(path, pattern = "\\.[rR]$|\\.[rR]md$|\\.[qQ]md$|\\.[rR]nw$|\\.[rR]pres$\\.[qQ]md$") {
   # check if directory or single file
   if (dir.exists(path)) {
     # if directory, search for all possible R or Rmd files

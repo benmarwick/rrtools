@@ -1,7 +1,7 @@
 --[[
 ScholarlyMeta – normalize author/affiliation meta variables
 
-Copyright (c) 2017-2019 Albert Krewinkel, Robert Winkler
+Copyright (c) 2017-2021 Albert Krewinkel, Robert Winkler
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
 with or without fee is hereby granted, provided that the above copyright notice
@@ -17,6 +17,21 @@ THIS SOFTWARE.
 ]]
 local List = require 'pandoc.List'
 
+--- Returns the type of a metadata value.
+--
+-- @param v a metadata value
+-- @treturn string one of `Blocks`, `Inlines`, `List`, `Map`, `string`, `boolean`
+local function metatype (v)
+  if PANDOC_VERSION <= '2.16.2' then
+    local metatag = type(v) == 'table' and v.t and v.t:gsub('^Meta', '')
+    return metatag and metatag ~= 'Map' and metatag or type(v)
+  end
+  return pandoc.utils.type(v)
+end
+
+local type = pandoc.utils.type or metatype
+
+
 -- Split a string at commas.
 local function comma_separated_values(str)
   local acc = List:new{}
@@ -28,20 +43,19 @@ end
 
 --- Ensure the return value is a list.
 local function ensure_list (val)
-  if type(val) ~= 'table' then
-    -- create singleton list (or empty list if val == nil).
-    return List:new{val}
-  elseif val.t == 'MetaInlines' then
+  if type(val) == 'List' then
+    return val
+  elseif type(val) == 'Inlines' then
     -- check if this is really a comma-separated list
     local csv = comma_separated_values(pandoc.utils.stringify(val))
     if #csv >= 2 then
       return csv
     end
     return List:new{val}
-  elseif val.t == 'MetaList' then
+  elseif type(val) == 'table' and #val > 0 then
     return List:new(val)
   else
-    -- MetaBlocks or MetaMap, use as a singleton
+    -- Anything else, use as a singleton (or empty list if val == nil).
     return List:new{val}
   end
 end
@@ -67,23 +81,23 @@ end
 -- (`nil`).
 function to_named_object (obj)
   local named = {}
-  if type(obj) ~= 'table' then
+  if type(obj) == 'Inlines' then
+    -- Treat inlines as the name
+    named.name = obj
+    named.id = pandoc.utils.stringify(obj)
+  elseif type(obj) ~= 'table' then
     -- if the object isn't a table, just use its value as a name.
     named.name = pandoc.MetaInlines{pandoc.Str(tostring(obj))}
     named.id = tostring(obj)
-  elseif obj.t == 'MetaInlines' then
-      -- Treat inlines as the name
-      named.name = obj
-      named.id = pandoc.utils.stringify(obj)
   elseif obj.name ~= nil then
     -- object has name attribute → just create a copy of the object
     add_missing_entries(obj, named)
     named.id = pandoc.utils.stringify(named.id or named.name)
   elseif next(obj) and next(obj, next(obj)) == nil then
-    -- the entry's key is taken as the name, the value contains the
-    -- attributes.
+    -- Single-entry table. The entry's key is taken as the name, the value
+    -- contains the attributes.
     key, attribs = next(obj)
-    if type(attribs) == "string" or attribs.t == 'MetaInlines' then
+    if type(attribs) == 'string' or type(attribs) == 'Inlines' then
       named.name = attribs
     else
       add_missing_entries(attribs, named)
@@ -156,6 +170,11 @@ local function canonicalize(raw_author, raw_institute)
   local author_insts = flatten(authors:map(function(x) return x.institute end))
   for _, inst in ipairs(author_insts) do
     merge_on_id(institutes, inst)
+  end
+
+  -- Add list indices to institutes for numbering and reference purposes
+  for idx, inst in ipairs(institutes) do
+    inst.index = pandoc.MetaInlines{pandoc.Str(tostring(idx))}
   end
 
   -- replace institutes with their indices

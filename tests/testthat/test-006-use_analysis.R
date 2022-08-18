@@ -14,8 +14,19 @@ test_that("use_analysis generates the template directories and files", {
                c("data", "figures",  "paper", "supplementary-materials", "templates"))
 
   expect_equal(list.files(file.path(package_path, 'analysis', 'paper')),
-               c("paper.Rmd", "references.bib"))
+               c("paper.qmd", "references.bib"))
 
+})
+
+#### check that the new paper.qmd can render ok ####
+
+test_that("the new paper.qmd can render to docx ok", {
+
+ quarto::quarto_render(input = file.path(package_path, 'analysis', 'paper', "paper.qmd"),
+                       quiet = TRUE)
+
+ expect_equal(list.files(file.path(package_path, 'analysis', 'paper')),
+             c( "paper.docx" , "paper.qmd", "references.bib"))
 })
 
 #### DESCRIPTION updated correctly ####
@@ -47,7 +58,7 @@ test_that("use_analysis(location = 'inst') generates the template directories an
                c("data", "figures",  "paper", "supplementary-materials", "templates"))
 
   expect_equal(list.files(file.path(package_path, 'inst', 'paper')),
-               c("paper.Rmd", "references.bib"))
+               c("paper.qmd", "references.bib"))
 
 })
 
@@ -71,6 +82,6 @@ test_that("use_analysis(location = 'vignettes') generates the template directori
                c("data", "figures",  "paper", "supplementary-materials", "templates"))
 
   expect_equal(list.files(file.path(package_path, 'vignettes', 'paper')),
-               c("paper.Rmd", "references.bib"))
+               c("paper.qmd", "references.bib"))
 
 })

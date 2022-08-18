@@ -113,7 +113,7 @@ check_suggested <- function(pkg, version = NULL, compare = NA) {
 # (in interactive mode only)
 as.package <- function(x = NULL, create = NA) {
   if (is.package(x)) return(x)
-  
+
   x <- package_file(path = x)
   load_pkg_description(x, create = create)
 }
@@ -131,23 +131,23 @@ package_file <- function(..., path = ".") {
     stop("`path` must be a string.", call. = FALSE)
   }
   path <- strip_slashes(normalizePath(path, mustWork = FALSE))
-  
+
   if (!file.exists(path)) {
     stop("Can't find '", path, "'.", call. = FALSE)
   }
   if (!file.info(path)$isdir) {
     stop("'", path, "' is not a directory.", call. = FALSE)
   }
-  
+
   # Walk up to root directory
   while (!has_description(path)) {
     path <- dirname(path)
-    
+
     if (is_root(path)) {
       stop("Could not find package root.", call. = FALSE)
     }
   }
-  
+
   file.path(path, ...)
 }
 
@@ -171,7 +171,7 @@ strip_slashes <- function(x) {
 # Load package DESCRIPTION into convenient form.
 load_pkg_description <- function(path, create) {
   path_desc <- file.path(path, "DESCRIPTION")
-  
+
   if (!file.exists(path_desc)) {
     if (is.na(create)) {
       if (interactive()) {
@@ -181,18 +181,18 @@ load_pkg_description <- function(path, create) {
         create <- FALSE
       }
     }
-    
+
     if (create) {
       setup(path = path)
     } else {
       stop("No description at ", path_desc, call. = FALSE)
     }
   }
-  
+
   desc <- as.list(read.dcf(path_desc)[1, ])
   names(desc) <- tolower(names(desc))
   desc$path <- path
-  
+
   structure(desc, class = "package")
 }
 
@@ -214,21 +214,21 @@ parse_deps <- function(string) {
   if (is.null(string)) return()
   stopifnot(is.character(string), length(string) == 1)
   if (grepl("^\\s*$", string)) return()
-  
+
   pieces <- strsplit(string, "[[:space:]]*,[[:space:]]*")[[1]]
-  
+
   # Get the names
   names <- gsub("\\s*\\(.*?\\)", "", pieces)
   names <- gsub("^\\s+|\\s+$", "", names)
-  
+
   # Get the versions and comparison operators
   versions_str <- pieces
   have_version <- grepl("\\(.*\\)", versions_str)
   versions_str[!have_version] <- NA
-  
+
   compare  <- sub(".*\\((\\S+)\\s+.*\\)", "\\1", versions_str)
   versions <- sub(".*\\(\\S+\\s+(.*)\\)", "\\1", versions_str)
-  
+
   # Check that non-NA comparison operators are valid
   compare_nna   <- compare[!is.na(compare)]
   compare_valid <- compare_nna %in% c(">", ">=", "==", "<=", "<")
@@ -236,10 +236,10 @@ parse_deps <- function(string) {
     stop("Invalid comparison operator in dependency: ",
          paste(compare_nna[!compare_valid], collapse = ", "))
   }
-  
+
   deps <- data.frame(name = names, compare = compare,
                      version = versions, stringsAsFactors = FALSE)
-  
+
   # Remove R dependency
   deps[names != "R", ]
 }
@@ -253,17 +253,17 @@ check_dep_version <- function(dep_name, dep_ver = NA, dep_compare = NA) {
   if (!requireNamespace(dep_name, quietly = TRUE)) {
     stop("Dependency package ", dep_name, " not available.")
   }
-  
+
   if (xor(is.na(dep_ver), is.na(dep_compare))) {
     stop("dep_ver and dep_compare must be both NA or both non-NA")
-    
+
   } else if(!is.na(dep_ver) && !is.na(dep_compare)) {
-    
+
     compare <- match.fun(dep_compare)
     if (!compare(
       as.numeric_version(getNamespaceVersion(dep_name)),
       as.numeric_version(dep_ver))) {
-      
+
       warning("Need ", dep_name, " ", dep_compare,
               " ", dep_ver,
               " but loaded version is ", getNamespaceVersion(dep_name))
