@@ -64,6 +64,7 @@ use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
 
   usethis::ui_done("Adding runtime.txt for Binder")
   use_runtime()
+  use_build_ignore("runtime.txt")
 
   invisible(TRUE)
 }
