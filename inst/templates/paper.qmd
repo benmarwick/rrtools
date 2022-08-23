@@ -2,6 +2,8 @@
 title: "Title Goes Here"
 author:
   - Jane Doe:
+      correspondence: "yes"
+      email: janedoe@fosg.org
       institute:
         - fosg
         - fop
