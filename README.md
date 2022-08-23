@@ -1,6 +1,8 @@
 # rrtools: Tools for Writing Reproducible Research in R
 
-[![Travis-CI Build Status](https://travis-ci.org/benmarwick/rrtools.svg?branch=master)](https://travis-ci.org/benmarwick/rrtools) [![Circle-CI Build Status](https://circleci.com/gh/benmarwick/rrtools.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/benmarwick/rrtools)  [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/benmarwick/rrtools/master?urlpath=rstudio)
+  <!-- badges: start -->
+[![R-CMD-check](https://github.com/benmarwick/rrtools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/benmarwick/rrtools/actions/workflows/R-CMD-check.yaml)
+[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/benmarwick/rrtools/master?urlpath=rstudio)
   <!-- badges: end -->
 
 ## Motivation
@@ -100,29 +102,25 @@ To create a reproducible research compendium step-by-step using the rrtools appr
 
   - this creates a basic Dockerfile using [`rocker/verse`](https://github.com/rocker-org/rocker) as the base  image
   - the version of R in your rocker container will match the version used when you run this function (e.g., `rocker/verse:3.5.0`)
-  - [`rocker/verse`](https://github.com/rocker-org/rocker) includes R, the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX, so compendium build times are very fast on travis
+  - [`rocker/verse`](https://github.com/rocker-org/rocker) includes R, the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX, so compendium build times are very fast 
   - we need to:
-      - edit the Dockerfile to add linux dependencies (for R packages that require additional libraries outside of R). You can find out what these are by browsing the [DESCRIPTION](DESCRIPTION) files of the other packages you’re using, and looking in the SystemRequirements field for each package. If you are getting build errors on travis, check the logs. Often, the error messages will include the names of missing libraries.
+      - edit the Dockerfile to add linux dependencies (for R packages that require additional libraries outside of R). You can find out what these are by browsing the [DESCRIPTION](DESCRIPTION) files of the other packages you’re using, and looking in the SystemRequirements field for each package. If you are getting build errors on GitHub Actions, check the logs. Often, the error messages will include the names of missing libraries.
       - modify which qmd files are rendered when the container is made
-      - have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this function generates. Or we can use `rrtools::use_circleci()` to build our Docker container privately at <https://circleci.com>, from a private GitHub repo.
-  - If we want to use Travis on our project, we need to make an account at <https://hub.docker.com/> to receive our Docker container after a successful build on travis
+      - have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this function generates. 
 
-#### 6\. `rrtools::use_travis()`
+#### 6\. `rrtools::use_github_action()`
 
-  - this creates a minimal `.travis.yml` file. By default it configures travis to build our Docker container from our Dockerfile, and build, install and run our custom package in this container. By specifying `docker = FALSE` in this function, the travis file will not use Docker in travis, but run R directly on the travis infrastructure. We recommend using Docker because it offers greater computational isolation and saves a substantial amount of time during the travis build because the base image contains many pre-compiled packages.
+  - this creates a minimal `.yml` configuration file that will attempt to render your qmd document each time you push to GitHub. By default it attempts to build our Docker container from our Dockerfile, and build, install and run our custom package in this container. By specifying `docker = FALSE` in this function, the configuration file will not use Docker, but run R directly on the CI infrastructure. We recommend using Docker because it offers greater computational isolation and saves a substantial amount of time during the build because the base image contains many pre-compiled packages.
   - we need to:
-      - go to <https://travis-ci.org/> to connect to our repo
-      - add environment variables to enable push of the Docker container to the Docker Hub
-      - make an account at <https://hub.docker.com/> to host our Docker container
-  - Note that you should run this function only when we are ready for our GitHub repository to be public. The free travis service we’re using here requires your GitHub repository to be public. It will not work on private repositories. If you want to keep your GitHub repo private until after publication, you can use `rrtools::use_circleci()` for running free private continuous integration tests at <https://circleci.com>, instead of travis. With `rrtools::use_circleci(docker_hub = FALSE)` we can stop our Docker container from appearing on Docker Hub, so our Docker container stays completely private.
-  - Besides travis and circleci there are also other Continous Integration (CI) services. Gitlab and Github even offer this as part of their repository hosting now. So far rrtools only provides configuration templates for travis and circleci, but we collect examples for other options [here](inst/templates/alternative_ci_templates).
+      - write this function!
+      - give guidance on how to see the results
 
 #### 7\. `usethis::use_testthat()`
 
-  - if you add functions in `R/`, include tests to ensure they function as intended
-  - create tests.R in `tests/testthat/` and check <http://r-pkgs.had.co.nz/tests.html> for template
+  - if you add functions in `R/`, you should include tests to ensure they function as intended
+  - this function creates tests.R in `tests/testthat/` and you can check <http://r-pkgs.had.co.nz/tests.html> for templates
 
-You should be able to follow these steps to get a new research compendium repository connected to travis and ready to write in just a few minutes.
+You should be able to follow these steps to get a new research compendium repository ready to write in just a few minutes.
 
 ## References and related reading
 
