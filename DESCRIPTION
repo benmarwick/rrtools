@@ -30,7 +30,8 @@ Imports:
     glue,
     here,
     devtools,
-    git2r
+    git2r,
+    knitr
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/benmarwick/rrtools
