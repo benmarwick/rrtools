@@ -21,8 +21,6 @@ Imports:
     whisker,
     rstudioapi,
     rmarkdown,
-    curl,
-    RCurl,
     jsonlite,
     methods,
     httr,
@@ -32,14 +30,13 @@ Imports:
     glue,
     here,
     devtools,
-    knitr,
     git2r,
-    quarto
+    knitr
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/benmarwick/rrtools
 BugReports: https://github.com/benmarwick/rrtools/issues
-Suggests: testthat
+Suggests: testthat, quarto
 RoxygenNote: 7.2.1
 VignetteBuilder: knitr
 Date: 2019-01-15
