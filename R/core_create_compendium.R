@@ -37,7 +37,7 @@ create_compendium <- function(
         # run additional commands
         paste0("usethis::use_mit_license(copyright_holder = '", get_git_config('user.name', global = TRUE), "')"),
         "cat('\n')",
-        "rrtools::use_readme_qmd(render_readme = FALSE)",
+        "rrtools::use_readme_rmd(render_readme = FALSE)",
         "cat('\n')",
         paste0("rrtools::use_analysis(data_in_git = ", data_in_git, ")"),
         "cat('\n')",
@@ -79,7 +79,7 @@ create_compendium <- function(
     # run additional commands
     usethis::use_mit_license(copyright_holder = get_git_config('user.name', global = TRUE))
     cat('\n')
-    rrtools::use_readme_qmd(render_readme = FALSE)
+    rrtools::use_readme_rmd(render_readme = FALSE)
     cat('\n')
     rrtools::use_analysis(data_in_git = data_in_git)
     cat('\n')

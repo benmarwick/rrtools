@@ -4,17 +4,22 @@ author:
   - Jane Doe:
       correspondence: "yes"
       email: janedoe@fosg.org
+      orcid: 0000-0003-1689-0557
       institute:
         - fosg
         - fop
   - John Q. Doe:
       institute: fosg
+      orcid: 0000-0003-1689-0558
   - Peder Ås:
       institute: fosg
+      orcid: 0000-0003-1689-0559
   - Juan Pérez:
+      orcid: 0000-0003-1689-0551
       institute:
         - name: Acme Corporation
-  - Max Mustermann
+  - Max Mustermann:
+      orcid: 0000-0003-1689-0552
 institute:
   - fosg:
       name: Formatting Open Science Group

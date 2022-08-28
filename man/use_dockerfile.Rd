@@ -4,19 +4,19 @@
 \alias{use_dockerfile}
 \title{Add a Dockerfile}
 \usage{
-use_dockerfile(pkg = ".", rocker = "verse", rmd_to_knit = "path_to_rmd")
+use_dockerfile(pkg = ".", rocker = "verse", qmd_to_knit = "path_to_qmd")
 }
 \arguments{
 \item{pkg}{defaults to the package in the current working directory}
 
 \item{rocker}{chr, the rocker image to base this container on}
 
-\item{rmd_to_knit, }{chr, path to the Rmd file to render in the Docker
+\item{qmd_to_knit, }{chr, path to the qmd file to render in the Docker
 container, relative to the top level of the compendium
-(i.e. "analysis/paper/paper.Rmd"). There's no need to specify this if your Rmd
-to render is at "analysis/paper/paper.Rmd", "vignettes/paper/paper.Rmd" or
-"inst/paper/paper.Rmd". If you have a custom directory structure, and a custom
-file name for the Rmd file, you can specify that file path and name here so
+(i.e. "analysis/paper/paper.qmd"). There's no need to specify this if your qmd
+to render is at "analysis/paper/paper.qmd", "vignettes/paper/paper.qmd" or
+"inst/paper/paper.qmd". If you have a custom directory structure, and a custom
+file name for the qmd file, you can specify that file path and name here so
 Docker can find the file to render in the container.B}
 }
 \description{

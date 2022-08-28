@@ -1,16 +1,18 @@
 #' @name use_analysis
 #' @aliases add_analysis
 #' @title Adds an analysis directory (and sub-directories), and an qmd file ready to write
-#'
 #' @description This will create \file{paper.qmd}, \file{references.bib}
-#' and several others, and add \pkg{bookdown} to the imported packages listed in the DESCRIPTION file.
-#'
+#' and several others.
 #' @param pkg defaults to the package in the current working directory
-#' @param template the template file to use to create the main analysis document. Defaults to 'paper.qmd', ready to write R Markdown and knit to MS Word using bookdown
+#' @param template the template file to use to create the main analysis document. Defaults to 'paper.qmd', ready to write R Markdown and knit to MS Word
 #' @param location the location where the directories and files will be written to. Defaults to a top-level 'analysis' directory. Other options are 'inst' (for the inst/ directory, so that all the contents will be included in the installed package) and 'vignettes' (as in a regular package vignette, all contents will be included in the installed package).
 #' @param data forwarded to \code{whisker::whisker.render}
 #' @param data_in_git should git track the files in the data directory?
+#' @import usethis
+#' @import devtools
 #' @export
+
+
 use_analysis <- function(pkg = ".", location = "top_level", template = 'paper.qmd', data = list(), data_in_git = TRUE) {
   pkg <- as.package(pkg)
   pkg$qmd <- TRUE
@@ -157,7 +159,6 @@ use_vignette_qmd <- function(location, pkg, gh, template, vignette_yml = "vignet
   add_desc_package(pkg, "Suggests", "rmarkdown")
   add_desc_package(pkg, "VignetteBuilder", "knitr")
   use_directory("vignettes", pkg = pkg)
-  # use_git_ignore("inst/doc", pkg = pkg) # test to suppress testing error
 
   template_path <- template_path_fn(template)
   qmd <- readLines(template_path)

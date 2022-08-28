@@ -4,15 +4,11 @@
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^README-.*\.png$
-^\.travis\.yml$
 ^CONDUCT\.md$
 ^Dockerfile$
 ^analysis/
-^circle\.yml$
 ^CONTRIBUTING\.md$
-thesis
 ^LICENSE\.md$
-^\.circleci$
 ^\.github$
 ^\.binder$
-analysis
+^runtime\.txt$

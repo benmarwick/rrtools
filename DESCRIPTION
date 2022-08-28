@@ -17,15 +17,29 @@ Maintainer: Ben Marwick <benmarwick@gmail.com>
 Description: Instructions, templates, and functions for making a basic 
     compendium suitable for doing reproducible research with R.
 License: MIT + file LICENSE
-Imports: devtools, git2r, whisker, rstudioapi, rmarkdown, curl, RCurl, jsonlite, methods, httr, usethis, clisymbols,
-    crayon, glue
+Imports: 
+    whisker,
+    rstudioapi,
+    rmarkdown,
+    curl,
+    RCurl,
+    jsonlite,
+    methods,
+    httr,
+    usethis,
+    clisymbols,
+    crayon,
+    glue,
+    here,
+    devtools,
+    knitr,
+    git2r,
+    quarto
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/benmarwick/rrtools
 BugReports: https://github.com/benmarwick/rrtools/issues
-Suggests: testthat, knitr,
-    devtools,
-    git2r
-RoxygenNote: 7.1.1
+Suggests: testthat
+RoxygenNote: 7.2.1
 VignetteBuilder: knitr
 Date: 2019-01-15
