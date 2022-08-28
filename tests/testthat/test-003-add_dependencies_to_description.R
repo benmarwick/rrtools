@@ -93,3 +93,4 @@ test_that("the DESCRIPTION file again contains the package dependencies", {
     c(14:20)
   )
 })
+
