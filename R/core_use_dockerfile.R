@@ -16,7 +16,10 @@
 #' @import utils
 #' @export
 
-  use_dockerfile <- function(pkg = ".", rocker = "verse", qmd_to_knit = "path_to_qmd") {
+  use_dockerfile <- function(pkg = ".",
+                             rocker = "verse",
+                             qmd_to_knit = "path_to_qmd",
+                             use_gh_action = TRUE) {
   pkg <- as.package(pkg)
 
   # get R version for rocker/r-ver
@@ -50,10 +53,27 @@
                open = TRUE,
                out_path = "")
 
+# create yaml for GitHub Actions that uses the dockerfile
+
+  if(use_gh_action){
+
+  use_directory(".github/workflows", pkg = pkg)
+  use_template("render-in-docker.yaml",
+               "render-in-docker.yaml",
+               ignore = TRUE,
+               pkg = pkg,
+               data = gh,
+               open = TRUE,
+               out_path = ".github/workflows")
+  } else {
+    # do nothing
+  }
+
   message("Next: \n",
           " * Edit the dockerfile with your name & email if needed", "\n",
           " * Edit the dockerfile to include system dependencies, such as linux libraries that are needed by the R packages you're using", "\n",
-          " * Check the last line of the dockerfile to specify which qmd should be rendered in the Docker container, edit if necessary", "\n"  )
+          " * Check the last line of the dockerfile to specify which qmd should be rendered in the Docker container, edit if necessary", "\n",
+          " * Look at the GitHub Actions page of your compendium at github.com to inspect the output", "\n")
 
   invisible(TRUE)
 }

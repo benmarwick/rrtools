@@ -103,29 +103,18 @@ To create a reproducible research compendium step-by-step using the rrtools appr
   - this initates tracking of the packages you use in your project using [renv](https://github.com/rstudio/renv). renv will discover the R packages used in your project, and install those packages into a private project library
   - We can use `renv::snapshot()` to save the state of our project library from time to time, or at the end when we are ready to share. The project state will be saved into a file called renv.lock.
   - Our collaborators can run `renv::restore()` to install exactly those packages into their own library.
-  - Don't skip this step because our Binder and Dockerfile use the renv.lock file to install the packages they need to run your code. 
+  - Don't skip this step because our Binder and Dockerfile use the renv.lock file to install the packages they need to run your code. So renv is an important component of making a compendium reproducible.
  
 #### 6\. `rrtools::use_dockerfile()`
 
-  - this creates a basic Dockerfile using [`rocker/verse`](https://github.com/rocker-org/rocker) as the base  image
+  - this creates a basic Dockerfile using [`rocker/verse`](https://github.com/rocker-org/rocker) as the base image
+  - this also creates creates a minimal `.yml` configuration file to activate continuous integration using GitHub Actions. This will attempt to render your qmd document, in a Docker container specified by your Dockerfile, each time you push to GitHub. You can view the results of each attempt at the 'actions' page for your compendium on github.com, e.g. https://github.com/benmarwick/rrtools/actions 
   - the version of R in your rocker container will match the version used when you run this function (e.g., `rocker/verse:3.5.0`)
   - [`rocker/verse`](https://github.com/rocker-org/rocker) includes R, the [tidyverse](http://tidyverse.org/), RStudio, pandoc and LaTeX, so compendium build times are very fast 
   - we need to:
       - edit the Dockerfile to add linux dependencies (for R packages that require additional libraries outside of R). You can find out what these are by browsing the [DESCRIPTION](DESCRIPTION) files of the other packages you’re using, and looking in the SystemRequirements field for each package. If you are getting build errors on GitHub Actions, check the logs. Often, the error messages will include the names of missing libraries.
       - modify which qmd files are rendered when the container is made
       - have a public GitHub repo to use the Dockerfile that this function generates. It is possible to keep the repository private and run a local Docker container with minor modifications to the Dockerfile that this function generates. 
-
-#### 6\. `rrtools::use_github_action()`
-
-  - this creates a minimal `.yml` configuration file that will attempt to render your qmd document each time you push to GitHub. By default it attempts to build our Docker container from our Dockerfile, and build, install and run our custom package in this container. By specifying `docker = FALSE` in this function, the configuration file will not use Docker, but run R directly on the CI infrastructure. We recommend using Docker because it offers greater computational isolation and saves a substantial amount of time during the build because the base image contains many pre-compiled packages.
-  - we need to:
-      - write this function!
-      - give guidance on how to see the results
-
-#### 7\. `usethis::use_testthat()`
-
-  - if you add functions in `R/`, you should include tests to ensure they function as intended
-  - this function creates tests.R in `tests/testthat/` and you can check <http://r-pkgs.had.co.nz/tests.html> for templates
 
 You should be able to follow these steps to get a new research compendium repository ready to write in just a few minutes.
 
