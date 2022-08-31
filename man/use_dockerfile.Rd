@@ -23,6 +23,10 @@ to render is at "analysis/paper/paper.qmd", "vignettes/paper/paper.qmd" or
 "inst/paper/paper.qmd". If you have a custom directory structure, and a custom
 file name for the qmd file, you can specify that file path and name here so
 Docker can find the file to render in the container.B}
+
+\item{use_gh_action, }{lgl, create a configuration figure to activate GitHub Actions
+continuous integration? Uses the Dockerfile to generate a Docker container, and
+renders the qmd file in that.}
 }
 \description{
 This will create a basic \file{Dockerfile} based on rocker/verse
