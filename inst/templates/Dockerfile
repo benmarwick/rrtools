@@ -13,7 +13,10 @@ RUN . /etc/environment \
   && sudo apt-get update \
   && sudo apt-get install libudunits2-dev -y \
   # build this compendium package
-  && R -e "devtools::install('/{{{repo}}}', dep=TRUE)" \
+  && R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))" \
+  && R -e "remotes::install_github(c('rstudio/renv', 'quarto-dev/quarto-r'))" \
+  # install pkgs we need
+  && R -e "renv::restore()" \
   # render the manuscript into a docx, you'll need to edit this if you've
-  # customised the location and name of your main Rmd file
-  && R -e "rmarkdown::render('/{{{repo}}}/{{{rmd_path}}}')"
+  # customised the location and name of your main qmd file
+  && R -e "quarto::quarto_render('/{{{repo}}}/{{{qmd_path}}}')"

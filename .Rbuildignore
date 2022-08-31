@@ -1,3 +1,5 @@
+^renv$
+^renv\.lock$
 ^Meta$
 ^doc$
 ^.*\.Rproj$
@@ -11,4 +13,6 @@
 ^LICENSE\.md$
 ^\.github$
 ^\.binder$
-^runtime\.txt$
+^\.binder/Dockerfile$
+^/\.binder/Dockerfile$
+^binder-Dockerfile$

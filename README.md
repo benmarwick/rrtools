@@ -59,7 +59,7 @@ To create a reproducible research compendium step-by-step using the rrtools appr
       - a template citation to show others how to cite your project. Edit this to include the correct title and [DOI](https://doi.org).
       - license information for the text, figures, code and data in your compendium
   - this also adds two other markdown files: a code of conduct for users [CONDUCT.md](CONDUCT.md), and basic instructions for people who want to contribute to your project [CONTRIBUTING.md](CONTRIBUTING.md), including for first-timers to git and GitHub. 
-  - this adds a `runtime.txt` that makes [Binder](https://mybinder.org/) work, if your compendium is hosted online (e.g. GitHub, Zenodo, Figshare, Dataverse, etc.)
+  - this adds a `.binder/Dockerfile` that makes [Binder](https://mybinder.org/) work, if your compendium is hosted online. Currently configured for GitHub, but easily adapted for elsewhere (e.g. Zenodo, Figshare, Dataverse, etc.)
   - render this document after each change to refresh [README.md](README.md), which is the file that GitHub displays on the repository home page
 
 #### 4\. `rrtools::use_analysis()`
@@ -97,8 +97,15 @@ To create a reproducible research compendium step-by-step using the rrtools appr
     `rrtools::add_dependencies_to_description()` that will scan the qmd file, identify libraries used in there, and add them to the `DESCRIPTION` file.
   - this function has an `data_in_git =` argument, which is `TRUE` by default. If set to `FALSE` you will exclude files in the `data/` directory from being tracked by git and prevent them from appearing on GitHub. You should set `data_in_git = FALSE` if your data files are large (\>100 mb is the limit for GitHub) or you do not want to make the data files publicly accessible on GitHub.
       - To load your custom code in the `paper.qmd`, you have a few options. You can write all your R code in chunks in the qmd, that’s the simplest method. Or you can write R code in script files in `/R`, and include `devtools::load_all(".")` at the top of your `paper.qmd`. Or you can write functions in `/R` and use `library(pkgname)` at the top of your `paper.qmd`, or omit `library` and preface each function call with `pkgname::`. Up to you to choose whatever seems most natural to you.
+      
+#### 5\. `renv::init()`
 
-#### 5\. `rrtools::use_dockerfile()`
+  - this initates tracking of the packages you use in your project using [renv](https://github.com/rstudio/renv). renv will discover the R packages used in your project, and install those packages into a private project library
+  - We can use `renv::snapshot()` to save the state of our project library from time to time, or at the end when we are ready to share. The project state will be saved into a file called renv.lock.
+  - Our collaborators can run `renv::restore()` to install exactly those packages into their own library.
+  - Don't skip this step because our Binder and Dockerfile use the renv.lock file to install the packages they need to run your code. 
+ 
+#### 6\. `rrtools::use_dockerfile()`
 
   - this creates a basic Dockerfile using [`rocker/verse`](https://github.com/rocker-org/rocker) as the base  image
   - the version of R in your rocker container will match the version used when you run this function (e.g., `rocker/verse:3.5.0`)
