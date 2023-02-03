@@ -9,9 +9,9 @@
 
 The goal of **rrtools** is to provide instructions, templates, and functions for making a basic compendium suitable for writing a reproducible journal article or report with [R](https://www.r-project.org). This package documents the key steps and provides convenient functions for quickly creating a new research compendium. The approach is based generally on [Kitzes et al. (2017)](https://www.practicereproducibleresearch.org), and more specifically on [Marwick (2017)](https://doi.org/10.1007/s10816-015-9272-9), [Marwick et al. (2018)](https://doi.org/10.7287/peerj.preprints.3192v1), and [Wickham’s (2017)](https://docs.google.com/document/d/1LzZKS44y4OEJa4Azg5reGToNAZL0e0HSUwxamNY7E-Y/edit#) work using the R package structure as the basis for a research compendium.
 
-rrtools provides a template for doing scholarly writing in a literate programming environment using [Quarto](https://quarto.org/), an open-source scientific and technical publishing system. It also allows for isolation of your computational environment using [Docker](https://www.docker.com/what-docker), package versioning using [MRAN](https://mran.microsoft.com/documents/rro/reproducibility/), and continuous integration using [GitHub Actions](https://github.com/features/actions). It makes a convenient starting point for writing a journal article or report. If you're writing a PhD thesis, or a similar type of multi-chapter document, a better choice might the [huskydown package](https://github.com/benmarwick/huskydown) or other bookdown variants.
+rrtools provides a template for doing scholarly writing in a literate programming environment using [Quarto](https://quarto.org/), an open-source scientific and technical publishing system. It also allows for isolation of your computational environment using [Docker](https://www.docker.com/what-docker), package versioning using [renv](https://rstudio.github.io/renv/index.html), and continuous integration using [GitHub Actions](https://github.com/features/actions). It makes a convenient starting point for writing a journal article or report. 
 
-The functions in rrtools allow you to use R to easily follow the best practices outlined in several major scholarly publications on reproducible research. In addition to those cited above, [Wilson et al. (2017)](https://doi.org/10.1371/journal.pcbi.1005510), [Piccolo & Frampton (2016)](https://gigascience.biomedcentral.com/articles/10.1186/s13742-016-0135-4), [Stodden & Miguez (2014)](http://doi.org/10.5334/jors.ay) and rOpenSci (2017[a](http://ropensci.github.io/reproducibility-guide/), [b](https://github.com/ropensci/rrrpkg)) are important sources that have influenced our approach to this package.
+The functions in rrtools allow you to use R to easily follow the best practices outlined in several major scholarly publications on reproducible research. In addition to those cited above, [Wilson et al. (2017)](https://doi.org/10.1371/journal.pcbi.1005510), [Piccolo & Frampton (2016)](https://gigascience.biomedcentral.com/articles/10.1186/s13742-016-0135-4), [Stodden & Miguez (2014)](http://doi.org/10.5334/jors.ay) and [rOpenSci (2017](https://github.com/ropensci/rrrpkg)) are important sources that have influenced our approach to this package.
 
 ## Installation
 
@@ -26,7 +26,7 @@ devtools::install_github("benmarwick/rrtools")
 
 ## How to use
 
-To create a reproducible research compendium step-by-step using the rrtools approach, follow these detailed instructions. We use [RStudio](https://www.rstudio.com/products/rstudio/#Desktop), and recommend it, but is not required for these steps to work. We recommend copy-pasting these directly into your console, and editing the options before running. We don’t recommend saving these lines in a script in your project: they are meant to be once-off setup functions.
+To create a reproducible research compendium step-by-step using the rrtools approach, follow these detailed instructions. We use [RStudio](https://posit.co/products/open-source/rstudio/#Desktop), and recommend it, but is not required for these steps to work. We recommend copy-pasting these directly into your console, and editing the options before running. We don’t recommend saving these lines in a script in your project: they are meant to be once-off setup functions.
 
 #### 0\. Create a Git-managed directory linked to an online repository
 
@@ -138,10 +138,6 @@ analytical work reproducibly using R (and friends).
 Piccolo, S. R. and M. B. Frampton (2016). “Tools and techniques for
 computational reproducibility.” GigaScience 5(1): 30.
 <https://gigascience.biomedcentral.com/articles/10.1186/s13742-016-0135-4>
-
-rOpenSci community (2017a). Reproducibility in Science A Guide to
-enhancing reproducibility in scientific results and writing. Online at
-<http://ropensci.github.io/reproducibility-guide/>
 
 rOpenSci community (2017b). rrrpkg: Use of an R package to facilitate
 reproducible research. Online at <https://github.com/ropensci/rrrpkg>
