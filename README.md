@@ -32,7 +32,7 @@ To create a reproducible research compendium step-by-step using the rrtools appr
 
   - It is possible to use rrtools without Git, but usually we want our research compendium to be managed by the version control software [Git](https://git-scm.com/). The free online book [Happy Git With R](http://happygitwithr.com) has details on how to do this. In brief, there are two methods to get started:
       + [New project on GitHub first, then download to RStudio](https://happygitwithr.com/new-github-first.html): Start on Github, Gitlab, or a similar web service, and create an empty repository called `pkgname` (you should use a different name, please follow the rules below) on that service. Then [clone](https://happygitwithr.com/new-github-first.html) that repository to have a local empty directory on your computer, called `pkgname`, that is linked to this remote repository. Please see our [wiki](https://github.com/benmarwick/rrtools/wiki/Create-a-new,-empty-research-compendium,-starting-with-an-empty-GitHub-repository) for a step-by-step walk-though of this method, illustrated with screenshots. 
-      + [New project in RStudio first, then connect to GitHub/GitLab](https://happygitwithr.com/existing-github-last.html): An alternative approach is to create a local, empty, directory called `pkgname` on your computer, and initialize it with Git (`git init`), then create a GitHub/GitLab repository and connect your local project to the remote repository.
+      + [New project in RStudio first, then connect to GitHub/GitLab](https://happygitwithr.com/existing-github-last.html): An alternative approach is to create a local, empty, directory called `pkgname` on your computer (e.g. in your Desktop or Downloads folder), and initialize it with Git (`git init`), then create a GitHub/GitLab repository and connect your local project to the remote repository.
   - Whichever of those two methods that you choose, you continue by [staging, commiting and pushing](https://happygitwithr.com/git-basics.html) every future change in the repository with Git.
   - Your `pkgname` must follow some rules for everything to work, it must: 
     + … contain only ASCII letters, numbers, and ‘.’
@@ -42,10 +42,10 @@ To create a reproducible research compendium step-by-step using the rrtools appr
 
 #### 1\. `rrtools::use_compendium("pkgname")`
 
+  - if you started with a new project on GitHub first, run `rrtools::use_compendium()`, if you started with a new project in RStudio first, run `rrtools::use_compendium("pkgname")` 
   - this uses `usethis::create_package()` to create a basic R package in the `pkgname` directory, and then, if you’re using RStudio, opens the project. If you’re not using RStudio, it sets the working directory to the `pkgname` directory. 
   - we need to:
-      - run `rrtools::use_compendium("path/to/pkgname")` (you use the path to `pkgname` in your system)
-      - edit the `DESCRIPTION` file (located in your `pkgname` directory) to include accurate metadata, e.g. your [ORCID](https://orcid.org/)
+      - edit the `DESCRIPTION` file (located in your `pkgname` directory) to include accurate metadata, e.g. your [ORCID](https://orcid.org/) and email address
       - periodically update the `Imports:` section of the `DESCRIPTION` file with the names of packages used in the code we write in the qmd document(s) by running `rrtools::add_dependencies_to_description()`
 
 #### 2\. `usethis::use_mit_license(copyright_holder = "My Name")`
