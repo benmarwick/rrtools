@@ -87,7 +87,7 @@ my_data <- read.csv(here::here('analysis/data/raw_data/my_csv_file.csv'))
 plot(rnorm(10))
 ```
 
-Figure @fig-demo-plot shows how we can have a caption and cross-reference for a plot. Note that figure label and cross-references must both be prefixed with `fig-`
+@fig-demo-plot shows how we can have a caption and cross-reference for a plot. Note that figure label and cross-references must both be prefixed with `fig-`
 
 ```{r}
 #| label: demo-inline-code
