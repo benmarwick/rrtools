@@ -90,7 +90,7 @@ test_that("the DESCRIPTION file has once more changed exactly as expected", {
 test_that("the DESCRIPTION file again contains the package dependencies", {
   expect_equal(
     grep(" git2r | glue | knitr | magrittr | rmarkdown | usethis | raster ", description_changed_once_more),
-    c(14:19)
+    c(14:20)
   )
 })
 
