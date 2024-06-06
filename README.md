@@ -53,9 +53,9 @@ To create a reproducible research compendium step-by-step using the rrtools appr
   - this adds a reference to the MIT license in the [DESCRIPTION](DESCRIPTION) file and generates a [LICENSE](LICENSE) file listing the name provided as the copyright holder
   - to use a different license, replace this line with any of the licenses mentioned here: `?usethis::use_mit_license()`
 
-#### 3\. `rrtools::use_readme_rmd()`
+#### 3\. `rrtools::use_readme_qmd()`
 
-  - this generates [README.Rmd](README.Rmd) and renders it to [README.md](README.md), ready to display on GitHub. It contains: 
+  - this generates [README.qmd](README.qmd) and renders it to [README.md](README.md), ready to display on GitHub. It contains: 
       - a template citation to show others how to cite your project. Edit this to include the correct title and [DOI](https://doi.org).
       - license information for the text, figures, code and data in your compendium
   - this also adds two other markdown files: a code of conduct for users [CONDUCT.md](CONDUCT.md), and basic instructions for people who want to contribute to your project [CONTRIBUTING.md](CONTRIBUTING.md), including for first-timers to git and GitHub. 
