@@ -1,9 +1,9 @@
 #' Creates skeleton README files
 #'
 #' @description
-#' \code{README.Rmd} will be automatically
+#' \code{README.qmd} will be automatically
 #' added to \code{.Rbuildignore}. The resulting README is populated with default
-#' YAML frontmatter and R fenced code chunks (\code{Rmd}).
+#' YAML frontmatter and R fenced code chunks (\code{qmd}).
 #' Your readme should contain:
 #' \itemize{
 #' \item a high-level description of the package and its goals
@@ -13,16 +13,16 @@
 #'
 #' @param pkg package description, can be path or package name.  See
 #'   \code{\link{as.package}} for more information
-#' @param render_readme should the README.Rmd be directly rendered to
+#' @param render_readme should the README.qmd be directly rendered to
 #' a github markdown document? default: TRUE
 #' @importFrom rmarkdown render
 #' @export
 #' @examples
 #' \dontrun{
-#' use_readme_rmd()
+#' use_readme_qmd()
 #' }
 #' @family infrastructure
-use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
+use_readme_qmd <- function(pkg = ".", render_readme = TRUE) {
   pkg <- as.package(pkg)
   data <- pkg
 
@@ -31,11 +31,11 @@ use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
     gh <- github_info(pkg$path)
     data = c(pkg, gh)
   }
-  pkg$Rmd <- TRUE
+  pkg$qmd <- TRUE
 
 
   use_template("omni-README",
-               save_as = "README.Rmd",
+               save_as = "README.qmd",
                data = data,
                ignore = TRUE,
                open = TRUE,
@@ -46,12 +46,12 @@ use_readme_rmd <- function(pkg = ".", render_readme = TRUE) {
 
   if (uses_git(pkg$path)) {
     message("* Adding pre-commit hook")
-    use_git_hook("pre-commit", render_template("readme-rmd-pre-commit.sh"))
+    use_git_hook("pre-commit", render_template("readme-qmd-pre-commit.sh"))
   }
 
   if (render_readme) {
-    usethis::ui_done("\nRendering README.Rmd to README.md for GitHub.")
-    rmarkdown::render("README.Rmd", quiet = TRUE)
+    usethis::ui_done("\nRendering README.qmd to README.md for GitHub.")
+    rmarkdown::render("README.qmd", quiet = TRUE)
     unlink("README.html")
   }
 

@@ -12,7 +12,8 @@ Authors@R: c(person("Ben", "Marwick", role = c("aut", "cre"), email = "benmarwic
              person("Wojciech", "Francuzik", role = "ctb"),
              person("Charles", "Gray", role = "ctb"),
              person("Joseph de la Torre", "Dwyer", role = "ctb"),
-             person("Max", "Czapanskiy", role = "ctb"))
+             person("Max", "Czapanskiy", role = "ctb"),
+             person("Joana","Belmiro", role = "ctb"))
 Maintainer: Ben Marwick <benmarwick@gmail.com>
 Description: Instructions, templates, and functions for making a basic 
     compendium suitable for doing reproducible research with R.
@@ -36,6 +37,6 @@ LazyData: true
 URL: https://github.com/benmarwick/rrtools
 BugReports: https://github.com/benmarwick/rrtools/issues
 Suggests: testthat, quarto, knitr
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.1
 VignetteBuilder: knitr
 Date: 2019-01-15

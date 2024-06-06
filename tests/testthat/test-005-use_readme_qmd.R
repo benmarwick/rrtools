@@ -1,9 +1,9 @@
-context("use_readme_rmd()")
+context("use_readme_qmd()")
 
 #### run function ####
 
 suppressMessages(
-  rrtools::use_readme_rmd(
+  rrtools::use_readme_qmd(
     package_path,
     render_readme = FALSE
   )
@@ -12,10 +12,10 @@ suppressMessages(
 #### check results ####
 
 # general
-test_that("use_readme_rmd generates the correct files", {
+test_that("use_readme_qmd generates the correct files", {
   expect_true(
     all(
-      c("CONDUCT.md", "CONTRIBUTING.md",  "README.Rmd") %in%
+      c("CONDUCT.md", "CONTRIBUTING.md",  "README.qmd") %in%
       list.files(package_path)
     )
   )
@@ -83,9 +83,9 @@ test_that("CONTRIBUTING.md could be rendered to html", {
   )
 })
 
-# README.Rmd
-test_that("README.Rmd is a text file and has the correct heading", {
-  readme <- readLines(file.path(package_path, "README.Rmd"))
+# README.qmd
+test_that("README.qmd is a text file and has the correct heading", {
+  readme <- readLines(file.path(package_path, "README.qmd"))
   expect_gt(
     length(readme),
     1
@@ -95,10 +95,10 @@ test_that("README.Rmd is a text file and has the correct heading", {
   )
 })
 
-test_that("README.Rmd could be rendered to github markdown and then html", {
+test_that("README.qmd could be rendered to github markdown and then html", {
   expect_silent(
     rmarkdown::render(
-      input = file.path(package_path, "README.Rmd"),
+      input = file.path(package_path, "README.qmd"),
       output_format = "github_document",
       output_file = file.path(package_path, "README.md"),
       quiet = TRUE
