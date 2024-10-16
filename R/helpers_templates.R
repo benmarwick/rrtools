@@ -5,23 +5,23 @@ use_template <- function(template, save_as = template, data = list(),
 
   path <- file.path(pkg$path, out_path, save_as)
   if (!can_overwrite(path, ask = ask)) {
-    stop("`", save_as, "` already exists.", call. = FALSE)
+    stop(glue::glue("`{save_as}` already exists."), call. = FALSE)
   }
 
   template_path <- template_path_fn(template)
 
   template_out <- whisker::whisker.render(readLines(template_path), data)
 
-  usethis::ui_done("Creating {usethis::ui_value(save_as)} from template.")
+  usethis::ui_done(glue::glue("Creating {usethis::ui_value(save_as)} from template."))
   writeLines(template_out, path)
 
   if (ignore) {
-    usethis::ui_done("Adding {usethis::ui_value(save_as)} to `.Rbuildignore`.")
+    usethis::ui_done(glue::glue("Adding {usethis::ui_value(save_as)} to `.Rbuildignore`."))
     use_build_ignore(save_as, pkg = pkg)
   }
 
   if (open) {
-    usethis::ui_todo("Modify ", usethis::ui_value(save_as))
+    usethis::ui_todo(glue::glue("Modify {usethis::ui_value(save_as)}"))
     open_in_rstudio(path)
   }
 

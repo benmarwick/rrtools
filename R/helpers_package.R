@@ -61,11 +61,15 @@ suggests_dep <- function(pkg) {
   deps[found, ]
 }
 
-# from https://github.com/r-lib/devtools/blob/master/R/utils.R
-is_installed <- function(pkg, version = 0) {
+# from https://github.com/r-lib/devtools/blob/master/R/utils.R but this
+# function was removed some time ago, so I've just updated it to keep it
+# working
+is_installed <- function(pkg, version = "0.0.0") {
   installed_version <- tryCatch(utils::packageVersion(pkg), error = function(e) NA)
-  !is.na(installed_version) && installed_version >= version
+  required_version <- as.package_version(version)
+  !is.na(installed_version) && installed_version >= required_version
 }
+
 
 # from https://github.com/r-lib/devtools/blob/master/R/pkgload.R
 check_suggested <- function(pkg, version = NULL, compare = NA) {
