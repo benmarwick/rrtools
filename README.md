@@ -7,7 +7,7 @@
 
 ## Motivation
 
-The goal of **rrtools** is to provide instructions, templates, and functions for making a basic compendium suitable for writing a reproducible journal article or report with [R](https://www.r-project.org). This package documents the key steps and provides convenient functions for quickly creating a new research compendium. The approach is based on [Marwick (2017)](https://doi.org/10.1007/s10816-015-9272-9), [Marwick et al. (2018)](https://doi.org/10.7287/peerj.preprints.3192v1), and [Wickham’s (2017)](https://docs.google.com/document/d/1LzZKS44y4OEJa4Azg5reGToNAZL0e0HSUwxamNY7E-Y/edit#) work using the R package structure as the basis for a research compendium.
+The goal of **rrtools** is to provide instructions, templates, and functions for making a basic compendium suitable for writing a reproducible journal article or report with [R](https://www.r-project.org). This package documents the key steps and provides convenient functions for quickly creating a new research compendium. The approach is based on Marwick et al.'s [(2017](https://doi.org/10.1007/s10816-015-9272-9), [Marwick et al. 2018](https://doi.org/10.7287/peerj.preprints.3192v1)) work using the R package structure as the basis for a research compendium.
 
 rrtools provides a template for doing scholarly writing in a literate programming environment using [Quarto](https://quarto.org/), an open-source scientific and technical publishing system. It also allows for isolation of your computational environment using [Docker](https://www.docker.com/what-docker), package versioning using [renv](https://rstudio.github.io/renv/index.html), and continuous integration using [GitHub Actions](https://github.com/features/actions). It makes a convenient starting point for writing a journal article or report. 
 
@@ -121,10 +121,9 @@ You should be able to follow these steps to get a new research compendium reposi
 
 ## References and related reading
 
-Kitzes, J., Turek, D., & Deniz, F. (Eds.). (2017). *The Practice of
+Kitzes, J., Turek, D., & Deniz, F. (Eds.). (2017). [*The Practice of
 Reproducible Research: Case Studies and Lessons from the Data-Intensive
-Sciences*. Oakland, CA: University of California Press.
-<https://www.practicereproducibleresearch.org>
+Sciences*](https://www.ucpress.edu/books/the-practice-of-reproducible-research/paper). Oakland, CA: University of California Press.
 
 Marwick, B. (2017). Computational reproducibility in archaeological
 research: Basic principles and a case study of their implementation.
@@ -148,10 +147,6 @@ Stodden, V. & Miguez, S., (2014). Best Practices for Computational
 Science: Software Infrastructure and Environments for Reproducible and
 Extensible Research. Journal of Open Research Software. 2(1), p.e21.
 DOI: <http://doi.org/10.5334/jors.ay>
-
-Wickham, H. (2017) *Research compendia*. Note prepared for the 2017
-rOpenSci Unconf.
-<https://docs.google.com/document/d/1LzZKS44y4OEJa4Azg5reGToNAZL0e0HSUwxamNY7E-Y/edit#>
 
 Wilson G, Bryan J, Cranston K, Kitzes J, Nederbragt L, et al. (2017).
 Good enough practices in scientific computing. *PLOS Computational
